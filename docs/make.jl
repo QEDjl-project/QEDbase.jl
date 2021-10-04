@@ -11,7 +11,9 @@ using QEDbase
 
 using DocumenterCitations
 
-bib = CitationBibliography("./Bibliography.bib", sorting = :y)
+@show
+
+bib = CitationBibliography(joinpath(@__DIR__,"Bibliography.bib"), sorting = :y)
 
 pages = [
     "Home" => "index.md",
