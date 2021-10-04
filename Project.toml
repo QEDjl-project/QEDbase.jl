@@ -4,9 +4,6 @@ authors = ["Uwe Hernandez Acosta"]
 version = "0.1.0"
 
 [deps]
-DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
-DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
-DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
