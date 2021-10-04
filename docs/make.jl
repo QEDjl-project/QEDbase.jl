@@ -1,9 +1,32 @@
-using QEDbase
+using Pkg
+Pkg.activate("../.")
+
 using Documenter
+using QEDbase
 
-DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
 
-makedocs(;
+#DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
+
+using DocumenterCitations
+
+bib = CitationBibliography("./Bibliography.bib", sorting = :y)
+
+pages = [
+    "Home" => "index.md",
+    "Dirac Tensors" => "dirac_tensors.md",
+    "Lorentz Vectors" => "lorentz_vectors.md",
+    "Four Momenta" => "four_momenta.md",
+    "Library" => [
+        "Contents" => "library/outline.md",
+        "API" => "library/api.md",
+        #"Private" => "library/internals.md",
+        "Function index" => "library/function_index.md",
+        ],
+    "refs.md"
+]
+
+
+makedocs(bib;
     modules=[QEDbase],
     authors="Uwe Hernandez Acosta",
     repo="https://gitlab.hzdr.de/hernan68/QEDbase.jl/blob/{commit}{path}#{line}",
@@ -13,7 +36,5 @@ makedocs(;
         canonical="https://hernan68.gitlab.io/QEDbase.jl",
         assets=String[],
     ),
-    pages=[
-        "Home" => "index.md",
-    ],
+    pages=pages,
 )
