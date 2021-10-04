@@ -21,6 +21,7 @@ Julia 1.6:
   extends:
     - .script
     - .coverage
+  only: [main,dev]
 pages:
   image: julia:1.6
   stage: deploy
