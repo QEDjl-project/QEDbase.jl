@@ -26,12 +26,17 @@ pages:
   stage: deploy
   script:
     - apt-get update -qq && apt-get install -y git  # needed by Documenter
-    - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("MyPackage");'  # rebuild Julia (can be put somewhere else I'm sure
-    - julia -e 'using Pkg; import MyPackage; Pkg.add("Documenter")'  # install Documenter
-    - julia --color=yes docs/make.jl  # make documentation
-    - mv docs/build public  # move to the directory picked up by Gitlab pages
+    - |
+      julia --project=docs -e '
+        using Pkg
+        Pkg.develop(PackageSpec(path=pwd()))
+        Pkg.instantiate()
+        using Documenter: doctest
+        using QEDbase
+        doctest(QEDbase)
+        include("docs/make.jl")'
   artifacts:
     paths:
-      - public
+      - docs/build
   only:
     - main
