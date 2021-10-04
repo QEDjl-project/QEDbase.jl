@@ -6,6 +6,7 @@ version = "0.1.1"
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+LocalCoverage = "5f6e1e16-694c-5876-87ef-16b5274f298e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
