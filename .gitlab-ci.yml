@@ -21,3 +21,23 @@ Julia 1.6:
   extends:
     - .script
     - .coverage
+pages:
+  image: julia:1.6
+  stage: deploy
+  script:
+    - |
+      julia --project=docs -e '
+        using Pkg
+        Pkg.add(PackageSpec(path=pwd()))
+        Pkg.instantiate()
+        using Documenter: doctest
+        using QEDbase
+        doctest(QEDbase)
+        include("docs/make.jl")'
+    - mkdir -p public
+    - mv docs/build public/dev
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
