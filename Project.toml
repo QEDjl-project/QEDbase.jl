@@ -1,0 +1,13 @@
+name = "QEDbase"
+uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
+authors = ["Uwe Hernandez Acosta"]
+version = "0.1.0"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
