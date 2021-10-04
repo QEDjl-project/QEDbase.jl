@@ -3,6 +3,11 @@ uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
 authors = ["Uwe Hernandez Acosta"]
 version = "0.1.0"
 
+[deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [compat]
 julia = "1.6"
 

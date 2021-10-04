@@ -2,5 +2,8 @@ using QEDbase
 using Test
 
 @testset "QEDbase.jl" begin
-    # Write your tests here.
+
+    include("dirac_tensor.jl")
+    include("lorentz_vector.jl")
+
 end
