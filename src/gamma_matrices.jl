@@ -49,7 +49,20 @@ function _gamma3(::Type{DiracGammaRepresentation})::DiracMatrix
                         0,1,0,0)
 end
 
+
 # default gamma matrix is in Dirac's representation
 gamma() = gamma(DiracGammaRepresentation)
 
 const GAMMA = gamma()
+
+
+
+# feynman slash notation
+
+function slashed(::Type{TG},LV::TV) where {TG<:AbstractGammaRepresentation,TV<:AbstractLorentzVector}
+    gamma(TG)*LV
+end
+
+function slashed(LV::T) where {T<:AbstractLorentzVector}
+    GAMMA*LV
+end

@@ -15,7 +15,7 @@ export FourMomentum, mass_square,mass,isonshell
 export BiSpinor, AdjointBiSpinor, DiracMatrix, mul
 export AbstractDiracVector, AbstractDiracMatrix
 
-export gamma,GAMMA,AbstractGammaRepresentation, DiracGammaRepresentation
+export gamma,GAMMA,AbstractGammaRepresentation, DiracGammaRepresentation, slashed
 
 #export Coordinates
 

@@ -53,4 +53,11 @@ EYE = one(DiracMatrix)
         @test isapprox(a_slash*a_slash,(a*a)*one(DiracMatrix))
         @test isapprox(GAMMA*(a_slash*GAMMA),-2*a_slash)
     end # interface LorentzVector
+
+    @testset "Feynman slash" begin
+        a = LorentzVector(rand(rng,4) + 1im*rand(rng,4))
+
+        @test isapprox(slashed(a),GAMMA*a)
+        @test isapprox(slashed(a),slashed(DiracGammaRepresentation,a))
+    end
 end
