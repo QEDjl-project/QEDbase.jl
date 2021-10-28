@@ -1,7 +1,7 @@
 name = "QEDbase"
 uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
 authors = ["Uwe Hernandez Acosta"]
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
