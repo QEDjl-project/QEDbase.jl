@@ -6,4 +6,6 @@ using Test
     include("dirac_tensor.jl")
     include("lorentz_vector.jl")
 
+    include("gamma_matrices.jl")
+
 end
