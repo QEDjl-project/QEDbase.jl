@@ -11,7 +11,6 @@ using QEDbase
 
 using DocumenterCitations
 
-@show
 
 bib = CitationBibliography(joinpath(@__DIR__,"Bibliography.bib"), sorting = :y)
 
