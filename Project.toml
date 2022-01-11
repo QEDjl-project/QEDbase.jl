@@ -5,9 +5,15 @@ version = "0.1.2"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+Flatten = "4c728ea3-d9ee-5c9a-9642-b6f7d7dc04fa"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PProf = "e4faabce-9ead-11e9-39d9-4379958e3056"
+PhysicalConstants = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
+ProfileVega = "4391764f-db79-4bd7-a4c6-f9062de4300e"
+ProfileView = "c46f51b8-102a-5cf2-8d2c-8597cb0e0da7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+TimerOutputs = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
 
 [compat]
 julia = "1.6"
