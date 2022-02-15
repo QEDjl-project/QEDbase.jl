@@ -51,6 +51,11 @@ struct AdjointBiSpinor <: AbstractDiracVector{ComplexF64}
     el4::ComplexF64
 end
 
+#interface
+AdjointBiSpinor(spn::BiSpinor) = AdjointBiSpinor(conj(SVector(spn)))
+BiSpinor(spn::AdjointBiSpinor) = BiSpinor(conj(SVector(spn)))
+
+
 
 """
 $(TYPEDEF)
@@ -90,7 +95,7 @@ Tensor product of an adjoint with a standard bi-spinor resulting in a scalar.
 
 !!! note "Multiplication operator"
     This also overloads the `*` operator for this types.
-    
+
 """
 function mul(aBS::AdjointBiSpinor,BS::BiSpinor)::ComplexF64
     aBS'*BS
@@ -105,7 +110,7 @@ Tensor product of a standard with an adjoint bi-spinor resulting in a Dirac matr
 
 !!! note "Multiplication operator"
     This also overloads the `*` operator for this types.
-    
+
 """
 function mul(BS::BiSpinor,aBS::AdjointBiSpinor)::DiracMatrix
     DiracMatrix(BS*aBS')

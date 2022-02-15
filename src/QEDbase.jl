@@ -17,6 +17,13 @@ export AbstractDiracVector, AbstractDiracMatrix
 
 export gamma,GAMMA,AbstractGammaRepresentation, DiracGammaRepresentation, slashed
 
+
+
+export BASE_PARTICLE_SPINOR,BASE_ANTIPARTICLE_SPINOR
+export IncomingFermionSpinor,OutgoingFermionSpinor,IncomingAntiFermionSpinor,OutgoingAntiFermionSpinor
+export SpinorU, SpinorUbar, SpinorV, SpinorVbar
+export @valid_spinor_input
+
 #export Coordinates
 
 using StaticArrays
@@ -30,6 +37,7 @@ include("lorentz_vector.jl")
 include("gamma_matrices.jl")
 
 include("four_momentum.jl") # maybe go to a kinematics module!!
+include("particle_spinors.jl")
 #include("coordinates/coordinates.jl")
 
 

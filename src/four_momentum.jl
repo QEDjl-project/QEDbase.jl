@@ -81,6 +81,6 @@ function mass(p::FourMomentum)
     return sqrt(m2)
 end
 
-function isonshell(P::FourMomentum,m::T;rtol=eps()) where T<:Real
-    isapprox(mass_square(P),m,rtol=rtol)
+function isonshell(P::FourMomentum,m::T) where T<:Real
+    isapprox(mass_square(P),m^2)
 end
