@@ -18,17 +18,17 @@ This package is part of the `QED.jl` library. For the description of the interop
 - Dirac's gamma matrices
 
 ## Installation
-To install the current stable version of `QEDtemplate.jl` you may use the standard julia package manager within the julia REPL
+To install the current stable version of `QEDbase.jl` you may use the standard julia package manager within the julia REPL
 
 ```julia
 julia> using Pkg
 
 julia> Pkg.add("QEDbase")
 ```
-or you use the Pkg promt by hitting `]` within the Julia REPL and then type
+or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
-(@v1.6) pkg> add QEDbase
+(@v1.7) pkg> add QEDbase
 ```
 
 ## Quickstart
@@ -50,19 +50,37 @@ Such `FourMomentum` behaves like a four element static array (with all the stand
 ```julia
 julia> @assert dot(P,P) == P*P == mass_square(P) == P[1]^2 - sum(P[1:].^2)
 ```
-
-With them its possible to print out the _awesomeness_:
+## Testing
+After installation it might be necessary to check if everything works properly. For that you can run the unittests by typing within the julia REPL
 
 ```julia
-julia> print_awesome(awesome_physics)
-Your physics is awesome!
+julia> using Pkg
+julia> using QEDbase
+julia> Pkg.test("QEDbase")
 
-julia> print_awesome(less_awesome_physics)
-Others physics is less awesome.
+...
 
+Testing Running tests...
+Test Summary: | Pass  Total
+QEDbase.jl    |  149    149
+     Testing QEDbase tests passed
 ```
 
+## Contributing
+If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QED.jl` coherent, consider visiting the general [contribution guide of `QED.jl`](www.contribution-of-qed.jl).
 
-## Citing
+## Credits and contributers
+This work was partly funded by the Center for Advanced Systems Understanding (CASUS) that is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget approved by the Saxon State Parliament.
 
-See [`CITATION.bib`](CITATION.bib) for the relevant reference(s).
+The core code of the package `QEDbase.jl` is developed by a small team at the Center for Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
+
+- Uwe Hernandez Acosta (u.hernandez@hzdr.de)
+
+This package would not be possible without many contributions done from the commuity as well. For that we want send big thanks to:
+
+- my Mate supplier
+- the guy who will show me how to include the most recent contributers on github
+
+## License
+
+[MIT](LICENSE) © Uwe Hernandez Acosta
