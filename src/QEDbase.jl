@@ -6,8 +6,14 @@ $(EXPORTS)
 """
 module QEDbase
 
+using SimpleTraits
+using ArgCheck
+
 import Base:*
 import StaticArrays: similar_type
+
+
+export minkowski_dot,mdot,register_LorentzVectorLike
 
 export AbstractLorentzVector,LorentzVector, dot,magnitude
 export FourMomentum, mass_square,mass,isonshell
@@ -34,6 +40,7 @@ using DocStringExtensions
 
 include("dirac_tensors.jl")
 include("lorentz_vector.jl")
+include("lorentz_interface.jl")
 include("gamma_matrices.jl")
 
 include("four_momentum.jl") # maybe go to a kinematics module!!
