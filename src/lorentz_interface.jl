@@ -52,6 +52,7 @@ end
 
 
 @traitdef IsLorentzVectorLike{T}
+@traitdef IsMutableLorentzVectorLike{T}
 
 
 function getT end
@@ -74,11 +75,12 @@ function register_LorentzVectorLike(T::Type)
     
     @eval @traitimpl IsLorentzVectorLike{$T}
 
-    if hasmethod(setT!,Tuple{T})&&hasmethod(setX!,Tuple{T})&&hasmethod(setY!,Tuple{T})&&hasmethod(setZ!,Tuple{T})
+    if hasmethod(setT!,Tuple{T,Union{}})&&hasmethod(setX!,Tuple{T,Union{}})&&hasmethod(setY!,Tuple{T,Union{}})&&hasmethod(setZ!,Tuple{T,Union{}})
         @eval @traitimpl IsMutableLorentzVectorLike{$T}
     end
     return 
 end
+
 
 # general functions
 
@@ -113,6 +115,7 @@ const getMass = getInvariantMass
 
 @inline @traitfn getE(lv::T)  where {T; IsLorentzVectorLike{T}} =  getT(lv)
 const getEnergy = getE
+
 @inline @traitfn getPx(lv::T)  where {T; IsLorentzVectorLike{T}} =  getX(lv)
 @inline @traitfn getPy(lv::T)  where {T; IsLorentzVectorLike{T}} =  getY(lv)
 @inline @traitfn getPz(lv::T)  where {T; IsLorentzVectorLike{T}} =  getZ(lv)
@@ -169,6 +172,15 @@ end
     getX(lv)==n && getY(lv)==n ? n : atan(getY(lv),getX(lv))
 end
 
+@traitfn function getCosPhi(lv::T)  where {T; IsLorentzVectorLike{T}}
+    perp = getPerp(lv)
+    perp==zero(perp) ? zero(perp) : getX(lv)/perp
+end
+
+@traitfn function getSinPhi(lv::T)  where {T; IsLorentzVectorLike{T}}
+    perp = getPerp(lv)
+    perp==zero(perp) ? zero(perp) : getY(lv)/perp
+end
 
 # light cone coordinates
 @inline @traitfn getPlus(lv::T)  where {T; IsLorentzVectorLike{T}} = 0.5*(getT(lv) + getZ(lv))
@@ -180,5 +192,87 @@ end
 # Setter
 #
 ####
-
+@inline @traitfn setE!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setT!(lv,value)
+const setEnergy! = setE!
+@inline @traitfn setPx!(lv::T,value::VT)  where {T,VT; IsLorentzVectorLike{T}} =  setX!(lv,value)
 @inline @traitfn setPy!(lv::T,value::VT)  where {T,VT; IsLorentzVectorLike{T}} =  setY!(lv,value)
+@inline @traitfn setPz!(lv::T,value::VT)  where {T,VT; IsLorentzVectorLike{T}} =  setZ!(lv,value)
+
+# setter spherical coordinates
+
+@traitfn function setTheta!(lv::T,theta::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    rho = getRho(lv)
+    sphi = getSinPhi(lv)
+    cphi = getCosPhi(lv)
+    sth = sin(theta)
+
+    setX!(lv,rho*sth*cphi)
+    setY!(lv,rho*sth*sphi)
+    setZ!(lv,rho*cos(theta))
+end
+
+@traitfn function setCosTheta!(lv::T,cos_theta::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    rho = getRho(lv)
+    sphi = getSinPhi(lv)
+    cphi = getCosPhi(lv)
+    sth = sqrt(one(cos_theta)-cos_theta^2)
+
+    setX!(lv,rho*sth*cphi)
+    setY!(lv,rho*sth*sphi)
+    setZ!(lv,rho*cos_theta)
+end
+
+@traitfn function setRho!(lv::T,rho::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    rho2 = getRho(lv)
+    if rho != zero(rho2)
+        setX!(getX(lv)*rho/rho2)
+        setX!(getY(lv)*rho/rho2)
+        setX!(getZ(lv)*rho/rho2)
+    end
+    # add warning if rho2 == 0 -> zero vector does not change if its length is stretched.
+end
+
+
+# setter light cone coordinates
+
+@traitfn function setPlus!(lv::T,plus::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    setT!(plus + getMinus(lv))
+    setZ!(plus - getMinus(lv))
+end
+
+@traitfn function setMinus!(lv::T,minus::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    setT!(getPlus(lv) + minus)
+    setZ!(getPlus(lv) - minus)
+end
+
+
+# transverse coordinates
+
+@traitfn function setTransversMomentum!(lv::T,pT::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    old_pT = getTransverseMomentum(lv)
+    if old_PT != zero(old_pT)
+        setX!(getX(lv)*pT/old_pT)
+        setY!(getY(lv)*pT/old_pT)
+    end
+    # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+end
+const setPerp! = setTransversMomentum!
+const setPt! = setTransversMomentum!
+
+@traitfn function setTransverseMass!(lv::T,mT::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    old_mT = getTransverseMass(lv)
+    if old_PT != zero(old_pT)
+        setT!(getT(lv)*mT/old_mT)
+        setZ!(getZ(lv)*mT/old_mT)
+    end
+    # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+end
+const setMt! = setTransverseMass!
+
+
+@traitfn function setRapidity!(lv::T,rap::VT)  where {T,VT; IsLorentzVectorLike{T}}
+    mT = getTransverseMass(lv)
+    setT!(mT*cosh(rap))
+    setZ!(mT*sinh(rap))
+    # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+end

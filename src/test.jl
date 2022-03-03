@@ -16,6 +16,9 @@ end
 @inline QEDbase.getZ(lv::CustomType) = lv.z
 
 
+)
+
+
 #QEDbase.LorentzVectorStyle(::CustomType) = QEDbase.IsLorentzVectorLike()
 
 QEDbase.register_LorentzVectorLike(CustomType)
@@ -26,6 +29,7 @@ a = CustomType(rand(4)...)
 b = CustomType(rand(4)...)
 
 
+getT(a)
 
 
 mdot(a,b)
@@ -39,6 +43,10 @@ th = 0.2
 ph = 0.1
 
 P = CustomType(E,rho*cos(ph)*sin(th),rho*sin(ph)*sin(th),rho*cos(th))
+
+P
+
+QEDbase.getPhi(P)
 
 @benchmark QEDbase.getPhi($P)
 
@@ -65,6 +73,8 @@ mutable struct CustomType2
     y::Float64
     z::Float64
 end
+
+
 
 @inline QEDbase.getT(lv::CustomType2) = lv.t
 @inline QEDbase.getX(lv::CustomType2) = lv.x
@@ -109,6 +119,7 @@ end
 @inline QEDbase.getY(lv::CustomType3) = lv.y
 @inline QEDbase.getZ(lv::CustomType3) = lv.z
 
+
 function QEDbase.setT!(lv::CustomType3,value::Float64)
     lv.t = value
 end
@@ -126,7 +137,10 @@ function QEDbase.setZ!(lv::CustomType3,value::Float64)
 end
 
 
-Base.promote_rule(::Type{CustomType3},::Type{CustomType}) = CustomType3
+#Base.promote_rule(::Type{CustomType3},::Type{CustomType}) = CustomType3
+
+hasmethod(QEDbase.setX!,Tuple{CustomType3,Union{}})
+
 
 QEDbase.register_LorentzVectorLike(CustomType3)
 
@@ -139,19 +153,21 @@ ph2 = 0.1
 
 smP = CustomType3(E,rho*cos(ph2)*sin(th),rho*sin(ph2)*sin(th),rho*cos(th))
 
+QEDbase.setE!(smP,1.5)
 
-newY = 4.0
-@benchmark QEDbase.setPy!($smP,$newY)
+QEDbase.getE(smP)
 
+new_theta = 0.7
+QEDbase.setTheta!(smP,new_theta)
 
-QEDbase.mdot(smP,smP)
+QEDbase.getTheta(smP)
+
+@benchmark QEDbase.setTheta!($smP,$new_theta)
+
 
 @code_lowered QEDbase.mdot(mP,P)
 @code_typed QEDbase.mdot(mP,P)
 @code_warntype QEDbase.mdot(mP,P)
 @code_llvm QEDbase.mdot(mP,P)
 @code_native QEDbase.mdot(P,P)
-
-
-
 
