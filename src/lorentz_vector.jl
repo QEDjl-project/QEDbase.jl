@@ -14,8 +14,6 @@ Abstract type to model generic Lorentz vectors, i.e. elements of a minkowski-lik
 """
 abstract type AbstractLorentzVector{T} <: FieldVector{4, T} end
 
-
-
 #interface with dirac tensors
 """
 $(TYPEDSIGNATURES)
@@ -27,7 +25,7 @@ Product product of generic Lorentz vector with a Dirac tensor from the left. Bas
 
 """
 function mul(DM::T,L::TL) where {T<:Union{AbstractDiracMatrix,AbstractDiracVector},TL<:AbstractLorentzVector}
-    SLorentzVector(DM*L[1],DM*L[2],DM*L[3],DM*L[4])
+    constructorof(TL)(DM*L[1],DM*L[2],DM*L[3],DM*L[4])
 end
 @inline *(DM::T,L::TL) where {T<:Union{AbstractDiracMatrix,AbstractDiracVector},TL<:AbstractLorentzVector} = mul(DM,L)
 
@@ -41,7 +39,7 @@ Product product of generic Lorentz vector with a Dirac tensor from the right. Ba
 
 """
 function mul(L::TL,DM::T) where {TL<:AbstractLorentzVector,T<:Union{AbstractDiracMatrix,AbstractDiracVector}}
-    SLorentzVector(L[1]*DM,L[2]*DM,L[3]*DM,L[4]*DM)
+    constructorof(TL)(L[1]*DM,L[2]*DM,L[3]*DM,L[4]*DM)
 end
 @inline *(L::TL,DM::T) where {TL<:AbstractLorentzVector,T<:Union{AbstractDiracMatrix,AbstractDiracVector}} = mul(L,DM)
 
@@ -73,14 +71,12 @@ struct SLorentzVector{T} <: AbstractLorentzVector{T}
 
     "`z` component"
     z::T
-
-    SLorentzVector(t::Tt,x::Tx,y::Ty,z::Tz) where {Tt,Tx,Ty,Tz} = new{promote_type(Tt,Tx,Ty,Tz)}(t,x,y,z)
 end
-#SLorentzVector(t, x, y, z) = SLorentzVector(promote(t, x, y, z)...)
+SLorentzVector(t, x, y, z) = SLorentzVector(promote(t, x, y, z)...)
 
-Base.promote_rule(::Type{SLorentzVector{T1}},::Type{SLorentzVector{T2}}) where {T1,T2} = SLorentzVector{promote_type(T1,T2)}
+#Base.promote_rule(::Type{SLorentzVector{T1}},::Type{SLorentzVector{T2}}) where {T1,T2} = SLorentzVector{promote_type(T1,T2)}
 
-function similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SLorentzVector,T,S}
+function similar_type(::Type{A},::Type{T},::Size{S}) where {A<:SLorentzVector,T,S}
     SLorentzVector{T}
 end
 
@@ -113,14 +109,12 @@ mutable struct MLorentzVector{T} <: AbstractLorentzVector{T}
 
     "`z` component"
     z::T
-
-    MLorentzVector(t::Tt,x::Tx,y::Ty,z::Tz) where {Tt,Tx,Ty,Tz} = new{promote_type(Tt,Tx,Ty,Tz)}(t,x,y,z)
 end
-#MLorentzVector(t, x, y, z) = MLorentzVector(promote(t, x, y, z)...)
+MLorentzVector(t, x, y, z) = MLorentzVector(promote(t, x, y, z)...)
 
 Base.promote_rule(::Type{MLorentzVector{T1}},::Type{MLorentzVector{T2}}) where {T1,T2} = MLorentzVector{promote_type(T1,T2)}
 
-function similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MLorentzVector,T,S}
+function similar_type(::Type{A},::Type{T},::Size{S}) where {A<:MLorentzVector,T,S}
     MLorentzVector{T}
 end
 
@@ -149,7 +143,7 @@ end
 
 register_LorentzVectorLike(MLorentzVector)
 
-#Base.promote_rule(::Type{SLorentzVector},::Type{MLorentzVector}) = MLorentzVector
+#Base.promote_type(::Type{SLorentzVector{T1}},::Type{MLorentzVector{T2}}) where {T1,T2} = MLorentzVector{promote_type(T1,T2)}
 
 
 function dot(p1::T1,p2::T2) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}

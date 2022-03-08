@@ -1,7 +1,7 @@
 
 lorentz_getter = [
     getT,getX,getY,getZ,
-    getMagnitude2, getMag2, getMag, 
+    getMagnitude2, getMag2,getMagnitude, getMag, 
     getInvariantMass2, getMass2, getInvariantMass, getMass,
     getE, getPx, getPy, getPz,
     getBeta, getGamma,

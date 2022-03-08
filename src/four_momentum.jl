@@ -1,23 +1,24 @@
 """
-FourMomentum type
+SFourMomentum type
 
 """
 
+abstract type AbstractFourMomentum <: AbstractLorentzVector{Float64} end
 
 #######
 #
-# Concrete FourMomentum type
+# Concrete SFourMomentum type
 #
 #######
 """
 $(TYPEDEF)
 
-Builds a LorentzVector with real components used to model the four-momentum of a particle or field.
+Builds a static LorentzVector with real components used to statically model the four-momentum of a particle or field.
 
 # Fields
 $(TYPEDFIELDS)
 """
-struct FourMomentum <: AbstractLorentzVector{Float64}
+struct SFourMomentum <: AbstractFourMomentum
 
     "Time component"
     t::Float64
@@ -40,11 +41,89 @@ The interface transforms each number-like input to float64:
 
 $(TYPEDSIGNATURES)
 """
-FourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = FourMomentum(float(t), x, y, z)
+SFourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = SFourMomentum(float(t), x, y, z)
 
 
-similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T<:Real,S} = FourMomentum
-similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T,S} = LorentzVector{T}
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T<:Real,S} = SFourMomentum
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T,S} = SLorentzVector{T}
+
+
+@inline getT(p::SFourMomentum) = p.t
+@inline getX(p::SFourMomentum) = p.x
+@inline getY(p::SFourMomentum) = p.y
+@inline getZ(p::SFourMomentum) = p.z
+
+register_LorentzVectorLike(SFourMomentum)
+
+#######
+#
+# Concrete MFourMomentum type
+#
+#######
+"""
+$(TYPEDEF)
+
+Builds a mutable LorentzVector with real components used to statically model the four-momentum of a particle or field.
+
+# Fields
+$(TYPEDFIELDS)
+"""
+mutable struct MFourMomentum <: AbstractFourMomentum
+
+    "Time component"
+    t::Float64
+
+    "`x` component"
+    x::Float64
+
+    "`y` component"
+    y::Float64
+
+    "`z` component"
+    z::Float64
+end
+
+
+"""
+$(SIGNATURES)
+
+The interface transforms each number-like input to float64:
+
+$(TYPEDSIGNATURES)
+"""
+MFourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = MFourMomentum(float(t), x, y, z)
+
+
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T<:Real,S} = MFourMomentum
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T,S} = MLorentzVector{T}
+
+
+@inline getT(p::MFourMomentum) = p.t
+@inline getX(p::MFourMomentum) = p.x
+@inline getY(p::MFourMomentum) = p.y
+@inline getZ(p::MFourMomentum) = p.z
+
+
+
+
+function QEDbase.setT!(lv::MFourMomentum,value::Float64)
+    lv.t = value
+end
+
+function QEDbase.setX!(lv::MFourMomentum,value::Float64)
+    lv.x = value
+end
+
+function QEDbase.setY!(lv::MFourMomentum,value::Float64)
+    lv.y = value
+end
+
+function QEDbase.setZ!(lv::MFourMomentum,value::Float64)
+    lv.z = value
+end
+
+
+register_LorentzVectorLike(MFourMomentum)
 
 
 
@@ -53,34 +132,6 @@ similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T,S} = Loren
 # Utility functions on FourMomenta
 #
 #######
-"""
-
-    mass_square(p::FourMomentum)
-
-Calculate the mass square of the given four-momentum. We use the mostly-minus metric for that, i.e. return
-
-```math
-m^2 := p_0^2 - p_1^2 -p_2^2 - p_3^2
-```
-"""
-function mass_square(p::FourMomentum)
-    dot(p,p)
-end
-
-"""
-
-    mass(p::FourMomentum)
-
-Calculate the mass w.r.t. a given four-momentum ``p``. This function will return a complex number if the mass square is negative, e.g. if ``p`` is the momentum of a virtual particle.
-"""
-function mass(p::FourMomentum)
-    m2 = mass_square(p)
-    if m2<0
-        m2=complex(m2)
-    end
-    return sqrt(m2)
-end
-
-function isonshell(P::FourMomentum,m::T) where T<:Real
-    isapprox(mass_square(P),m^2)
+function isonshell(P::TM,m::T) where {TM<:AbstractFourMomentum,T<:Real}
+    isapprox(getMass2(P),m^2)
 end

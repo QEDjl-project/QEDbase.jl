@@ -85,8 +85,9 @@ end
 # general functions
 
 
-@inline @traitfn minkowski_dot(x1::T,x2::T) where {T; IsLorentzVectorLike{T}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
-minkowski_dot(x::T1,y::T2) where {T1,T2} = minkowski_dot(promote(x,y)...)
+#@inline @traitfn minkowski_dot(x1::T,x2::T) where {T; IsLorentzVectorLike{T}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
+@inline @traitfn minkowski_dot(x1::T1,x2::T2) where {T1,T2; IsLorentzVectorLike{T1},IsLorentzVectorLike{T2}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
+
 const mdot = minkowski_dot
 
 @inline @traitfn getMagnitude2(lv::T) where {T; IsLorentzVectorLike{T}} = getX(lv)^2 + getY(lv)^2 + getZ(lv)^2
@@ -209,6 +210,7 @@ const setEnergy! = setE!
     setX!(lv,rho*sth*cphi)
     setY!(lv,rho*sth*sphi)
     setZ!(lv,rho*cos(theta))
+    return 
 end
 
 @traitfn function setCosTheta!(lv::T,cos_theta::VT)  where {T,VT; IsLorentzVectorLike{T}}
@@ -220,29 +222,33 @@ end
     setX!(lv,rho*sth*cphi)
     setY!(lv,rho*sth*sphi)
     setZ!(lv,rho*cos_theta)
+    return 
 end
 
 @traitfn function setRho!(lv::T,rho::VT)  where {T,VT; IsLorentzVectorLike{T}}
     rho2 = getRho(lv)
     if rho != zero(rho2)
-        setX!(getX(lv)*rho/rho2)
-        setX!(getY(lv)*rho/rho2)
-        setX!(getZ(lv)*rho/rho2)
+        setX!(lv,getX(lv)*rho/rho2)
+        setX!(lv,getY(lv)*rho/rho2)
+        setX!(lv,getZ(lv)*rho/rho2)
     end
     # add warning if rho2 == 0 -> zero vector does not change if its length is stretched.
+    return 
 end
 
 
 # setter light cone coordinates
 
 @traitfn function setPlus!(lv::T,plus::VT)  where {T,VT; IsLorentzVectorLike{T}}
-    setT!(plus + getMinus(lv))
-    setZ!(plus - getMinus(lv))
+    setT!(lv,plus + getMinus(lv))
+    setZ!(lv,plus - getMinus(lv))
+    return 
 end
 
 @traitfn function setMinus!(lv::T,minus::VT)  where {T,VT; IsLorentzVectorLike{T}}
-    setT!(getPlus(lv) + minus)
-    setZ!(getPlus(lv) - minus)
+    setT!(lv,getPlus(lv) + minus)
+    setZ!(lv,getPlus(lv) - minus)
+    return 
 end
 
 
@@ -251,10 +257,11 @@ end
 @traitfn function setTransversMomentum!(lv::T,pT::VT)  where {T,VT; IsLorentzVectorLike{T}}
     old_pT = getTransverseMomentum(lv)
     if old_PT != zero(old_pT)
-        setX!(getX(lv)*pT/old_pT)
-        setY!(getY(lv)*pT/old_pT)
+        setX!(lv,getX(lv)*pT/old_pT)
+        setY!(lv,getY(lv)*pT/old_pT)
     end
     # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+    return 
 end
 const setPerp! = setTransversMomentum!
 const setPt! = setTransversMomentum!
@@ -262,17 +269,19 @@ const setPt! = setTransversMomentum!
 @traitfn function setTransverseMass!(lv::T,mT::VT)  where {T,VT; IsLorentzVectorLike{T}}
     old_mT = getTransverseMass(lv)
     if old_PT != zero(old_pT)
-        setT!(getT(lv)*mT/old_mT)
-        setZ!(getZ(lv)*mT/old_mT)
+        setT!(lv,getT(lv)*mT/old_mT)
+        setZ!(lv,getZ(lv)*mT/old_mT)
     end
     # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+    return 
 end
 const setMt! = setTransverseMass!
 
 
 @traitfn function setRapidity!(lv::T,rap::VT)  where {T,VT; IsLorentzVectorLike{T}}
     mT = getTransverseMass(lv)
-    setT!(mT*cosh(rap))
-    setZ!(mT*sinh(rap))
+    setT!(lv,mT*cosh(rap))
+    setZ!(lv,mT*sinh(rap))
     # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
+    return 
 end

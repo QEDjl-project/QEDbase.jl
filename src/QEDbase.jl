@@ -8,6 +8,7 @@ module QEDbase
 
 using SimpleTraits
 using ArgCheck
+using ConstructionBase
 
 import Base:*
 import StaticArrays: similar_type
@@ -17,7 +18,7 @@ import StaticArrays: similar_type
 
 export minkowski_dot,mdot,register_LorentzVectorLike
 export getT,getX, getY, getZ
-export getMagnitude2, getMag2, getMag
+export getMagnitude2, getMag2, getMagnitude,getMag
 export getInvariantMass2, getMass2, getInvariantMass, getMass
 export getE, getPx, getPy, getPz
 export getBeta, getGamma
@@ -36,8 +37,8 @@ export setTransversMomentum!,setPerp!,setPt!
 export setTransverseMass!,setMt!
 export setRapidity!
 
-export AbstractLorentzVector,SLorentzVector, dot
-export FourMomentum, mass_square,mass,isonshell
+export AbstractLorentzVector,SLorentzVector,MLorentzVector, dot
+export SFourMomentum,MFourMomentum,isonshell
 
 export BiSpinor, AdjointBiSpinor, DiracMatrix, mul
 export AbstractDiracVector, AbstractDiracMatrix

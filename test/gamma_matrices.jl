@@ -30,7 +30,7 @@ EYE = one(DiracMatrix)
     end # Minkowski product
 
     @testset "gamma sandwich" begin
-        @test LorentzVector([_gamma_sandwich(nu) for nu in 1:4]) == -2*GAMMA
+        @test SLorentzVector([_gamma_sandwich(nu) for nu in 1:4]) == -2*GAMMA
     end # gamma sandwich
 
     @testset "adjoints" begin
@@ -39,12 +39,12 @@ EYE = one(DiracMatrix)
             @test adjoint(GAMMA[i])==-GAMMA[i]
         end
 
-        @test LorentzVector([adjoint(GAMMA[nu]) for nu in 1:4]) == GAMMA[1]*(GAMMA*GAMMA[1])
+        @test SLorentzVector([adjoint(GAMMA[nu]) for nu in 1:4]) == GAMMA[1]*(GAMMA*GAMMA[1])
     end # adjoints
 
-    @testset "interface LorentzVector" begin
-        a = LorentzVector(rand(rng,4))
-        b = LorentzVector(rand(rng,4))
+    @testset "interface SLorentzVector" begin
+        a = SLorentzVector(rand(rng,4))
+        b = SLorentzVector(rand(rng,4))
 
         a_slash = GAMMA*a
         b_slash = GAMMA*b
@@ -52,10 +52,10 @@ EYE = one(DiracMatrix)
         @test isapprox(tr(a_slash*b_slash), 4*a*b)
         @test isapprox(a_slash*a_slash,(a*a)*one(DiracMatrix))
         @test isapprox(GAMMA*(a_slash*GAMMA),-2*a_slash)
-    end # interface LorentzVector
+    end # interface SLorentzVector
 
     @testset "Feynman slash" begin
-        a = LorentzVector(rand(rng,4) + 1im*rand(rng,4))
+        a = SLorentzVector(rand(rng,4) + 1im*rand(rng,4))
 
         @test isapprox(slashed(a),GAMMA*a)
         @test isapprox(slashed(a),slashed(DiracGammaRepresentation,a))
