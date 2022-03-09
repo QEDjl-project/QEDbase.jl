@@ -19,6 +19,7 @@ This package is part of the `QED.jl` library. For the description of the interop
 - Dirac's gamma matrices
 
 ## Installation
+
 To install the current stable version of `QEDbase.jl` you may use the standard julia package manager within the julia REPL
 
 ```julia
@@ -26,6 +27,7 @@ julia> using Pkg
 
 julia> Pkg.add("QEDbase")
 ```
+
 or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
@@ -81,13 +83,15 @@ Test Summary: | Pass  Total
 QEDbase.jl    |  468    468
      Testing QEDbase tests passed
 ```
+
 If you see the last line, you can assume that `QEDbase.jl` works properly for you.
 
-
 ## Contributing
+
 If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QED.jl` coherent, consider visiting the general [contribution guide of `QED.jl`](www.contribution-of-qed.jl).
 
 ## Credits and contributers
+
 This work was partly funded by the Center for Advanced Systems Understanding (CASUS) that is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget approved by the Saxon State Parliament.
 
 The core code of the package `QEDbase.jl` is developed by a small team at the Center for Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
