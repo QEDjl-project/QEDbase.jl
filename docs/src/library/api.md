@@ -5,6 +5,13 @@ Modules = [QEDbase]
 Pages   = ["QEDbase.jl"]
 ```
 
+# Lorentz Vector Interface
+```@autodocs
+Modules = [QEDbase]
+Pages   = ["lorentz_interface.jl"]
+Order   = [:type,:function]
+```
+
 # Lorentz Vectors
 ```@autodocs
 Modules = [QEDbase]

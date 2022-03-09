@@ -15,6 +15,9 @@ Abstract type to model generic Lorentz vectors, i.e. elements of a minkowski-lik
 abstract type AbstractLorentzVector{T} <: FieldVector{4, T} end
 
 #interface with dirac tensors
+
+
+
 """
 $(TYPEDSIGNATURES)
 
@@ -22,7 +25,6 @@ Product product of generic Lorentz vector with a Dirac tensor from the left. Bas
 
 !!! note "Multiplication operator"
     This also overloads the `*` operator for this types.
-
 """
 function mul(DM::T,L::TL) where {T<:Union{AbstractDiracMatrix,AbstractDiracVector},TL<:AbstractLorentzVector}
     constructorof(TL)(DM*L[1],DM*L[2],DM*L[3],DM*L[4])

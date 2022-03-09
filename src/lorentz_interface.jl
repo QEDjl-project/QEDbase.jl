@@ -55,6 +55,14 @@ end
 @traitdef IsMutableLorentzVectorLike{T}
 
 
+
+"""
+$(SIGNATURES)
+
+The Lorentz-vector interface getter which returns the 0-component.
+
+$(TYPEDSIGNATURES)
+"""
 function getT end
 function getX end
 function getY end
@@ -90,6 +98,17 @@ end
 
 # general functions
 #@inline @traitfn minkowski_dot(x1::T,x2::T) where {T; IsLorentzVectorLike{T}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
+
+
+"""
+$(SIGNATURES)
+
+The generic version of the Minkowski dot product.
+
+$(TYPEDSIGNATURES)
+"""
+minkowski_dot
+
 @inline @traitfn minkowski_dot(x1::T1,x2::T2) where {T1,T2; IsLorentzVectorLike{T1},IsLorentzVectorLike{T2}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
 
 const mdot = minkowski_dot

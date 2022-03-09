@@ -10,10 +10,11 @@ This is `QEDbase.jl`, a julia package which provides the general data structures
 
 This package is part of the `QED.jl` library. For the description of the interoperability with other packages of `QED.jl` see [docs](www.docs-to-qed.jl).
 
+## Current features
 
-#### Current features
-- Lorentz vectors as well as  four momenta and four polarisation vectors
-- general BiSpinors, its adjoint counterpart as well as Dirac matrices
+- Generic interface for Lorentz vectors
+- concrete implementations of static and mutable Lorentz-vector/four-momentum types
+- general Dirac bi-spinors, its adjoint counterpart as well as Dirac matrices
 - particle spinors, i.e. solutions of Dirac's equation in momentum space
 - Dirac's gamma matrices
 
@@ -33,7 +34,7 @@ or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ## Quickstart
 #### Four momentum
-One can define a four momentum component wise:
+One can define a static four momentum component wise:
 
 ```julia
 julia> using QEDbase
@@ -44,13 +45,28 @@ julia> px,py,pz = rand(3)
 
 julia> E = sqrt(px^2 + py^2 + pz^2 + mass^2) # on-shell condition
 
-julia> P = FourMomentum(E,px,py,pz)
+julia> P = SFourMomentum(E,px,py,pz)
 ```
-Such `FourMomentum` behaves like a four element static array (with all the standard arithmetics), but with the `dot` product exchanged with the Minkowski product
+
+Such `SFourMomentum` behaves like a four element static array (with all the standard arithmetics), but with the `dot` product exchanged with the Minkowski product
+
 ```julia
-julia> @assert dot(P,P) == P*P == mass_square(P) == P[1]^2 - sum(P[1:].^2)
+julia> @assert dot(P,P) == P*P == getMass2(P) == P[1]^2 - sum(P[1:].^2)
 ```
+
+Furthermore, the Lorentz-vector interface provides a lot of properties for such a `SFourMomentum`, e.g.
+
+```julia
+
+julia> @assert isapprox(getRapidity(mom), 0.5*log((E+pz)/(E-pz)))
+julia> @assert isapprox(getPlus(mom), 0.5*(E+pz))
+julia> @assert isapprox(getPerp(mom), px^2 + py^2)
+```
+
+and a lot more (see [here](www.docs-to-the-lorentz-interface-getter.jl) for a complete list). There is also a mutable version of a four vector in `QEDbase.jl`, where the Lorentz-vector interface provides setters to different properties as well (see [here](www.docs-to-the-lorentz-interface-setter.jl) for details).
+
 ## Testing
+
 After installation it might be necessary to check if everything works properly. For that you can run the unittests by typing within the julia REPL
 
 ```julia
@@ -62,9 +78,11 @@ julia> Pkg.test("QEDbase")
 
 Testing Running tests...
 Test Summary: | Pass  Total
-QEDbase.jl    |  149    149
+QEDbase.jl    |  468    468
      Testing QEDbase tests passed
 ```
+If you see the last line, you can assume that `QEDbase.jl` works properly for you.
+
 
 ## Contributing
 If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QED.jl` coherent, consider visiting the general [contribution guide of `QED.jl`](www.contribution-of-qed.jl).
