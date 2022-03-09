@@ -1,24 +1,24 @@
 
 lorentz_getter = [
-    getT,getX,getY,getZ,
-    getMagnitude2, getMag2,getMagnitude, getMag, 
+    getT,getX, getY, getZ,
+    getMagnitude2, getMag2, getMagnitude,getMag,
     getInvariantMass2, getMass2, getInvariantMass, getMass,
-    getE, getPx, getPy, getPz,
+    getE, getEnergy, getPx, getPy, getPz,
     getBeta, getGamma,
     getTransverseMomentum2, getPt2, getPerp2, getTransverseMomentum, getPt, getPerp,
-    getTransverseMass2, getMt2, getTransverseMass, getMt, 
+    getTransverseMass2, getMt2, getTransverseMass, getMt,
     getRapidity,
     getRho2,getRho,
     getTheta,getCosTheta,
     getPhi,getCosPhi,getSinPhi,
-    getPlus,getMinus,
+    getPlus,getMinus
 ]
 
 lorentz_setter = [
-    setE!,setPx!,setPy!,setPz!,
-    setTheta!,setCosTheta!,setRho!,
+    setE!,setEnergy!,setPx!,setPy!,setPz!,
+    setTheta!,setCosTheta!,setRho!, setPhi!,
     setPlus!,setMinus!,
-    setTransversMomentum!,setPerp!,setPt!,
+    setTransverseMomentum!,setPerp!,setPt!,
     setTransverseMass!,setMt!,
     setRapidity!
 ]
@@ -26,17 +26,12 @@ lorentz_setter = [
 @testset "LorentzVectorInterface" begin
 
     @testset "CustomType" begin
-        struct CustomType{T<:Real}
-            t::T
-            x::T
-            y::T
-            z::T
-        end
+        struct CustomType{T} end
         
-        @inline QEDbase.getT(lv::CustomType) = lv.t
-        @inline QEDbase.getX(lv::CustomType) = lv.x
-        @inline QEDbase.getY(lv::CustomType) = lv.y
-        @inline QEDbase.getZ(lv::CustomType) = lv.z
+        function QEDbase.getT(lv::CustomType) end
+        function QEDbase.getX(lv::CustomType) end
+        function QEDbase.getY(lv::CustomType) end
+        function QEDbase.getZ(lv::CustomType) end
 
         QEDbase.register_LorentzVectorLike(CustomType)
 
@@ -48,35 +43,18 @@ lorentz_setter = [
     end
 
     @testset "MutableCustomType" begin
-        struct MutableCustomType{T<:Real}
-            t::T
-            x::T
-            y::T
-            z::T
-        end
+        mutable struct MutableCustomType{T} end
         
-        @inline QEDbase.getT(lv::MutableCustomType) = lv.t
-        @inline QEDbase.getX(lv::MutableCustomType) = lv.x
-        @inline QEDbase.getY(lv::MutableCustomType) = lv.y
-        @inline QEDbase.getZ(lv::MutableCustomType) = lv.z
+        function QEDbase.getT(lv::MutableCustomType) end
+        function QEDbase.getX(lv::MutableCustomType) end
+        function QEDbase.getY(lv::MutableCustomType) end
+        function QEDbase.getZ(lv::MutableCustomType) end
 
 
-        function QEDbase.setT!(lv::MutableCustomType,value::T) where {T<:Real}
-            lv.t = value
-        end
-
-        function QEDbase.setX!(lv::MutableCustomType,value::T) where {T<:Real}
-            lv.x = value
-        end
-
-        function QEDbase.setY!(lv::MutableCustomType,value::T) where {T<:Real}
-            lv.y = value
-        end
-
-        function QEDbase.setZ!(lv::MutableCustomType,value::T) where {T<:Real}
-            lv.z = value
-        end
-
+        function QEDbase.setT!(lv::MutableCustomType,value::T) where T end
+        function QEDbase.setX!(lv::MutableCustomType,value::T) where T end
+        function QEDbase.setY!(lv::MutableCustomType,value::T) where T end
+        function QEDbase.setZ!(lv::MutableCustomType,value::T) where T end
 
         QEDbase.register_LorentzVectorLike(MutableCustomType)
 

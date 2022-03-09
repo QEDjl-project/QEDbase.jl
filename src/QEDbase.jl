@@ -20,7 +20,7 @@ export minkowski_dot,mdot,register_LorentzVectorLike
 export getT,getX, getY, getZ
 export getMagnitude2, getMag2, getMagnitude,getMag
 export getInvariantMass2, getMass2, getInvariantMass, getMass
-export getE, getPx, getPy, getPz
+export getE, getEnergy, getPx, getPy, getPz
 export getBeta, getGamma
 export getTransverseMomentum2, getPt2, getPerp2, getTransverseMomentum, getPt, getPerp
 export getTransverseMass2, getMt2, getTransverseMass, getMt
@@ -30,10 +30,10 @@ export getTheta,getCosTheta
 export getPhi,getCosPhi,getSinPhi
 export getPlus,getMinus
 
-export setE!,setPx!,setPy!,setPz!
-export setTheta!,setCosTheta!,setRho!
+export setE!,setEnergy!,setPx!,setPy!,setPz!
+export setTheta!,setCosTheta!,setRho!, setPhi!
 export setPlus!,setMinus!
-export setTransversMomentum!,setPerp!,setPt!
+export setTransverseMomentum!,setPerp!,setPt!
 export setTransverseMass!,setMt!
 export setRapidity!
 

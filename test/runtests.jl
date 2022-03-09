@@ -10,5 +10,6 @@ using Test
     include("gamma_matrices.jl")
 
     include("particle_spinors.jl")
+    include("four_momentum.jl")
 
 end
