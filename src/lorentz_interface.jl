@@ -1,13 +1,8 @@
 """
-Here the lorentz vector interface is defined. It is based on the trait `LorentzVectorStyle`, which has two states 
+Here the Lorentz vector interface is defined. It enables several functions related to Lorentz vectors for any custom type just by implementing the API for the respective type.
+For instance, say we want to implement a type, which shall act like a Lorentz vector. Then, we start with our custom type:
 
-```Julia
-    IsLorentzVectorLike <: LorentzVectorStyle
-    NotLorentzVectorLike <: LorentzVectorStyle
-````
-In order to use the lorentz vector library, one needs to implement a custom type, e.g.
-
-```Julia
+```julia
 struct CustomType
     t::Float64
     x::Float64
@@ -15,27 +10,41 @@ struct CustomType
     z::Float64
 end
 ```
-For this `CustomType`, one need to overload the functions
-`getT`, `getX`, `getY`, and `getZ` from `QEDbase`:
+The first group of functions to be implemented for this `CustomType` in order to connect this type to the Lorentz vector interface are the getter for the cartesian components.
 
-```Julia
+```julia
 QEDbase.getT(lv::CustomType) = lv.t
 QEDbase.getX(lv::CustomType) = lv.x
 QEDbase.getY(lv::CustomType) = lv.y
 QEDbase.getZ(lv::CustomType) = lv.z
 ```
-With this done, one can register the `CustomType` as a `LorentzVectorLike` type,
-which enables generic functions like:
+Make sure that you dispatch on the getter from `QEDbase` by defining `QEDbase.getT`, etc.
 
+With this done, we can aleady register the `CustomType` as a `LorentzVectorLike` type using the `register_LorentzVectorLike` function
+```juila
+register_LorentzVectorLike(CustomType)
+```
+If something goes wrong, this function call will raise an `RegistryError` indicating, what is missing. With this done, `CustomType` is ready to be used as a LorentzVectorLike
 ```Julia
 L = CustomType(2.0,1.0,0.0,-1.0)
 
 getTheta(L) # 
 getRapidity(L) # 
-...
 ```
+
 """
 
+
+"""
+
+$(TYPEDEF)
+
+Exception raised, if a certain type `target_type` can not be registed for a certain interface, since there needs the function `func` to be impleemnted.
+
+# Fields
+$(TYPEDFIELDS)
+
+"""
 struct RegistryError <: Exception
     func::Function
     target_type
@@ -46,6 +55,11 @@ function Base.showerror(io::IO, err::RegistryError)
     println(io,"RegistryError:"," The type <$(err.target_type)> must implement <$(err.func)> to be registered.")
 end
 
+"""
+$(SIGNATURES)
+
+Wrapper around `Base.hasmethod` with a more meaningful error message in the context of function registration.
+"""
 function _hasmethod_registry(fun::Function,::Type{T}) where T
 	@argcheck hasmethod(fun,Tuple{T}) RegistryError(fun,T)
 end
@@ -57,24 +71,100 @@ end
 
 
 """
-$(SIGNATURES)
 
-The Lorentz-vector interface getter which returns the 0-component.
+    getT(lv)
 
-$(TYPEDSIGNATURES)
+Return the 0-component of a given `LorentzVectorLike`.
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t`.
+
 """
 function getT end
+
+"""
+
+    getX(lv)
+
+Return the 1-component of a given `LorentzVectorLike`.
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `x`.
+
+"""
 function getX end
+
+"""
+
+    getY(lv)
+
+Return the 2-component of a given `LorentzVectorLike`.
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `y`.
+
+"""
 function getY end
+
+"""
+
+    getZ(lv)
+
+Return the 3-component of a given `LorentzVectorLike`.
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `z`.
+
+"""
 function getZ end
 
+"""
+
+    setT!(lv,value)
+
+Sets the 0-component of a given `LorentzVectorLike` to the given `value`.
+"""
 function setT! end
+
+"""
+
+    setX!(lv,value)
+
+Sets the 1-component of a given `LorentzVectorLike` to the given `value`.
+"""
 function setX! end
+
+"""
+
+    setY!(lv,value)
+
+Sets the 2-component of a given `LorentzVectorLike` to the given `value`.
+"""
 function setY! end
+
+"""
+
+    setZ!(lv,value)
+
+Sets the 3-component of a given `LorentzVectorLike` to the given `value`.
+"""
 function setZ! end
 
 
+"""
+$(SIGNATURES)
 
+Function to register a custom type as a LorentzVectorLike. 
+
+This makes sure, the passed custom type has implemented at least the function `getT, getX, getY, getZ` 
+and enables getter functions of the lorentz vector libray for the given type. 
+If additionally the functions `setT!,setX!,setY!,setZ!` are implemened for the passed custom type,
+also the setter functions of the Lorentz vector interface are enable.
+"""
 function register_LorentzVectorLike(T::Type)
     _hasmethod_registry(getT, T)
     _hasmethod_registry(getX, T)
@@ -90,38 +180,118 @@ function register_LorentzVectorLike(T::Type)
 end
 
 
-####
-#
-# getter
-#
-####
-
-# general functions
-#@inline @traitfn minkowski_dot(x1::T,x2::T) where {T; IsLorentzVectorLike{T}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
 
 
 """
-$(SIGNATURES)
+    
+    minkowski_dot(v1,v2)
 
-The generic version of the Minkowski dot product.
+Return the Minkowski dot product of two `LorentzVectorLike`. 
 
-$(TYPEDSIGNATURES)
+!!! example
+
+    If `(t1,x1,y1,z1)` and `(t2,x2,y2,z2)` are two `LorentzVectorLike`, this is equivalent to 
+    ```julia
+    t1*t2 - (x1*x2 + y1*y2 + z1*z2)
+    ```
+
+!!! note
+
+    Here we use the mostly minus metric.
+
 """
-minkowski_dot
-
 @inline @traitfn minkowski_dot(x1::T1,x2::T2) where {T1,T2; IsLorentzVectorLike{T1},IsLorentzVectorLike{T2}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
 
+"""
+Function alias for [`minkowski_dot`](@ref).
+"""
 const mdot = minkowski_dot
 
+
+########
+# getter
+########
+"""
+    
+    getMagnitude2(lv)
+
+Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum of the squared spatial components. 
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `x^2+ y^2 + z^2`.
+
+
+!!! warning
+
+    This function differs from a similar function for the `TLorentzVector` used in the famous `ROOT` library.
+
+"""
 @inline @traitfn getMagnitude2(lv::T) where {T; IsLorentzVectorLike{T}} = getX(lv)^2 + getY(lv)^2 + getZ(lv)^2
+
+"""
+Functiom alias for [`getMagnitude2`](@ref).
+"""
 const getMag2 = getMagnitude2
 
+
+"""
+
+    getMagnitude(lv)
+
+Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spatial components. 
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(x^2+ y^2 + z^2)`.
+
+
+!!! warning
+
+    This function differs from a similar function for the `TLorentzVector` used in the famous `ROOT` library.
+
+"""
 @inline @traitfn getMagnitude(lv::T)  where {T; IsLorentzVectorLike{T}} = sqrt(getMagnitude2(lv))
+
+"""
+Functiom alias for [`getMagnitude`](@ref).
+"""
 const getMag = getMagnitude
 
+
+"""
+
+    getInvariantMass2(lv)
+
+Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minkowski dot with itself. 
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t^2 - (x^2+ y^2 + z^2)`. 
+
+
+"""
 @inline @traitfn getInvariantMass2(lv::T)  where {T; IsLorentzVectorLike{T}} = minkowski_dot(lv,lv)
+
+"""Function alias for [`getInvariantMass2`](@ref)"""
 const getMass2 = getInvariantMass2
 
+"""
+
+    getInvariantMass(lv)
+
+Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square root of the minkowski dot with itself. 
+
+!!! example 
+
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(t^2 - (x^2+ y^2 + z^2))`.
+
+
+!!! note
+    
+    If the squared invariant mass `m2` is negative, `-sqrt(-m2)` is returned. 
+
+"""
 @traitfn function getInvariantMass(lv::T)  where {T; IsLorentzVectorLike{T}} 
     m2 = getInvariantMass2(lv)
     if m2<zero(m2)
@@ -132,18 +302,82 @@ const getMass2 = getInvariantMass2
         return sqrt(m2)
     end
 end
+
+"""Function alias for [`getInvariantMass`](@ref)."""
 const getMass = getInvariantMass
 
 
+##########################
 # Momentum specific getter
+##########################
 
+"""
+
+    getE(lv)
+
+Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component. 
+
+!!! example 
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `E`.
+
+"""
 @inline @traitfn getE(lv::T)  where {T; IsLorentzVectorLike{T}} =  getT(lv)
+
+"""Function alias for [`getE`](@ref)."""
 const getEnergy = getE
 
+
+"""
+
+    getPx(lv)
+
+Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-component. 
+
+!!! example 
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `px`.
+
+"""
 @inline @traitfn getPx(lv::T)  where {T; IsLorentzVectorLike{T}} =  getX(lv)
+
+"""
+
+    getPy(lv)
+
+Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-component. 
+
+!!! example 
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `py`.
+
+"""
 @inline @traitfn getPy(lv::T)  where {T; IsLorentzVectorLike{T}} =  getY(lv)
+
+"""
+
+    getPz(lv)
+
+Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-component. 
+
+!!! example 
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `pz`.
+
+"""
 @inline @traitfn getPz(lv::T)  where {T; IsLorentzVectorLike{T}} =  getZ(lv)
 
+"""
+
+    getBeta(lv)
+
+Return magnitude of the beta vector for a given `LorentzVectorLike`, i.e. the magnitude of the `LorentzVectorLike` divided by its 0-component.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `sqrt(px^2 + py^2 + pz^2)/E`.
+
+"""
 @inline @traitfn function getBeta(lv::T)  where {T; IsLorentzVectorLike{T}}
     if getT(lv)!=zero(getT(lv))
         getRho(lv)/getT(lv)
@@ -154,18 +388,109 @@ const getEnergy = getE
     end
 end
 
+"""
+
+    getGamma(lv)
+
+Return the relativistic gamma factor for a given `LorentzVectorLike`, i.e. the inverse square root of one minus the beta vector squared.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike` with beta vector `β`, this is equivalent to `1/sqrt(1- β^2)`.
+
+"""
 @inline @traitfn getGamma(lv::T)  where {T; IsLorentzVectorLike{T}} =  inv(sqrt(one(getT(lv))-getBeta(lv)^2))
 
+
+########################
 # transverse coordinates
+########################
+"""
+
+    getTransverseMomentum2(lv)
+
+Return the squared transverse momentum for a given `LorentzVectorLike`, i.e. the sum of its squared 1- and 2-component.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `px^2 + py^2`.
+
+!!! note
+
+    The transverse components are defined w.r.t. to the 3-axis. 
+
+"""
 @inline @traitfn getTransverseMomentum2(lv::T)  where {T; IsLorentzVectorLike{T}} = getX(lv)^2 + getY(lv)^2
+
+"""Function alias for [`getTransverseMomentum2`](@ref)."""
 const getPt2 = getTransverseMomentum2
+"""Function alias for [`getTransverseMomentum2`](@ref)."""
 const getPerp2 = getTransverseMomentum2
+
+"""
+
+    getTransverseMomentum(lv)
+
+Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitude of its transverse components.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `sqrt(px^2 + py^2)`.
+
+
+!!! note
+
+    The transverse components are defined w.r.t. to the 3-axis. 
+
+
+"""
 @inline @traitfn getTransverseMomentum(lv::T)  where {T; IsLorentzVectorLike{T}} = sqrt(getTransverseMomentum2(lv))
+"""Function alias for [`getTransverseMomentum`](@ref)."""
 const getPt = getTransverseMomentum
+"""Function alias for [`getTransverseMomentum`](@ref)."""
 const getPerp = getTransverseMomentum
 
+"""
+
+    getTransverseMass2(lv)
+
+Return the squared transverse mass for a given `LorentzVectorLike`, i.e. the difference of its squared 0- and 3-component.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `E^2 - pz^2`.
+
+
+!!! note
+
+    The transverse components are defined w.r.t. to the 3-axis. 
+
+
+"""
 @inline @traitfn getTransverseMass2(lv::T)  where {T; IsLorentzVectorLike{T}} = getT(lv)^2 - getZ(lv)^2
+"""Function alias for [`getTransverseMass2`](@ref)"""
 const getMt2 = getTransverseMass2
+
+"""
+
+    getTransverseMass(lv)
+
+Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square root of its squared transverse mass.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `sqrt(E^2 - pz^2)`.
+
+
+!!! note
+
+    The transverse components are defined w.r.t. to the 3-axis. 
+
+!!! note
+
+    If the squared transverse mass `mT2` is negative, `-sqrt(-mT2)` is returned.
+
+"""
 @traitfn function getTransverseMass(lv::T)  where {T; IsLorentzVectorLike{T}}
     mT2 = getTransverseMass2(lv)
     if mT2<zero(mT2)
@@ -175,41 +500,168 @@ const getMt2 = getTransverseMass2
         sqrt(mT2)
     end
 end
+"""Function alias for [`getTransverseMass`](@ref)"""
 const getMt = getTransverseMass
 
+"""
 
+    getRapidity(lv)
+
+Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `LorentzVectorLike`.
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `log((E+pz)/(E-pz))`.
+
+
+!!! note
+
+    The transverse components are defined w.r.t. to the 3-axis. 
+
+"""
 @inline @traitfn getRapidity(lv::T)  where {T; IsLorentzVectorLike{T}} = 0.5*log((getT(lv) + getZ(lv))/(getT(lv) - getZ(lv)))
 
+
+#######################
 # spherical coordinates
+#######################
+
+"""Function alias for [`getMagnitude2`](@ref)"""
 const getRho2 = getMagnitude2
+"""Function alias for [`getMagnitude2`](@ref)"""
 const getRho = getMagnitude 
 
+"""
+
+    getTheta(lv)
+
+Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of its spatial components in [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system).
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike` with magnitude `rho`, this is equivalent to `arccos(pz/rho)`.
+
+!!! note
+
+    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis. 
+
+"""
 @inline @traitfn function getTheta(lv::T)  where {T; IsLorentzVectorLike{T}}
     getX(lv)==zero(getX(lv)) && getY(lv)==zero(getY(lv)) && getZ(lv)==zero(getZ(lv)) ? zero(getX(lv)) : atan(getTransverseMomentum(lv),getZ(lv))
 end
 
+"""
+
+    getCosTheta(lv)
+
+Return the cosine of the theta angle for a given `LorentzVectorLike`.
+
+!!! note 
+
+    This is an equivalent but faster version of `cos(getTheta(lv))`; see [`getTheta`](@ref).
+
+"""
 @traitfn function getCosTheta(lv::T)  where {T; IsLorentzVectorLike{T}}
     r = getRho(lv)
     r==zero(getX(lv)) ? one(getX(lv)) : getZ(lv)/r
 end
 
+"""
+
+    getPhi(lv)
+
+Return the phi angle for a given `LorentzVectorLike`, i.e. the azimuthal angle of its spatial components in [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system).
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `atan(py,px)`.
+
+!!! note
+
+    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis. 
+
+"""
 @traitfn function getPhi(lv::T)  where {T; IsLorentzVectorLike{T}}
     n = zero(getX(lv))
     getX(lv)==n && getY(lv)==n ? n : atan(getY(lv),getX(lv))
 end
 
+"""
+
+    getCosPhi(lv)
+
+Return the cosine of the phi angle for a given `LorentzVectorLike`.
+
+!!! note 
+
+    This is an equivalent but faster version of `cos(getPhi(lv))`; see [`getPhi`](@ref).
+
+"""
 @traitfn function getCosPhi(lv::T)  where {T; IsLorentzVectorLike{T}}
     perp = getPerp(lv)
     perp==zero(perp) ? one(perp) : getX(lv)/perp
 end
 
+"""
+
+    getSinPhi(lv)
+
+Return the sin of the phi angle for a given `LorentzVectorLike`.
+
+!!! note 
+
+    This is an equivalent but faster version of `sin(getPhi(lv))`; see [`getPhi`](@ref).
+
+"""
 @traitfn function getSinPhi(lv::T)  where {T; IsLorentzVectorLike{T}}
     perp = getPerp(lv)
     perp==zero(perp) ? sin(perp) : getY(lv)/perp
 end
 
+
+########################
 # light cone coordinates
+########################
+"""
+
+    getPlus(lv)
+
+Return the plus component for a given `LorentzVectorLike` in [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates).
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `(E+pz)/2`.
+
+!!! note
+
+    The [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) are defined w.r.t. to the 3-axis.
+    
+!!! warning
+
+    The definition ``p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+
+"""
 @inline @traitfn getPlus(lv::T)  where {T; IsLorentzVectorLike{T}} = 0.5*(getT(lv) + getZ(lv))
+
+"""
+
+    getMinus(lv)
+
+Return the minus component for a given `LorentzVectorLike` in [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates).
+
+!!! example
+
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `(E-pz)/2`.
+
+!!! note
+
+    The [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) are defined w.r.t. to the 3-axis.
+    
+!!! warning
+
+    The definition ``p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+
+"""
 @inline @traitfn getMinus(lv::T)  where {T; IsLorentzVectorLike{T}} = 0.5*(getT(lv) - getZ(lv))
 
 
