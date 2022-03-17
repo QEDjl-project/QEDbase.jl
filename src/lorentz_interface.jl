@@ -670,14 +670,74 @@ Return the minus component for a given `LorentzVectorLike` in [light-cone coordi
 # Setter
 #
 ####
+
+"""
+
+    setE!(lv,value)
+
+Sets the energy component of a given `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setE!` is then returned by [`getE`](@ref).
+
+"""
 @inline @traitfn setE!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setT!(lv,value)
+"""Function alias for [`setE!`](@ref)."""
 const setEnergy! = setE!
+
+"""
+
+    setPx!(lv,value)
+
+Sets the 1-component of a given `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setPx!` is then returned by [`getPx`](@ref).
+
+"""
 @inline @traitfn setPx!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setX!(lv,value)
+
+"""
+
+    setPy!(lv,value)
+
+Sets the 2-component of a given `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setPy!` is then returned by [`getPy`](@ref).
+
+"""
 @inline @traitfn setPy!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setY!(lv,value)
+
+"""
+
+    setPz!(lv,value)
+
+Sets the 3-component of a given `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setPz!` is then returned by [`getPz`](@ref).
+
+"""
 @inline @traitfn setPz!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setZ!(lv,value)
 
 # setter spherical coordinates
 
+"""
+
+    setTheta!(lv,value)
+
+Sets the theta angle of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setTheta!` is then returned by [`getTheta`](@ref). Since the theta angle is computed on the call of `getTheta`, the setter `setTheta!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setTheta!(lv::T,theta::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = getSinPhi(lv)
@@ -690,6 +750,17 @@ const setEnergy! = setE!
     return 
 end
 
+"""
+
+    setCosTheta!(lv,value)
+
+Sets the cosine of the theta angle of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setCosTheta!` is then returned by [`getCosTheta`](@ref). Since the cosine of the theta angle is computed on the call of `getCosTheta`, the setter `setCosTheta!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setCosTheta!(lv::T,cos_theta::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = getSinPhi(lv)
@@ -702,6 +773,17 @@ end
     return 
 end
 
+"""
+
+    setPhi!(lv,value)
+
+Sets the phi angle of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setPhi!` is then returned by [`getPhi`](@ref). Since the phi angle is computed on the call of `getPhi`, the setter `setPhi!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setPhi!(lv::T,phi::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = sin(phi)
@@ -715,6 +797,17 @@ end
     return 
 end
 
+"""
+
+    setRho!(lv,value)
+
+Sets the magnitude of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setRho!` is then returned by [`getRho`](@ref). Since the magnitude is computed on the call of `getRho`, the setter `setRho!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setRho!(lv::T,rho::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     rho2 = getRho(lv)
     if rho2 != zero(rho2)
@@ -729,6 +822,18 @@ end
 
 # setter light cone coordinates
 
+
+"""
+
+    setPlus!(lv,value)
+
+Sets the plus component of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setPlus!` is then returned by [`getPlus`](@ref). Since the plus component is computed on the call of `getPlus`, the setter `setPlus!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setPlus!(lv::T,plus::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     old_pminus = getMinus(lv)
     setT!(lv,plus + old_pminus)
@@ -736,6 +841,17 @@ end
     return 
 end
 
+"""
+
+    setMinus!(lv,value)
+
+Sets the minus component of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setMinus!` is then returned by [`getMinus`](@ref). Since the minus component is computed on the call of `getMinus`, the setter `setMinus!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setMinus!(lv::T,minus::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     old_pplus = getPlus(lv)
     setT!(lv,old_pplus + minus)
@@ -745,7 +861,17 @@ end
 
 
 # transverse coordinates
+"""
 
+    setTransverseMomentum!(lv,value)
+
+Sets the transverse momentum of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setTransverseMomentum!` is then returned by [`getTransverseMomentum`](@ref). Since the transverse momentum is computed on the call of `getTransverseMomentum`, the setter `setTransverseMomentum!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setTransverseMomentum!(lv::T,pT::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     old_pT = getTransverseMomentum(lv)
     if old_pT != zero(old_pT)
@@ -755,9 +881,22 @@ end
     # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
     return 
 end
+"""Function alias for [`setTransverseMomentum!`](@ref)."""
 const setPerp! = setTransverseMomentum!
+"""Function alias for [`setTransverseMomentum!`](@ref)."""
 const setPt! = setTransverseMomentum!
 
+"""
+
+    setTransverseMass!(lv,value)
+
+Sets the transverse mass of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setTransverseMass!` is then returned by [`getTransverseMass`](@ref). Since the transverse mass is computed on the call of `getTransverseMass`, the setter `setTransverseMass!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setTransverseMass!(lv::T,mT::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     old_mT = getTransverseMass(lv)
     if old_mT != zero(old_mT)
@@ -767,9 +906,20 @@ const setPt! = setTransverseMomentum!
     # add warning if old_pert == 0 -> vector with vanishing pert components does not change if its length is stretched transversally.
     return 
 end
+"""Function alias for [`setTransverseMass!`](@ref)."""
 const setMt! = setTransverseMass!
 
+"""
 
+    setRapidity!(lv,value)
+
+Sets the rapidity of a `LorentzVectorLike` to a given `value`.
+
+!!! note
+
+    The `value` setted with `setRapidity!` is then returned by [`setRapidity`](@ref). Since the rapidity is computed on the call of `setRapidity`, the setter `setRapidity!` changes several components of the given `LorentzVectorLike`.
+
+"""
 @traitfn function setRapidity!(lv::T,rap::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
     mT = getTransverseMass(lv)
     setT!(lv,mT*cosh(rap))
