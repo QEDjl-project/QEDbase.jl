@@ -76,8 +76,6 @@ struct SLorentzVector{T} <: AbstractLorentzVector{T}
 end
 SLorentzVector(t, x, y, z) = SLorentzVector(promote(t, x, y, z)...)
 
-#Base.promote_rule(::Type{SLorentzVector{T1}},::Type{SLorentzVector{T2}}) where {T1,T2} = SLorentzVector{promote_type(T1,T2)}
-
 function similar_type(::Type{A},::Type{T},::Size{S}) where {A<:SLorentzVector,T,S}
     SLorentzVector{T}
 end
@@ -114,8 +112,6 @@ mutable struct MLorentzVector{T} <: AbstractLorentzVector{T}
 end
 MLorentzVector(t, x, y, z) = MLorentzVector(promote(t, x, y, z)...)
 
-Base.promote_rule(::Type{MLorentzVector{T1}},::Type{MLorentzVector{T2}}) where {T1,T2} = MLorentzVector{promote_type(T1,T2)}
-
 function similar_type(::Type{A},::Type{T},::Size{S}) where {A<:MLorentzVector,T,S}
     MLorentzVector{T}
 end
@@ -144,9 +140,6 @@ end
 
 
 register_LorentzVectorLike(MLorentzVector)
-
-#Base.promote_type(::Type{SLorentzVector{T1}},::Type{MLorentzVector{T2}}) where {T1,T2} = MLorentzVector{promote_type(T1,T2)}
-
 
 function dot(p1::T1,p2::T2) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
     mdot(p1,p2)
