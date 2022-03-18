@@ -21,7 +21,7 @@ abstract type AbstractLorentzVector{T} <: FieldVector{4, T} end
 """
 $(TYPEDSIGNATURES)
 
-Product product of generic Lorentz vector with a Dirac tensor from the left. Basically, the multiplication is piped to the components from the Lorentz vector.
+Product of generic Lorentz vector with a Dirac tensor from the left. Basically, the multiplication is piped to the components from the Lorentz vector.
 
 !!! note "Multiplication operator"
     This also overloads the `*` operator for this types.
@@ -34,7 +34,7 @@ end
 """
 $(TYPEDSIGNATURES)
 
-Product product of generic Lorentz vector with a Dirac tensor from the right. Basically, the multiplication is piped to the components from the Lorentz vector.
+Product of generic Lorentz vector with a Dirac tensor from the right. Basically, the multiplication is piped to the components from the Lorentz vector.
 
 !!! note "Multiplication operator"
     This also overloads the `*` operator for this types.
