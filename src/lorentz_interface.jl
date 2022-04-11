@@ -606,7 +606,7 @@ end
 
     getSinPhi(lv)
 
-Return the sin of the phi angle for a given `LorentzVectorLike`.
+Return the sine of the phi angle for a given `LorentzVectorLike`.
 
 !!! note 
 
