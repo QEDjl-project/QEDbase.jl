@@ -2,7 +2,7 @@
 using LinearAlgebra
 using Random
 
-function _gamma_commutator(i,j)
+function _gamma_anticommutator(i,j)
     return GAMMA[i]*GAMMA[j] + GAMMA[j]*GAMMA[i]
 end
 
@@ -21,7 +21,7 @@ EYE = one(DiracMatrix)
     @testset "commutator" begin
 
         for (i,j) in Iterators.product(1:4,1:4)
-            @test isapprox(_gamma_commutator(i,j),2*METRIC[i,j]*EYE)
+            @test isapprox(_gamma_anticommutator(i,j),2*METRIC[i,j]*EYE)
         end
     end #commutator
 
