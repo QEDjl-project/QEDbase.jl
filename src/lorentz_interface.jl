@@ -528,7 +528,7 @@ Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `Loren
 
 """Function alias for [`getMagnitude2`](@ref)"""
 const getRho2 = getMagnitude2
-"""Function alias for [`getMagnitude2`](@ref)"""
+"""Function alias for [`getMagnitude`](@ref)"""
 const getRho = getMagnitude 
 
 """
