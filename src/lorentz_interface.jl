@@ -679,7 +679,7 @@ Sets the energy component of a given `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setE!` is then returned by [`getE`](@ref).
+    The `value` set with `setE!` is then returned by [`getE`](@ref).
 
 """
 @inline @traitfn setE!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setT!(lv,value)
@@ -694,7 +694,7 @@ Sets the 1-component of a given `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setPx!` is then returned by [`getPx`](@ref).
+    The `value` set with `setPx!` is then returned by [`getPx`](@ref).
 
 """
 @inline @traitfn setPx!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setX!(lv,value)
@@ -707,7 +707,7 @@ Sets the 2-component of a given `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setPy!` is then returned by [`getPy`](@ref).
+    The `value` set with `setPy!` is then returned by [`getPy`](@ref).
 
 """
 @inline @traitfn setPy!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setY!(lv,value)
@@ -720,7 +720,7 @@ Sets the 3-component of a given `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setPz!` is then returned by [`getPz`](@ref).
+    The `value` set with `setPz!` is then returned by [`getPz`](@ref).
 
 """
 @inline @traitfn setPz!(lv::T,value::VT)  where {T,VT; IsMutableLorentzVectorLike{T}} =  setZ!(lv,value)
@@ -735,7 +735,7 @@ Sets the theta angle of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setTheta!` is then returned by [`getTheta`](@ref). Since the theta angle is computed on the call of `getTheta`, the setter `setTheta!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setTheta!` is then returned by [`getTheta`](@ref). Since the theta angle is computed on the call of `getTheta`, the setter `setTheta!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setTheta!(lv::T,theta::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -758,7 +758,7 @@ Sets the cosine of the theta angle of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setCosTheta!` is then returned by [`getCosTheta`](@ref). Since the cosine of the theta angle is computed on the call of `getCosTheta`, the setter `setCosTheta!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setCosTheta!` is then returned by [`getCosTheta`](@ref). Since the cosine of the theta angle is computed on the call of `getCosTheta`, the setter `setCosTheta!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setCosTheta!(lv::T,cos_theta::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -781,7 +781,7 @@ Sets the phi angle of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setPhi!` is then returned by [`getPhi`](@ref). Since the phi angle is computed on the call of `getPhi`, the setter `setPhi!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setPhi!` is then returned by [`getPhi`](@ref). Since the phi angle is computed on the call of `getPhi`, the setter `setPhi!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setPhi!(lv::T,phi::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -805,7 +805,7 @@ Sets the magnitude of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setRho!` is then returned by [`getRho`](@ref). Since the magnitude is computed on the call of `getRho`, the setter `setRho!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setRho!` is then returned by [`getRho`](@ref). Since the magnitude is computed on the call of `getRho`, the setter `setRho!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setRho!(lv::T,rho::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -831,7 +831,7 @@ Sets the plus component of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setPlus!` is then returned by [`getPlus`](@ref). Since the plus component is computed on the call of `getPlus`, the setter `setPlus!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setPlus!` is then returned by [`getPlus`](@ref). Since the plus component is computed on the call of `getPlus`, the setter `setPlus!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setPlus!(lv::T,plus::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -849,7 +849,7 @@ Sets the minus component of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setMinus!` is then returned by [`getMinus`](@ref). Since the minus component is computed on the call of `getMinus`, the setter `setMinus!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setMinus!` is then returned by [`getMinus`](@ref). Since the minus component is computed on the call of `getMinus`, the setter `setMinus!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setMinus!(lv::T,minus::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -869,7 +869,7 @@ Sets the transverse momentum of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setTransverseMomentum!` is then returned by [`getTransverseMomentum`](@ref). Since the transverse momentum is computed on the call of `getTransverseMomentum`, the setter `setTransverseMomentum!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setTransverseMomentum!` is then returned by [`getTransverseMomentum`](@ref). Since the transverse momentum is computed on the call of `getTransverseMomentum`, the setter `setTransverseMomentum!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setTransverseMomentum!(lv::T,pT::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -894,7 +894,7 @@ Sets the transverse mass of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setTransverseMass!` is then returned by [`getTransverseMass`](@ref). Since the transverse mass is computed on the call of `getTransverseMass`, the setter `setTransverseMass!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setTransverseMass!` is then returned by [`getTransverseMass`](@ref). Since the transverse mass is computed on the call of `getTransverseMass`, the setter `setTransverseMass!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setTransverseMass!(lv::T,mT::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
@@ -917,7 +917,7 @@ Sets the rapidity of a `LorentzVectorLike` to a given `value`.
 
 !!! note
 
-    The `value` setted with `setRapidity!` is then returned by [`setRapidity`](@ref). Since the rapidity is computed on the call of `setRapidity`, the setter `setRapidity!` changes several components of the given `LorentzVectorLike`.
+    The `value` set with `setRapidity!` is then returned by [`setRapidity`](@ref). Since the rapidity is computed on the call of `setRapidity`, the setter `setRapidity!` changes several components of the given `LorentzVectorLike`.
 
 """
 @traitfn function setRapidity!(lv::T,rap::VT)  where {T,VT; IsMutableLorentzVectorLike{T}}
