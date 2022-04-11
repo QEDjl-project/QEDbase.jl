@@ -511,7 +511,7 @@ Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `Loren
 
 !!! example
 
-    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `log((E+pz)/(E-pz))`.
+    If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `0.5*log((E+pz)/(E-pz))`.
 
 
 !!! note
