@@ -243,7 +243,7 @@ Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spa
 
 !!! example 
 
-    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(x^2+ y^2 + z^2)`.
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(x^2 + y^2 + z^2)`.
 
 
 !!! warning
@@ -267,7 +267,7 @@ Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minko
 
 !!! example 
 
-    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t^2 - (x^2+ y^2 + z^2)`. 
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t^2 - (x^2 + y^2 + z^2)`. 
 
 
 """
@@ -284,7 +284,7 @@ Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square ro
 
 !!! example 
 
-    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(t^2 - (x^2+ y^2 + z^2))`.
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(t^2 - (x^2 + y^2 + z^2))`.
 
 
 !!! note
