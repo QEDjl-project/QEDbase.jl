@@ -539,7 +539,7 @@ Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of 
 
 !!! example
 
-    If `(E,px,py,pz)` is a `LorentzVectorLike` with magnitude `rho`, this is equivalent to `arccos(pz/rho)`.
+    If `(E,px,py,pz)` is a `LorentzVectorLike` with magnitude `rho`, this is equivalent to `arccos(pz/rho)`, which is also equivalent to `arctan(sqrt(px^2+py^2)/pz)`.
 
 !!! note
 
