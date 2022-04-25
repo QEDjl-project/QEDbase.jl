@@ -98,7 +98,7 @@ The core code of the package `QEDbase.jl` is developed by a small team at the Ce
 
 - Uwe Hernandez Acosta (u.hernandez@hzdr.de)
 
-This package would not be possible without many contributions done from the commuity as well. For that we want send big thanks to:
+This package would not be possible without many contributions done from the community as well. For that we want send big thanks to:
 
 - my Mate supplier
 - the guy who will show me how to include the most recent contributers on github
