@@ -13,25 +13,26 @@ abstract type AbstractFourMomentum <: AbstractLorentzVector{Float64} end
 """
 $(TYPEDEF)
 
-Builds a static LorentzVector with real components used to statically model the four-momentum of a particle or field.
+Builds a static LorentzVectorLike with real components used to statically model the four-momentum of a particle or field.
 
 # Fields
 $(TYPEDFIELDS)
 """
 struct SFourMomentum <: AbstractFourMomentum
 
-    "Time component"
-    t::Float64
+    "energy component"
+    E::Float64
 
     "`x` component"
-    x::Float64
+    px::Float64
 
     "`y` component"
-    y::Float64
+    py::Float64
 
     "`z` component"
-    z::Float64
+    pz::Float64
 end
+
 
 
 """
@@ -48,10 +49,10 @@ similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T<:Real,S} 
 similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T,S} = SLorentzVector{T}
 
 
-@inline getT(p::SFourMomentum) = p.t
-@inline getX(p::SFourMomentum) = p.x
-@inline getY(p::SFourMomentum) = p.y
-@inline getZ(p::SFourMomentum) = p.z
+@inline getT(p::SFourMomentum) = p.E
+@inline getX(p::SFourMomentum) = p.px
+@inline getY(p::SFourMomentum) = p.py
+@inline getZ(p::SFourMomentum) = p.pz
 
 register_LorentzVectorLike(SFourMomentum)
 
@@ -70,17 +71,17 @@ $(TYPEDFIELDS)
 """
 mutable struct MFourMomentum <: AbstractFourMomentum
 
-    "Time component"
-    t::Float64
+    "energy component"
+    E::Float64
 
     "`x` component"
-    x::Float64
+    px::Float64
 
     "`y` component"
-    y::Float64
+    py::Float64
 
     "`z` component"
-    z::Float64
+    pz::Float64
 end
 
 
@@ -98,28 +99,28 @@ similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T<:Real,S} 
 similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T,S} = MLorentzVector{T}
 
 
-@inline getT(p::MFourMomentum) = p.t
-@inline getX(p::MFourMomentum) = p.x
-@inline getY(p::MFourMomentum) = p.y
-@inline getZ(p::MFourMomentum) = p.z
+@inline getT(p::MFourMomentum) = p.E
+@inline getX(p::MFourMomentum) = p.px
+@inline getY(p::MFourMomentum) = p.py
+@inline getZ(p::MFourMomentum) = p.pz
 
 
 
 
 function QEDbase.setT!(lv::MFourMomentum,value::Float64)
-    lv.t = value
+    lv.E = value
 end
 
 function QEDbase.setX!(lv::MFourMomentum,value::Float64)
-    lv.x = value
+    lv.px = value
 end
 
 function QEDbase.setY!(lv::MFourMomentum,value::Float64)
-    lv.y = value
+    lv.py = value
 end
 
 function QEDbase.setZ!(lv::MFourMomentum,value::Float64)
-    lv.z = value
+    lv.pz = value
 end
 
 
@@ -134,4 +135,18 @@ register_LorentzVectorLike(MFourMomentum)
 #######
 function isonshell(P::TM,m::T) where {TM<:AbstractFourMomentum,T<:Real}
     isapprox(getMass2(P),m^2)
+end
+
+function Base.getproperty(P::TM,sym::Symbol) where {TM<:AbstractFourMomentum}
+    if sym==:t
+        return P.E
+    elseif sym==:x
+        return P.px
+    elseif sym==:y
+        return P.py
+    elseif sym==:z
+        return P.pz
+    else
+        return getfield(P,sym)
+    end
 end
