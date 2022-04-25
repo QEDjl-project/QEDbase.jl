@@ -1,5 +1,5 @@
 """
-Main module of HEPbase.jl - a little library for manipulating Lorentz vectors and Dirac tensors.
+Main module of QEDbase.jl - a little library for manipulating Lorentz vectors and Dirac tensors.
 
 # Exports
 $(EXPORTS)
@@ -70,4 +70,4 @@ include("particle_spinors.jl")
 #include("coordinates/coordinates.jl")
 
 
-end #HEPbase
+end #QEDbase
