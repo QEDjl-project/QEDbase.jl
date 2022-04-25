@@ -199,7 +199,7 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
 
 !!! note
 
-    Here we use the mostly minus metric.
+    We use the mostly minus metric.
 
 """
 @inline @traitfn minkowski_dot(x1::T1,x2::T2) where {T1,T2; IsLorentzVectorLike{T1},IsLorentzVectorLike{T2}} = getT(x1)*getT(x2) - (getX(x1)*getX(x2) + getY(x1)*getY(x2) + getZ(x1)*getZ(x2))
