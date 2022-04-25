@@ -162,10 +162,10 @@ $(SIGNATURES)
 
 Function to register a custom type as a LorentzVectorLike. 
 
-This makes sure, the passed custom type has implemented at least the function `getT, getX, getY, getZ` 
-and enables getter functions of the lorentz vector libray for the given type. 
-If additionally the functions `setT!,setX!,setY!,setZ!` are implemened for the passed custom type,
-also the setter functions of the Lorentz vector interface are enable.
+Ensure the passed custom type has implemented at least the function `getT, getX, getY, getZ` 
+and enables getter functions of the lorentz vector library for the given type. 
+If additionally the functions `setT!, setX!, setY!, setZ!` are implemened for the passed custom type,
+also the setter functions of the Lorentz vector interface are enabled.
 """
 function register_LorentzVectorLike(T::Type)
     _hasmethod_registry(getT, T)
