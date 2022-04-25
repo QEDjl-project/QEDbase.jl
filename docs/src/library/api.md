@@ -1,5 +1,5 @@
 
-# HEPbase
+# QEDbase
 
 ```@autodocs
 Modules = [QEDbase]
