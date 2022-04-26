@@ -34,6 +34,11 @@ or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 (@v1.7) pkg> add QEDbase
 ```
 
+or on Windows type
+```julia
+(@v1.7) pkg> add ./QEDbase.jl
+```
+
 ## Quickstart
 #### Four momentum
 One can define a static four momentum component wise:
