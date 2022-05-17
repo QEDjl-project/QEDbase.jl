@@ -164,4 +164,16 @@ end
         @test test_get_set(rng, setRapidity!, getRapidity)
         @test test_get_set(rng, setRapidity!, getRapidity, value = 0.0)
     end
-end # FourMomentum eetter
+end # FourMomentum setter
+
+@testset "isonshell" begin
+    rng = MersenneTwister(42)
+    x,y,z,m = rand(rng, 4)
+
+    E_massless  = sqrt(x^2 + y^2 + z^2 + 0.0)
+    E_massive = sqrt(x^2 + y^2 + z^2 + m^2)
+    mom_massless  = SFourMomentum(E_massless, x, y, z)
+    mom_massive = SFourMomentum(E_massive, x, y, z)
+	@test isonshell(mom_massless, 0.0)
+	@test isonshell(mom_massive, m)
+end
