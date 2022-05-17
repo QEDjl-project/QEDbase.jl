@@ -8,8 +8,8 @@ abstract type AbstractGammaRepresentation end
 # generic definition of the gamma matrices
 ####
 
-function gamma(::Type{T})::LorentzVector where T<:AbstractGammaRepresentation
-    return LorentzVector( _gamma0(T), _gamma1(T), _gamma2(T), _gamma3(T))
+function gamma(::Type{T})::SLorentzVector where T<:AbstractGammaRepresentation
+    return SLorentzVector( _gamma0(T), _gamma1(T), _gamma2(T), _gamma3(T))
 end
 
 

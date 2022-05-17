@@ -28,9 +28,9 @@ mutable struct SpinorConstructionError <: Exception
 
 Base.showerror(io::IO, e::SpinorConstructionError) = print(io, "SpinorConstructionError: ",e.var)
 
-@inline function _check_spinor_input(mom::FourMomentum,mass::Float64)
+@inline function _check_spinor_input(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real}
     if SPINOR_VALIDITY_CHECK[] && !isonshell(mom,mass)
-        throw(SpinorConstructionError("P^2 = $(mass_square(mom)) needs to be equal to mass^2=$(mass^2)"))
+        throw(SpinorConstructionError("P^2 = $(getMass2(mom)) needs to be equal to mass^2=$(mass^2)"))
     end
 end
 
@@ -43,7 +43,7 @@ abstract type AbstractParticleSpinor end
 # fermion spinors
 #
 
-function _build_particle_booster(mom::FourMomentum,mass::Float64)
+function _build_particle_booster(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real}
     _check_spinor_input(mom,mass)
     return (slashed(mom) + mass*one(DiracMatrix))/(sqrt(abs(mom.t)+mass))
 end
@@ -53,7 +53,7 @@ struct IncomingFermionSpinor <: AbstractParticleSpinor
     booster::DiracMatrix
 end
 
-IncomingFermionSpinor(mom::FourMomentum,mass::Float64) = IncomingFermionSpinor(_build_particle_booster(mom,mass))
+IncomingFermionSpinor(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real} = IncomingFermionSpinor(_build_particle_booster(mom,mass))
 
 function (SP::IncomingFermionSpinor)(spin::Int64)
     return SP.booster*BASE_PARTICLE_SPINOR[spin]
@@ -66,7 +66,7 @@ struct OutgoingFermionSpinor <: AbstractParticleSpinor
     booster::DiracMatrix
 end
 
-OutgoingFermionSpinor(mom::FourMomentum,mass::Float64) = OutgoingFermionSpinor(_build_particle_booster(mom,mass))
+OutgoingFermionSpinor(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real} = OutgoingFermionSpinor(_build_particle_booster(mom,mass))
 
 function (SP::OutgoingFermionSpinor)(spin::Int64)
     return AdjointBiSpinor(SP.booster*BASE_PARTICLE_SPINOR[spin])*GAMMA[1]
@@ -79,7 +79,7 @@ const SpinorUbar = OutgoingFermionSpinor
 # Anti fermion spinors
 #
 
-function _build_antiparticle_booster(mom::FourMomentum,mass::Float64)
+function _build_antiparticle_booster(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real}
     _check_spinor_input(mom,mass)
     return (mass*one(DiracMatrix) - slashed(mom))/(sqrt(abs(mom.t)+mass))
 end
@@ -88,7 +88,7 @@ struct OutgoingAntiFermionSpinor <: AbstractParticleSpinor
     booster::DiracMatrix
 end
 
-OutgoingAntiFermionSpinor(mom::FourMomentum,mass::Float64) = OutgoingAntiFermionSpinor(_build_antiparticle_booster(mom,mass))
+OutgoingAntiFermionSpinor(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real} = OutgoingAntiFermionSpinor(_build_antiparticle_booster(mom,mass))
 
 function (SP::OutgoingAntiFermionSpinor)(spin::Int64)
     return SP.booster*BASE_ANTIPARTICLE_SPINOR[spin]
@@ -101,7 +101,7 @@ struct IncomingAntiFermionSpinor <: AbstractParticleSpinor
     booster::DiracMatrix
 end
 
-IncomingAntiFermionSpinor(mom::FourMomentum,mass::Float64) = IncomingAntiFermionSpinor(_build_antiparticle_booster(mom,mass))
+IncomingAntiFermionSpinor(mom::T,mass::Float64) where T<:AbstractLorentzVector{TE} where {TE<:Real} = IncomingAntiFermionSpinor(_build_antiparticle_booster(mom,mass))
 
 function (SP::IncomingAntiFermionSpinor)(spin::Int64)
     return AdjointBiSpinor(SP.booster*BASE_ANTIPARTICLE_SPINOR[spin])*GAMMA[1]

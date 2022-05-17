@@ -1,5 +1,8 @@
+
+
+# TODO: remove this walkaround, if QEDbase is registered (or there is a better way to do that).
 #using Pkg
-#Pkg.activate("../.")
+#Pkg.add(path=joinpath(@__DIR__,".."))
 
 push!(LOAD_PATH,"../src/")
 
@@ -22,7 +25,6 @@ pages = [
     "Library" => [
         "Contents" => "library/outline.md",
         "API" => "library/api.md",
-        #"Private" => "library/internals.md",
         "Function index" => "library/function_index.md",
         ],
     "refs.md"

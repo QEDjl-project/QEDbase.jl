@@ -1,35 +1,87 @@
 """
-FourMomentum type
+SFourMomentum type
 
 """
 
+abstract type AbstractFourMomentum <: AbstractLorentzVector{Float64} end
 
 #######
 #
-# Concrete FourMomentum type
+# Concrete SFourMomentum type
 #
 #######
 """
 $(TYPEDEF)
 
-Builds a LorentzVector with real components used to model the four-momentum of a particle or field.
+Builds a static LorentzVectorLike with real components used to statically model the four-momentum of a particle or field.
 
 # Fields
 $(TYPEDFIELDS)
 """
-struct FourMomentum <: AbstractLorentzVector{Float64}
+struct SFourMomentum <: AbstractFourMomentum
 
-    "Time component"
-    t::Float64
+    "energy component"
+    E::Float64
 
     "`x` component"
-    x::Float64
+    px::Float64
 
     "`y` component"
-    y::Float64
+    py::Float64
 
     "`z` component"
-    z::Float64
+    pz::Float64
+end
+
+
+
+"""
+$(SIGNATURES)
+
+The interface transforms each number-like input to float64:
+
+$(TYPEDSIGNATURES)
+"""
+SFourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = SFourMomentum(float(t), x, y, z)
+
+
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T<:Real,S} = SFourMomentum
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: SFourMomentum,T,S} = SLorentzVector{T}
+
+
+@inline getT(p::SFourMomentum) = p.E
+@inline getX(p::SFourMomentum) = p.px
+@inline getY(p::SFourMomentum) = p.py
+@inline getZ(p::SFourMomentum) = p.pz
+
+register_LorentzVectorLike(SFourMomentum)
+
+#######
+#
+# Concrete MFourMomentum type
+#
+#######
+"""
+$(TYPEDEF)
+
+Builds a mutable LorentzVector with real components used to statically model the four-momentum of a particle or field.
+
+# Fields
+$(TYPEDFIELDS)
+"""
+mutable struct MFourMomentum <: AbstractFourMomentum
+
+    "energy component"
+    E::Float64
+
+    "`x` component"
+    px::Float64
+
+    "`y` component"
+    py::Float64
+
+    "`z` component"
+    pz::Float64
 end
 
 
@@ -40,11 +92,39 @@ The interface transforms each number-like input to float64:
 
 $(TYPEDSIGNATURES)
 """
-FourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = FourMomentum(float(t), x, y, z)
+MFourMomentum(t::T, x::T, y::T, z::T) where {T <: Union{Integer, Rational, Irrational}} = MFourMomentum(float(t), x, y, z)
 
 
-similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T<:Real,S} = FourMomentum
-similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T,S} = LorentzVector{T}
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T<:Real,S} = MFourMomentum
+similar_type(::Type{A},::Type{T},::Size{S}) where {A<: MFourMomentum,T,S} = MLorentzVector{T}
+
+
+@inline getT(p::MFourMomentum) = p.E
+@inline getX(p::MFourMomentum) = p.px
+@inline getY(p::MFourMomentum) = p.py
+@inline getZ(p::MFourMomentum) = p.pz
+
+
+
+
+function QEDbase.setT!(lv::MFourMomentum,value::Float64)
+    lv.E = value
+end
+
+function QEDbase.setX!(lv::MFourMomentum,value::Float64)
+    lv.px = value
+end
+
+function QEDbase.setY!(lv::MFourMomentum,value::Float64)
+    lv.py = value
+end
+
+function QEDbase.setZ!(lv::MFourMomentum,value::Float64)
+    lv.pz = value
+end
+
+
+register_LorentzVectorLike(MFourMomentum)
 
 
 
@@ -53,34 +133,20 @@ similar_type(::Type{A},::Type{T},::Size{S}) where {A<: FourMomentum,T,S} = Loren
 # Utility functions on FourMomenta
 #
 #######
-"""
-
-    mass_square(p::FourMomentum)
-
-Calculate the mass square of the given four-momentum. We use the mostly-minus metric for that, i.e. return
-
-```math
-m^2 := p_0^2 - p_1^2 -p_2^2 - p_3^2
-```
-"""
-function mass_square(p::FourMomentum)
-    dot(p,p)
+function isonshell(P::TM,m::T) where {TM<:AbstractFourMomentum,T<:Real}
+    isapprox(getMass2(P),m^2)
 end
 
-"""
-
-    mass(p::FourMomentum)
-
-Calculate the mass w.r.t. a given four-momentum ``p``. This function will return a complex number if the mass square is negative, e.g. if ``p`` is the momentum of a virtual particle.
-"""
-function mass(p::FourMomentum)
-    m2 = mass_square(p)
-    if m2<0
-        m2=complex(m2)
+function Base.getproperty(P::TM,sym::Symbol) where {TM<:AbstractFourMomentum}
+    if sym==:t
+        return P.E
+    elseif sym==:x
+        return P.px
+    elseif sym==:y
+        return P.py
+    elseif sym==:z
+        return P.pz
+    else
+        return getfield(P,sym)
     end
-    return sqrt(m2)
-end
-
-function isonshell(P::FourMomentum,m::T) where T<:Real
-    isapprox(mass_square(P),m^2)
 end

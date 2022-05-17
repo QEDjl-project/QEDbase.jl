@@ -5,11 +5,11 @@ const ATOL = 1e-15
 const SPINS = (1,2)
 
 
-@testset "particle spinors" begin
+@testset "particle spinors" for LorentzVectorType in [SFourMomentum, MFourMomentum]
     rng = MersenneTwister(1234)
     x,y,z = rand(rng,3)
     mass = rand(rng)
-    P = FourMomentum(sqrt(x^2 + y^2 + z^2 + mass^2),x,y,z)
+    P = LorentzVectorType(sqrt(x^2 + y^2 + z^2 + mass^2),x,y,z)
 
 
     U = SpinorU(P,mass)
@@ -70,7 +70,7 @@ const SPINS = (1,2)
     @testset "sandwich" begin
         for s1 in SPINS
             for s2 in SPINS
-                @test isapprox(FourMomentum(Ubar[s1]*(GAMMA*U[s2]))*(s1==s2),2*P*(s1==s2))
+                @test isapprox(LorentzVectorType(Ubar[s1]*(GAMMA*U[s2]))*(s1==s2),2*P*(s1==s2))
             end
         end
     end #sandwich
