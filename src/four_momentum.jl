@@ -133,8 +133,8 @@ register_LorentzVectorLike(MFourMomentum)
 # Utility functions on FourMomenta
 #
 #######
-function isonshell(P::TM,m::T) where {TM<:AbstractFourMomentum,T<:Real}
-    isapprox(getMass2(P),m^2,atol=1e-15)
+function isonshell(P::TM,m::T;atol=eps(Float64)) where {TM<:AbstractFourMomentum,T<:Real}
+    isapprox(getMass2(P),m^2,atol=atol)
 end
 
 function Base.getproperty(P::TM,sym::Symbol) where {TM<:AbstractFourMomentum}

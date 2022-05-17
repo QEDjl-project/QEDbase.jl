@@ -170,10 +170,10 @@ end # FourMomentum setter
     rng = MersenneTwister(42)
     x,y,z,m = rand(rng, 4)
 
-    E_photon  = sqrt(x^2 + y^2 + z^2 + 0.0)
-    E_fermion = sqrt(x^2 + y^2 + z^2 + m^2)
-    mom_photon  = SFourMomentum(E_photon, x, y, z)
-    mom_fermion = SFourMomentum(E_fermion, x, y, z)
-	@test isonshell(mom_photon, 0.0)
-	@test isonshell(mom_fermion, m)
+    E_massless  = sqrt(x^2 + y^2 + z^2 + 0.0)
+    E_massive = sqrt(x^2 + y^2 + z^2 + m^2)
+    mom_massless  = SFourMomentum(E_massless, x, y, z)
+    mom_massive = SFourMomentum(E_massive, x, y, z)
+	@test isonshell(mom_massless, 0.0)
+	@test isonshell(mom_massive, m)
 end
