@@ -134,7 +134,7 @@ register_LorentzVectorLike(MFourMomentum)
 #
 #######
 function isonshell(P::TM,m::T) where {TM<:AbstractFourMomentum,T<:Real}
-    isapprox(getMass2(P),m^2)
+    isapprox(getMass2(P),m^2,atol=1e-15)
 end
 
 function Base.getproperty(P::TM,sym::Symbol) where {TM<:AbstractFourMomentum}
