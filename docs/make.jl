@@ -1,10 +1,9 @@
 
-
 # TODO: remove this walkaround, if QEDbase is registered (or there is a better way to do that).
 #using Pkg
 #Pkg.add(path=joinpath(@__DIR__,".."))
 
-push!(LOAD_PATH,"../src/")
+#push!(LOAD_PATH,"../src/")
 
 using Documenter
 using QEDbase
@@ -33,6 +32,7 @@ pages = [
 
 makedocs(bib;
     modules=[QEDbase],
+    checkdocs = :exports,
     authors="Uwe Hernandez Acosta",
     repo="https://gitlab.hzdr.de/hernan68/QEDbase.jl/blob/{commit}{path}#{line}",
     sitename="QEDbase.jl",
