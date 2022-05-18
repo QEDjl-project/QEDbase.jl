@@ -35,11 +35,11 @@ pages:
         using Documenter: doctest
         using QEDbase
         doctest(QEDbase)
-        include("docs/make.jl")'
+        include("docs/make_local.jl")'
     - mkdir -p public
     - mv docs/build public/dev
   artifacts:
     paths:
       - public
   only:
-    - main
+    - [main,dev]
