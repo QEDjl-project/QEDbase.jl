@@ -1,6 +1,6 @@
 # QEDbase
 
-[![Dev](https://img.shields.io/badge/docs-latest-blue.svg)](https://hernan68.gitlab.io/QEDbase.jl/)
+[![Doc](https://img.shields.io/badge/docs-latest-blue.svg)](https://hernan68.pages.hzdr.de/QEDbase.jl)
 [![Build Status](https://gitlab.hzdr.de/hernan68/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/hernan68/QEDbase.jl/pipelines)
 [![Coverage](https://gitlab.hzdr.de/hernan68/QEDbase.jl/badges/main/coverage.svg)](https://gitlab.hzdr.de/hernan68/QEDbase.jl/commits/main)
 [![Coverage](https://codecov.io/gh/hernan68/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/hernan68/QEDbase.jl)
