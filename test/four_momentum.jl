@@ -1,4 +1,4 @@
-using Random
+using Random 
 
 const ATOL = 1e-15
 
@@ -166,14 +166,49 @@ end
     end
 end # FourMomentum setter
 
+const SCALE = 10.0 .^[-9, 0, 5]
+const M_MASSIVE = 1.0
+const M_MASSLESS = 0.0
+
+const M_ABSERR = 0.01
+const M_RELERR = 0.0001
+
 @testset "isonshell" begin
     rng = MersenneTwister(42)
-    x,y,z,m = rand(rng, 4)
+    x_base,y_base,z_base= rand(rng, 3)
+    
 
-    E_massless  = sqrt(x^2 + y^2 + z^2 + 0.0)
-    E_massive = sqrt(x^2 + y^2 + z^2 + m^2)
-    mom_massless  = SFourMomentum(E_massless, x, y, z)
-    mom_massive = SFourMomentum(E_massive, x, y, z)
-	@test isonshell(mom_massless, 0.0)
-	@test isonshell(mom_massive, m)
+    @testset "correct onshell" begin
+        @testset "($x_scale, $y_scale, $z_scale)" for (x_scale, y_scale, z_scale) in Iterators.product(SCALE, SCALE, SCALE)
+            x,y,z = x_base*x_scale,y_base*y_scale,z_base*z_scale
+            E_massless  = sqrt(x^2 + y^2 + z^2 + M_MASSLESS^2)
+            E_massive = sqrt(x^2 + y^2 + z^2 + M_MASSIVE^2)
+            mom_massless  = SFourMomentum(E_massless, x, y, z)
+            mom_massive = SFourMomentum(E_massive, x, y, z)
+            @test isonshell(mom_massless, M_MASSLESS)
+            @test isonshell(mom_massive, M_MASSIVE)
+
+            @test assert_onshell(mom_massless, M_MASSLESS)==nothing
+            @test assert_onshell(mom_massive, M_MASSIVE)==nothing
+        end
+    end
+  
+    @testset "correct not onshell" begin
+        @testset "$x_scale, $y_scale, $z_scale" for (x_scale, y_scale, z_scale) in Iterators.product(SCALE, SCALE, SCALE)
+            x,y,z = x_base*x_scale,y_base*y_scale,z_base*z_scale
+            m_err = min(M_ABSERR,M_RELERR*sum([x,y,z])/3.0) # mass error is M_RELERR of the mean of the components
+                                                            # but has at most the value M_ABSERR
+
+            E_massless  = sqrt(x^2 + y^2 + z^2 + (M_MASSLESS + m_err)^2)
+            E_massive = sqrt(x^2 + y^2 + z^2 + (M_MASSIVE + m_err)^2)
+            mom_massless  = SFourMomentum(E_massless, x, y, z)
+            mom_massive = SFourMomentum(E_massive, x, y, z)
+
+            @test !isonshell(mom_massless, M_MASSLESS)
+            @test !isonshell(mom_massive, M_MASSIVE)
+
+            @test_throws QEDbase.OnshellError assert_onshell(mom_massless, M_MASSLESS)
+            @test_throws QEDbase.OnshellError assert_onshell(mom_massive, M_MASSIVE)
+        end
+    end
 end
