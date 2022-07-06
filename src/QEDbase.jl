@@ -38,7 +38,7 @@ export setTransverseMass!, setMt!
 export setRapidity!
 
 export AbstractLorentzVector, SLorentzVector, MLorentzVector, dot
-export SFourMomentum, MFourMomentum, isonshell
+export SFourMomentum, MFourMomentum, isonshell, assert_onshell
 
 export BiSpinor, AdjointBiSpinor, DiracMatrix, mul
 export AbstractDiracVector, AbstractDiracMatrix
