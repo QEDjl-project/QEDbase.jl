@@ -1,17 +1,17 @@
-using Random 
+using Random
 
 const ATOL = 1e-15
 
 @testset "FourMomentum getter" for MomentumType in [SFourMomentum, MFourMomentum]
     rng = MersenneTwister(12345)
-    x,y,z = rand(rng, 3)
+    x, y, z = rand(rng, 3)
     mass = rand(rng)
     E = sqrt(x^2 + y^2 + z^2 + mass^2)
     mom_onshell = MomentumType(E, x, y, z)
     mom_zero = MomentumType(0.0, 0.0, 0.0, 0.0)
     mom_offshell = MomentumType(0.0, 0.0, 0.0, mass)
 
-    @testset "magnitude consistence" for mom in [mom_onshell, mom_offshell,mom_zero]
+    @testset "magnitude consistence" for mom in [mom_onshell, mom_offshell, mom_zero]
         @test getMagnitude2(mom) == getMag2(mom)
         @test getMagnitude(mom) == getMag(mom)
         @test isapprox(getMagnitude(mom), sqrt(getMagnitude2(mom)))
@@ -31,7 +31,7 @@ const ATOL = 1e-15
     @testset "mass value" begin
         @test isapprox(getInvariantMass2(mom_onshell), E^2 - (x^2 + y^2 + z^2))
         @test isapprox(getInvariantMass(mom_onshell), sqrt(E^2 - (x^2 + y^2 + z^2)))
-        
+
         @test isapprox(getInvariantMass(mom_onshell), mass)
         @test isapprox(getInvariantMass(mom_offshell), -mass)
         @test isapprox(getInvariantMass(mom_zero), 0.0)
@@ -44,8 +44,8 @@ const ATOL = 1e-15
         @test getPy(mom_onshell) == y
         @test getPz(mom_onshell) == z
 
-        @test isapprox(getBeta(mom_onshell), sqrt(x^2 + y^2 + z^2)/E)
-        @test isapprox(getGamma(mom_onshell), 1/sqrt(1.0 - getBeta(mom_onshell)^2))
+        @test isapprox(getBeta(mom_onshell), sqrt(x^2 + y^2 + z^2) / E)
+        @test isapprox(getGamma(mom_onshell), 1 / sqrt(1.0 - getBeta(mom_onshell)^2))
 
         @test getE(mom_zero) == 0.0
         @test getEnergy(mom_zero) == 0.0
@@ -55,19 +55,17 @@ const ATOL = 1e-15
 
         @test isapprox(getBeta(mom_zero), 0.0)
         @test isapprox(getGamma(mom_zero), 1.0)
-
     end
 
     @testset "transverse coordinates" for mom_on in [mom_onshell, mom_zero]
-        
         @test getTransverseMomentum2(mom_on) == getPt2(mom_on)
         @test getTransverseMomentum2(mom_on) == getPerp2(mom_on)
         @test getTransverseMomentum(mom_on) == getPt(mom_on)
         @test getTransverseMomentum(mom_on) == getPerp(mom_on)
 
         @test isapprox(getPt(mom_on), sqrt(getPt2(mom_on)))
-        
-        @test getTransverseMass2(mom_on) == getMt2(mom_on)        
+
+        @test getTransverseMass2(mom_on) == getMt2(mom_on)
         @test getTransverseMass(mom_on) == getMt(mom_on)
     end
 
@@ -77,8 +75,7 @@ const ATOL = 1e-15
         @test isapprox(getTransverseMass2(mom_onshell), E^2 - z^2)
         @test isapprox(getTransverseMass(mom_onshell), sqrt(E^2 - z^2))
         @test isapprox(getMt(mom_offshell), -mass)
-        @test isapprox(getRapidity(mom_onshell), 0.5*log((E + z)/(E - z)))
-
+        @test isapprox(getRapidity(mom_onshell), 0.5 * log((E + z) / (E - z)))
 
         @test isapprox(getTransverseMomentum2(mom_zero), 0.0)
         @test isapprox(getTransverseMomentum(mom_zero), 0.0)
@@ -100,23 +97,21 @@ const ATOL = 1e-15
         @test isapprox(getTheta(mom_onshell), atan(getPt(mom_onshell), z))
         @test isapprox(getTheta(mom_zero), 0.0)
 
-        @test isapprox(getPhi(mom_onshell), atan(y,x))
+        @test isapprox(getPhi(mom_onshell), atan(y, x))
         @test isapprox(getPhi(mom_zero), 0.0)
     end
 
     @testset "light-cone coordiantes" begin
-        @test isapprox(getPlus(mom_onshell), 0.5*(E + z))
-        @test isapprox(getMinus(mom_onshell), 0.5*(E - z))
+        @test isapprox(getPlus(mom_onshell), 0.5 * (E + z))
+        @test isapprox(getMinus(mom_onshell), 0.5 * (E - z))
 
         @test isapprox(getPlus(mom_zero), 0.0)
         @test isapprox(getMinus(mom_zero), 0.0)
     end
-
 end # FourMomentum getter
 
-
-function test_get_set(rng, setter, getter; value = rand(rng))
-    x,y,z = rand(rng, 3)
+function test_get_set(rng, setter, getter; value=rand(rng))
+    x, y, z = rand(rng, 3)
     mass = rand(rng)
     E = sqrt(x^2 + y^2 + z^2 + mass^2)
     mom = MFourMomentum(E, x, y, z)
@@ -137,36 +132,36 @@ end
 
     @testset "spherical coordiantes" begin
         @test test_get_set(rng, setTheta!, getTheta)
-        @test test_get_set(rng, setTheta!, getTheta, value = 0.0)
+        @test test_get_set(rng, setTheta!, getTheta, value=0.0)
         @test test_get_set(rng, setCosTheta!, getCosTheta)
-        @test test_get_set(rng, setCosTheta!, getCosTheta, value = 1.0)
+        @test test_get_set(rng, setCosTheta!, getCosTheta, value=1.0)
         @test test_get_set(rng, setPhi!, getPhi)
-        @test test_get_set(rng, setPhi!, getPhi, value = 0.0)
+        @test test_get_set(rng, setPhi!, getPhi, value=0.0)
         @test test_get_set(rng, setRho!, getRho)
-        @test test_get_set(rng, setRho!, getRho, value = 0.0)
+        @test test_get_set(rng, setRho!, getRho, value=0.0)
     end
 
     @testset "light-cone coordiantes" begin
         @test test_get_set(rng, setPlus!, getPlus)
-        @test test_get_set(rng, setPlus!, getPlus, value = 0.0)
+        @test test_get_set(rng, setPlus!, getPlus, value=0.0)
         @test test_get_set(rng, setMinus!, getMinus)
-        @test test_get_set(rng, setMinus!, getMinus, value = 0.0)
+        @test test_get_set(rng, setMinus!, getMinus, value=0.0)
     end
 
     @testset "transverse coordinates" begin
         @test test_get_set(rng, setTransverseMomentum!, getTransverseMomentum)
-        @test test_get_set(rng, setTransverseMomentum!, getTransverseMomentum, value = 0.0)
+        @test test_get_set(rng, setTransverseMomentum!, getTransverseMomentum, value=0.0)
         @test test_get_set(rng, setPerp!, getTransverseMomentum)
         @test test_get_set(rng, setPt!, getTransverseMomentum)
         @test test_get_set(rng, setTransverseMass!, getTransverseMass)
-        @test test_get_set(rng, setTransverseMass!, getTransverseMass, value = 0.0)
+        @test test_get_set(rng, setTransverseMass!, getTransverseMass, value=0.0)
         @test test_get_set(rng, setMt!, getTransverseMass)
         @test test_get_set(rng, setRapidity!, getRapidity)
-        @test test_get_set(rng, setRapidity!, getRapidity, value = 0.0)
+        @test test_get_set(rng, setRapidity!, getRapidity, value=0.0)
     end
 end # FourMomentum setter
 
-const SCALE = 10.0 .^[-9, 0, 5]
+const SCALE = 10.0 .^ [-9, 0, 5]
 const M_MASSIVE = 1.0
 const M_MASSLESS = 0.0
 
@@ -175,33 +170,34 @@ const M_RELERR = 0.0001
 
 @testset "isonshell" begin
     rng = MersenneTwister(42)
-    x_base,y_base,z_base= rand(rng, 3)
-    
+    x_base, y_base, z_base = rand(rng, 3)
 
     @testset "correct onshell" begin
-        @testset "($x_scale, $y_scale, $z_scale)" for (x_scale, y_scale, z_scale) in Iterators.product(SCALE, SCALE, SCALE)
-            x,y,z = x_base*x_scale,y_base*y_scale,z_base*z_scale
-            E_massless  = sqrt(x^2 + y^2 + z^2 + M_MASSLESS^2)
+        @testset "($x_scale, $y_scale, $z_scale)" for (x_scale, y_scale, z_scale) in
+                                                      Iterators.product(SCALE, SCALE, SCALE)
+            x, y, z = x_base * x_scale, y_base * y_scale, z_base * z_scale
+            E_massless = sqrt(x^2 + y^2 + z^2 + M_MASSLESS^2)
             E_massive = sqrt(x^2 + y^2 + z^2 + M_MASSIVE^2)
-            mom_massless  = SFourMomentum(E_massless, x, y, z)
+            mom_massless = SFourMomentum(E_massless, x, y, z)
             mom_massive = SFourMomentum(E_massive, x, y, z)
             @test isonshell(mom_massless, M_MASSLESS)
             @test isonshell(mom_massive, M_MASSIVE)
 
-            @test assert_onshell(mom_massless, M_MASSLESS)==nothing
-            @test assert_onshell(mom_massive, M_MASSIVE)==nothing
+            @test assert_onshell(mom_massless, M_MASSLESS) == nothing
+            @test assert_onshell(mom_massive, M_MASSIVE) == nothing
         end
     end
-  
-    @testset "correct not onshell" begin
-        @testset "$x_scale, $y_scale, $z_scale" for (x_scale, y_scale, z_scale) in Iterators.product(SCALE, SCALE, SCALE)
-            x,y,z = x_base*x_scale,y_base*y_scale,z_base*z_scale
-            m_err = min(M_ABSERR,M_RELERR*sum([x,y,z])/3.0) # mass error is M_RELERR of the mean of the components
-                                                            # but has at most the value M_ABSERR
 
-            E_massless  = sqrt(x^2 + y^2 + z^2 + (M_MASSLESS + m_err)^2)
+    @testset "correct not onshell" begin
+        @testset "$x_scale, $y_scale, $z_scale" for (x_scale, y_scale, z_scale) in
+                                                    Iterators.product(SCALE, SCALE, SCALE)
+            x, y, z = x_base * x_scale, y_base * y_scale, z_base * z_scale
+            m_err = min(M_ABSERR, M_RELERR * sum([x, y, z]) / 3.0) # mass error is M_RELERR of the mean of the components
+            # but has at most the value M_ABSERR
+
+            E_massless = sqrt(x^2 + y^2 + z^2 + (M_MASSLESS + m_err)^2)
             E_massive = sqrt(x^2 + y^2 + z^2 + (M_MASSIVE + m_err)^2)
-            mom_massless  = SFourMomentum(E_massless, x, y, z)
+            mom_massless = SFourMomentum(E_massless, x, y, z)
             mom_massive = SFourMomentum(E_massive, x, y, z)
 
             @test !isonshell(mom_massless, M_MASSLESS)
