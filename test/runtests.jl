@@ -10,6 +10,9 @@ using Test
 
     include("particle_spinors.jl")
     include("four_momentum.jl")
+<<<<<<< HEAD
 
     include("particles.jl")
+=======
+>>>>>>> baec5cc (Enhancement for the gitlab-ci)
 end

@@ -12,6 +12,7 @@ allowed_muls = Dict([
     (DiracMatrix, BiSpinor) => BiSpinor,
     (DiracMatrix, DiracMatrix) => DiracMatrix,
 ])
+<<<<<<< HEAD
 
 groundtruth_mul(a::AdjointBiSpinor, b::BiSpinor) = transpose(SArray(a)) * SArray(b)
 function groundtruth_mul(a::BiSpinor, b::AdjointBiSpinor)
@@ -22,6 +23,8 @@ function groundtruth_mul(a::AdjointBiSpinor, b::DiracMatrix)
 end
 groundtruth_mul(a::DiracMatrix, b::BiSpinor) = BiSpinor(SArray(a) * SArray(b))
 groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray(b))
+=======
+>>>>>>> baec5cc (Enhancement for the gitlab-ci)
 
 @testset "DiracTensor" begin
     dirac_tensors = [
@@ -99,6 +102,7 @@ groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray
                 @test SArray(res) == ops(SArray(ten))
             end
 
+<<<<<<< HEAD
             @testset "num*$(typeof(ten))" begin
                 #@test typeof(res_float_mul) == typeof(ten)
                 @test @inferred(ten * num) == @inferred(num * ten)
@@ -112,6 +116,17 @@ groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray
             end
 
             @testset "$(typeof(ten))*$(typeof(ten2))" for ten2 in dirac_tensors
+=======
+            #@test typeof(res_float_mul) == typeof(ten)
+            @test @inferred(ten * num) == @inferred(num * ten)
+            @test SArray(num * ten) == num * SArray(ten)
+
+            res_float_div = ten / num
+            #@test typeof(res_float_div) == typeof(ten)
+            @test SArray(@inferred(ten / num)) == SArray(ten) / num
+
+            for ten2 in dirac_tensors
+>>>>>>> baec5cc (Enhancement for the gitlab-ci)
                 mul_comb = (typeof(ten), typeof(ten2))
                 if mul_comb in keys(allowed_muls)
                     res = ten * ten2

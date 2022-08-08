@@ -19,6 +19,7 @@ GROUNDTRUTH_GAMMA0_DIRAC[2, 2] = 1
 GROUNDTRUTH_GAMMA0_DIRAC[3, 3] = -1
 GROUNDTRUTH_GAMMA0_DIRAC[4, 4] = -1
 
+<<<<<<< HEAD
 GROUNDTRUTH_GAMMA1_DIRAC = spzeros(4, 4)
 GROUNDTRUTH_GAMMA1_DIRAC[4, 1] = -1
 GROUNDTRUTH_GAMMA1_DIRAC[3, 2] = -1
@@ -37,6 +38,8 @@ GROUNDTRUTH_GAMMA3_DIRAC[4, 2] = 1
 GROUNDTRUTH_GAMMA3_DIRAC[1, 3] = 1
 GROUNDTRUTH_GAMMA3_DIRAC[2, 4] = -1
 
+=======
+>>>>>>> baec5cc (Enhancement for the gitlab-ci)
 @testset "gamma matrices" begin
     rng = MersenneTwister(42)
 
@@ -80,6 +83,7 @@ GROUNDTRUTH_GAMMA3_DIRAC[2, 4] = -1
 
         @test isapprox(slashed(a), GAMMA * a)
         @test isapprox(slashed(a), slashed(DiracGammaRepresentation, a))
+<<<<<<< HEAD
     end
 
     @testset "Dirac representation" begin
@@ -108,5 +112,7 @@ GROUNDTRUTH_GAMMA3_DIRAC[2, 4] = -1
                 @test isapprox(GAMMA[4][row, col], -GROUNDTRUTH_GAMMA3_DIRAC[row, col])
             end
         end
+=======
+>>>>>>> baec5cc (Enhancement for the gitlab-ci)
     end
 end
