@@ -10,11 +10,8 @@ using SimpleTraits
 using ArgCheck
 using ConstructionBase
 
-import Base:*
+import Base: *
 import StaticArrays: similar_type
-
-
-
 
 export minkowski_dot, mdot, register_LorentzVectorLike
 export getT, getX, getY, getZ
@@ -45,20 +42,15 @@ export AbstractDiracVector, AbstractDiracMatrix
 
 export gamma, GAMMA, AbstractGammaRepresentation, DiracGammaRepresentation, slashed
 
-
-
 export BASE_PARTICLE_SPINOR, BASE_ANTIPARTICLE_SPINOR
-export IncomingFermionSpinor, OutgoingFermionSpinor, IncomingAntiFermionSpinor, OutgoingAntiFermionSpinor
+export IncomingFermionSpinor,
+    OutgoingFermionSpinor, IncomingAntiFermionSpinor, OutgoingAntiFermionSpinor
 export SpinorU, SpinorUbar, SpinorV, SpinorVbar
 export @valid_spinor_input
-
-#export Coordinates
 
 using StaticArrays
 using LinearAlgebra
 using DocStringExtensions
-
-
 
 include("dirac_tensors.jl")
 include("lorentz_interface.jl")
@@ -67,7 +59,5 @@ include("gamma_matrices.jl")
 
 include("four_momentum.jl") # maybe go to a kinematics module!!
 include("particle_spinors.jl")
-#include("coordinates/coordinates.jl")
-
 
 end #QEDbase

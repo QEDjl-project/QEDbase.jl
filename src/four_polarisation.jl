@@ -15,4 +15,6 @@ end
 
 FourPolarisation(t, x, y, z) = FourPolarisation(promote(t, x, y, z)...)
 
-FourPolarisation(t::T, x::T, y::T, z::T) where {T <: Number} = FourPolarisation(complex(t), x, y, z)
+function FourPolarisation(t::T, x::T, y::T, z::T) where {T<:Number}
+    return FourPolarisation(complex(t), x, y, z)
+end

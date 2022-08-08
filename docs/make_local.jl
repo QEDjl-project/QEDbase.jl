@@ -1,5 +1,5 @@
 using Pkg
 Pkg.instantiate()
-Pkg.develop(path=".")
+Pkg.develop(; path=".")
 
 include("make.jl")
