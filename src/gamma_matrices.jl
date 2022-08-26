@@ -14,6 +14,12 @@ end
 
 ####
 # concrete implementatio of gamma matrices in Diracs representation
+#
+# Note: lower-index version of the gamma matrices are used
+#       e.g. see https://en.wikipedia.org/wiki/Gamma_matrices
+# Note: caused by the column major construction of matrices in Julia,
+#       the definition below looks *transposed*.
+#
 ####
 
 struct DiracGammaRepresentation <: AbstractGammaRepresentation end
@@ -34,10 +40,10 @@ function _gamma1(::Type{DiracGammaRepresentation})::DiracMatrix
 end
 
 function _gamma2(::Type{DiracGammaRepresentation})::DiracMatrix
-    return DiracMatrix(0, 0, 0, -1im,
-                       0, 0, 1im, 0,
-                       0, 1im, 0, 0,
-                       -1im, 0, 0, 0)
+    return DiracMatrix( 0,0,0,1im,
+                        0,0,-1im,0,
+                        0,-1im,0,0,
+                        1im,0,0,0)
 end
 
 function _gamma3(::Type{DiracGammaRepresentation})::DiracMatrix
