@@ -92,7 +92,7 @@ Tensor product of an adjoint with a standard bi-spinor resulting in a scalar.
 
 """
 function mul(aBS::AdjointBiSpinor, BS::BiSpinor)::ComplexF64
-    return aBS' * BS
+    return transpose(aBS) * BS
 end
 @inline *(aBS::AdjointBiSpinor, BS::BiSpinor) = mul(aBS::AdjointBiSpinor, BS::BiSpinor)
 
@@ -106,7 +106,7 @@ Tensor product of a standard with an adjoint bi-spinor resulting in a Dirac matr
 
 """
 function mul(BS::BiSpinor, aBS::AdjointBiSpinor)::DiracMatrix
-    return DiracMatrix(BS * aBS')
+    return DiracMatrix(BS * transpose(aBS))
 end
 @inline *(BS::BiSpinor, aBS::AdjointBiSpinor) = mul(BS::BiSpinor, aBS::AdjointBiSpinor)
 
@@ -133,11 +133,9 @@ Tensor product of an adjoint bi-spinor with a Dirac matrix resulting in another 
 
 """
 function mul(aBS::AdjointBiSpinor, DM::DiracMatrix)::AdjointBiSpinor
-    return aBS' * DM
+    return transpose(aBS) * DM
 end
-@inline function *(aBS::AdjointBiSpinor, DM::DiracMatrix)
-    return mul(aBS::AdjointBiSpinor, DM::DiracMatrix)
-end
+@inline *(aBS::AdjointBiSpinor, DM::DiracMatrix) = mul(aBS, DM)
 
 """
 $(TYPEDSIGNATURES)
@@ -158,5 +156,5 @@ $(TYPEDSIGNATURES)
 Tensor product of Dirac matrix sandwiched between an adjoint and a standard bi-spinor resulting in a scalar.
 """
 function mul(aBS::AdjointBiSpinor, DM::DiracMatrix, BS::BiSpinor)::ComplexF64
-    return aBS' * DM * BS
+    return transpose(aBS) * DM * BS
 end
