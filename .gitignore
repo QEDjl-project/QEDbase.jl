@@ -1,5 +1,5 @@
-# Project-specific gitignore files
-/docs/build/
+# Non-machine generated gitignore items
+.vscode
 
 # Created by https://www.toptal.com/developers/gitignore/api/julia,windows,macos,linux,vs,git,vim,emacs
 # Edit at https://www.toptal.com/developers/gitignore?templates=julia,windows,macos,linux,vs,git,vim,emacs
