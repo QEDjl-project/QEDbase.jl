@@ -1,62 +1,55 @@
-#
-# credits: https://gitlab.com/tkpapp/GitlabJuliaDemo.jl
-#
-
-
-image: julia:latest       # image comes from Docker hub
-
 stages:
   - linter
-  - test
-  - deploy
-
-before_script:
-  # workaround for https://github.com/JuliaDocs/Documenter.jl/issues/686
-  - apt-get -qq update; apt-get -y install git
-  - julia --project=@. -e "import Pkg; Pkg.build()"
+  - unit-test
+  - verify-unit-test-deps
 
 format:
   stage: linter
+  image: julia:1.9
   script:
     - "[[ -d .julia ]] && mv .julia /tmp"
     - julia --project=.formatting -e 'import Pkg; Pkg.add("JuliaFormatter")'
     - julia --project=.formatting .formatting/format_all.jl
     - "[[ -d /tmp/.julia ]] && mv /tmp/.julia ."
   variables:
-    CI_JULIA_VERSION: "1.7"
+    CI_JULIA_VERSION: "1.9"
     JULIA_DEPOT_PATH: /tmp/.julia
   allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'dev'
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
 
-unittest:
-  stage: test
+unit_tests_julia1.9:
+  image: julia:1.9
+  stage: unit-test
   script:
-    - julia --project=@. -e "import Pkg; Pkg.test(; coverage = false)"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'dev'
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'main'
+    - apt update && apt install -y git
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
+        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml NO_MESSAGE
+      else
+        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml
+      fi
+    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
+    - julia --project=. -e 'import Pkg; Pkg.test(; coverage = true)'
+  interruptible: true
+  tags:
+    - cpuonly
 
-coverage:
-  stage: test
+verify-unit-test-deps_julia1.9:
+  image: julia:1.9
+  stage: verify-unit-test-deps
   script:
-    - julia --project=@. -e "import Pkg; Pkg.test(; coverage = true)"
-    - julia --project=test/coverage -e 'import Pkg; Pkg.instantiate()'
-    - julia --project=test/coverage test/coverage/coverage-summary.jl
-  only:
-    - main
-
-pages:
-  stage: deploy
-  script:
-    - julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.develop(PackageSpec(path=pwd()))'
-    - julia --project=docs --color=yes docs/make.jl
-    - mv docs/build public # move to the directory picked up by Gitlab pages
-  artifacts:
-    paths:
-      - public
-  only:
-  - main
+    - apt update && apt install -y git
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # does not check for custom package URLs on the main and dev branch
+        echo "no custom package URL check necessary"
+      else
+        julia /QEDjl/.ci/verify_env.jl
+      fi
+  interruptible: true
+  tags:
+    - cpuonly
