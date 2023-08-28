@@ -30,6 +30,8 @@ struct SFourMomentum <: AbstractFourMomentum
 
     "`z` component"
     pz::Float64
+
+    pk::Float64
 end
 
 """
@@ -40,7 +42,7 @@ The interface transforms each number-like input to float64:
 $(TYPEDSIGNATURES)
 """
 function SFourMomentum(t::T, x::T, y::T, z::T) where {T<:Union{Integer,Rational,Irrational}}
-    return SFourMomentum(float(t), x, y, z)
+    return SFourMomentum(float(t), x, y, z, z)
 end
 
 function similar_type(::Type{A}, ::Type{T}, ::Size{S}) where {A<:SFourMomentum,T<:Real,S}
@@ -82,6 +84,8 @@ mutable struct MFourMomentum <: AbstractFourMomentum
 
     "`z` component"
     pz::Float64
+
+    pk::Float64
 end
 
 """
@@ -91,8 +95,8 @@ The interface transforms each number-like input to float64:
 
 $(TYPEDSIGNATURES)
 """
-function MFourMomentum(t::T, x::T, y::T, z::T) where {T<:Union{Integer,Rational,Irrational}}
-    return MFourMomentum(float(t), x, y, z)
+function MFourMomentum(t::T, x::T, y::T, z::T, k::T) where {T<:Union{Integer,Rational,Irrational}}
+    return MFourMomentum(float(t), x, y, z, k)
 end
 
 function similar_type(::Type{A}, ::Type{T}, ::Size{S}) where {A<:MFourMomentum,T<:Real,S}
