@@ -3,7 +3,6 @@ using Test
 
 @testset "QEDbase.jl" begin
     @test true
-    @test true != false
     # include("dirac_tensor.jl")
     # include("lorentz_vector.jl")
     # include("lorentz_interface.jl")
