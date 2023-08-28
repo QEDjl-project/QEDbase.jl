@@ -1,6 +1,8 @@
 stages:
   - linter
   - unit-test
+  - generate_integration_test
+  - run_integration_test
   - verify-unit-test-deps
 
 format:
@@ -36,6 +38,48 @@ unit_tests_julia1.9:
   interruptible: true
   tags:
     - cpuonly
+
+generate_integration_tests:
+  image: julia:1.9
+  stage: generate_integration_test
+  script:
+    # extract package name
+    - export CI_DEPENDENCY_NAME=$(cat $CI_PROJECT_DIR/Project.toml | grep name | awk '{ print $3 }' | tr -d '"')
+    - echo "CI_DEPENDENCY_NAME -> $CI_DEPENDENCY_NAME"
+    - apt update && apt install -y git
+    # TODO: use upstream repo
+    #- git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - git clone --depth 1 -b integrationTests https://github.com/SimeonEhrig/QED.jl.git /QEDjl
+    - cd /QEDjl/.ci/integTestGen/
+    # use local registry of the QED project
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
+    # needs to add General registry again, if local registry was added
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
+    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
+    # paths of artifacts are relative to CI_PROJECT_DIR
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
+        julia --project=. src/integTestGen.jl NO_MESSAGE > $CI_PROJECT_DIR/integrationjobs.yaml
+      else
+        julia --project=. src/integTestGen.jl > $CI_PROJECT_DIR/integrationjobs.yaml
+      fi
+    - cat $CI_PROJECT_DIR/integrationjobs.yaml
+  artifacts:
+    paths:
+      - integrationjobs.yaml
+    expire_in: 1 week
+  interruptible: true
+  tags:
+    - cpuonly
+
+run_integration_tests:
+  stage: run_integration_test
+  trigger:
+    include:
+      - artifact: integrationjobs.yaml
+        job: generate_integration_tests
+    strategy: depend
 
 verify-unit-test-deps_julia1.9:
   image: julia:1.9
