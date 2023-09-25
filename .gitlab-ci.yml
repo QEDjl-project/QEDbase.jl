@@ -1,22 +1,8 @@
 stages:
-  - linter
   - unit-test
   - generate_integration_test
   - run_integration_test
   - verify-unit-test-deps
-
-format:
-  stage: linter
-  image: julia:1.9
-  script:
-    - "[[ -d .julia ]] && mv .julia /tmp"
-    - julia --project=.formatting -e 'import Pkg; Pkg.instantiate()'
-    - julia --project=.formatting .formatting/format_all.jl
-    - "[[ -d /tmp/.julia ]] && mv /tmp/.julia ."
-  variables:
-    CI_JULIA_VERSION: "1.9"
-    JULIA_DEPOT_PATH: /tmp/.julia
-  allow_failure: true
 
 unit_tests_julia1.9:
   image: julia:1.9
