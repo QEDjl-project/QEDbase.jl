@@ -21,7 +21,7 @@ pages = [
     "refs.md",
 ]
 
-makedocs(
+makedocs(;
     modules=[QEDbase],
     checkdocs=:exports,
     authors="Uwe Hernandez Acosta",
@@ -33,5 +33,5 @@ makedocs(
         assets=String[],
     ),
     pages=pages,
-    plugins = [bib]
+    plugins=[bib],
 )
