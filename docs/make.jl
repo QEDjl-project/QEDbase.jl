@@ -1,4 +1,11 @@
 
+using Pkg
+
+# targeting the correct source code
+# this asumes the make.jl script is located in QEDbase.jl/docs
+project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
+Pkg.develop(path=project_path)
+
 using Documenter
 using QEDbase
 
@@ -6,7 +13,8 @@ using QEDbase
 
 using DocumenterCitations
 
-bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"); sorting=:y)
+
+bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
 
 pages = [
     "Home" => "index.md",
@@ -21,8 +29,7 @@ pages = [
     "refs.md",
 ]
 
-makedocs(
-    bib;
+makedocs(;
     modules=[QEDbase],
     checkdocs=:exports,
     authors="Uwe Hernandez Acosta",
@@ -34,4 +41,5 @@ makedocs(
         assets=String[],
     ),
     pages=pages,
+    plugins=[bib],
 )
