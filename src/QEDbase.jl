@@ -1,9 +1,3 @@
-"""
-Main module of QEDbase.jl - a little library for manipulating Lorentz vectors and Dirac tensors.
-
-# Exports
-$(EXPORTS)
-"""
 module QEDbase
 
 using SimpleTraits

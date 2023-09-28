@@ -3,6 +3,7 @@ import Base.getindex
 
 const SPINOR_VALIDITY_CHECK = Ref(true)
 
+
 macro valid_spinor_input(ex)
     return quote
         SPINOR_VALIDITY_CHECK.x = false

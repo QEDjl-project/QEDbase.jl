@@ -3,7 +3,8 @@
 
 ```@autodocs
 Modules = [QEDbase]
-Pages   = ["QEDbase.jl"]
+Pages = ["QEDbase.jl"]
+Order = [:module]
 ```
 
 # Lorentz Vector Interface

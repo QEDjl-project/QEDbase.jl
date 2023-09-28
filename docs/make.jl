@@ -6,7 +6,7 @@ using QEDbase
 
 using DocumenterCitations
 
-bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"); sorting=:y)
+bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
 
 pages = [
     "Home" => "index.md",
@@ -22,7 +22,6 @@ pages = [
 ]
 
 makedocs(
-    bib;
     modules=[QEDbase],
     checkdocs=:exports,
     authors="Uwe Hernandez Acosta",
@@ -34,4 +33,5 @@ makedocs(
         assets=String[],
     ),
     pages=pages,
+    plugins = [bib]
 )
