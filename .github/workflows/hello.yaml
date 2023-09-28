@@ -1,0 +1,7 @@
+name: run-on-pr
+on: [pull_request]
+jobs:
+    run-pr-echo:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "I'm a pull request job."
