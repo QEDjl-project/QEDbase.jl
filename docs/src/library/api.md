@@ -1,4 +1,3 @@
-
 # QEDbase
 
 ```@autodocs
@@ -23,7 +22,6 @@ Pages   = ["lorentz_vector.jl"]
 Order   = [:type,:function]
 ```
 
-
 # Four Momentum
 
 ```@autodocs
@@ -37,5 +35,13 @@ Order   = [:type,:function]
 ```@autodocs
 Modules = [QEDbase]
 Pages   = ["dirac_tensors.jl"]
+Order   = [:type,:function]
+```
+
+# Particles
+
+```@autodocs
+Modules = [QEDbase]
+Pages   = ["particles.jl", "interfaces/particle_interface.jl"]
 Order   = [:type,:function]
 ```

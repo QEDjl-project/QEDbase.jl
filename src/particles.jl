@@ -312,6 +312,15 @@ abstract type AbstractIndefinitePolarization <: AbstractPolarization end
 
 """
 Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarization and should average or sum over all polarizations, depending on direction.
+
+!!! info
+    There is a built-in alias for `AllPolarization`:
+```jldoctest
+julia> using QEDbase
+
+julia> AllPolarization === AllPol
+true
+```
 """
 struct AllPolarization <: AbstractIndefinitePolarization end
 const AllPol = AllPolarization
@@ -326,9 +335,12 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 
 !!! info 
     There is a built-in alias for `PolarizationX`:
-    ```julia
-    PolX === PolarizationX
-    ```
+```jldoctest
+julia> using QEDbase
+
+julia> PolX === PolarizationX
+true
+```
 """
 struct PolarizationX <: AbstractDefinitePolarization end
 const PolX = PolarizationX
@@ -343,9 +355,12 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 
 !!! info 
     There is a built-in alias for `PolarizationY`:
-    ```julia
-    PolY === PolarizationY
-    ```
+```jldoctest
+julia> using QEDbase
+
+julia> PolY === PolarizationY
+true
+```
 """
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
