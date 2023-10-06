@@ -29,51 +29,49 @@ abstract type AbstractParticle end
 """
     $(TYPEDSIGNATURES)
 
-Interface function for particles. Return `true` if the passed subtype of `AbstractParticle` can be considered a *fermion* in the sense of particle statistics, and `false` otherwise.
-The default implementation of `is_fermion` for every subtype of `AbstractParticle` will always return `false`.
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *fermion* in the sense of particle statistics, and `false` otherwise.
+The default implementation of `is_fermion` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
 """
 is_fermion(::AbstractParticle) = false
 
 """
     $(TYPEDSIGNATURES)
 
-Interface function for particles. Return `true` if the passed subtype of `AbstractParticle` can be considered a *boson* in the sense of particle statistics, and `false` otherwise.
-The default implementation of `is_boson` for every subtype of `AbstractParticle` will always return `false`.
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *boson* in the sense of particle statistics, and `false` otherwise.
+The default implementation of `is_boson` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
 """
 is_boson(::AbstractParticle) = false
 
 """
     $(TYPEDSIGNATURES)
     
-Interface function for particles. Return `true` if the passed subtype of `AbstractParticle` can be considered a *particle* as distinct from anti-particles, and `false` otherwise.
-The default implementation of `is_particle` for every subtype of `AbstractParticle` will always return `true`.
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *particle* as distinct from anti-particles, and `false` otherwise.
+The default implementation of `is_particle` for every subtype of [`AbstractParticle`](@ref) will always return `true`.
 """
 is_particle(::AbstractParticle) = true
 
 """
     $(TYPEDSIGNATURES)
 
-Interface function for particles. Return true if the passed subtype of `AbstractParticle` can be considered an *anti particle* as distinct from their particle counterpart, and `false` otherwise.
-The default implementation of `is_anti_particle` for every subtype of `AbstractParticle` will always return `false`.
+Interface function for particles. Return true if the passed subtype of [`AbstractParticle`](@ref) can be considered an *anti particle* as distinct from their particle counterpart, and `false` otherwise.
+The default implementation of `is_anti_particle` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
 """
 is_anti_particle(::AbstractParticle) = false
 
 """
-    
     mass(particle::AbstractParticle)::Real
 
 Interface function for particles. Return the rest mass of a particle (in units of the electron mass).
 
-This needs to be implemented for each concrete subtype of `AbstractParticle`.
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
 """
 function mass end
 
 """
-    
     charge(::AbstractParticle)::Real
 
 Interface function for particles. Return the electric charge of a particle (in units of the elementary electric charge).
 
-This needs to be implemented for each concrete subtype of `AbstractParticle`.
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
 """
 function charge end

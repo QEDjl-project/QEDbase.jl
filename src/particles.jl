@@ -11,31 +11,24 @@ using StaticArrays
     AbstractParticleType <: AbstractParticle
 
 This is the abstract base type for every species of particles. All functionalities defined on subtypes of `AbstractParticleType` should be static, i.e. known at compile time. 
-For adding runtime information, e.g. four-momenta or particle states, to a particle, consider implementing a concrete subtype of `AbstractParticle` instead, which may have a type parameter `P<:AbstractParticleType`. See the concrete type `Particle{P,ST,MT}`
+For adding runtime information, e.g. four-momenta or particle states, to a particle, consider implementing a concrete subtype of [`AbstractParticle`](@ref) instead, which may have a type parameter `P<:AbstractParticleType`. See the concrete type [`Particle`](@ref).
 
-Concrete built-in subtypes of `AbstractParticleType` are 
-
-```julia
-    Electron
-    Positron
-    Photon
-```
-
+Concrete built-in subtypes of `AbstractParticleType` are [`Electron`](@ref), [`Positron`](@ref) and [`Photon`](@ref).
 """
 abstract type AbstractParticleType <: AbstractParticle end
 
 """
-Abstract base types for particle species that act like fermions in the sense of particle statistics. 
-    
+Abstract base types for particle species that act like fermions in the sense of particle statistics.
+
 !!! note "particle interface"
     Every concrete subtype of [`FermionLike`](@ref) has `is_fermion(::FermionLike) = true`.
 """
 abstract type FermionLike <: AbstractParticleType end
 
-Base.@pure is_fermion(::FermionLike) = true
+is_fermion(::FermionLike) = true
 
 """
-Abstract base type for fermions as distinct from anti-fermions. 
+Abstract base type for fermions as distinct from [`AntiFermion`](@ref)s.
     
 !!! note "particle interface"
     All subtypes of `Fermion` have
@@ -92,7 +85,7 @@ is_anti_particle(::MajoranaFermion) = true
 Concrete type for *electrons* as a particle species. Mostly used for dispatch. 
 
 !!! note "particle interface"
-    Besides being a subtype of `Fermion`, objects of type `Electron` have
+    Besides being a subtype of [`Fermion`](@ref), objects of type `Electron` have
 
     ```julia
     mass(::Electron) = 1.0
@@ -107,7 +100,7 @@ charge(::Electron) = -1.0
 Concrete type for *positrons* as a particle species. Mostly used for dispatch. 
 
 !!! note "particle interface"
-    Besides being a subtype of `AntiFermion`, objects of type `Positron` have
+    Besides being a subtype of [`AntiFermion`](@ref), objects of type `Positron` have
 
     ```julia
     mass(::Positron) = 1.0
@@ -123,14 +116,14 @@ charge(::Positron) = 1.0
 Abstract base types for particle species that act like bosons in the sense of particle statistics. 
     
 !!! note "particle interface"
-    Every concrete subtype of [`BosonLike`](@ref) has `is_boson(::BosonLike) = true`.
+    Every concrete subtype of `BosonLike` has `is_boson(::BosonLike) = true`.
 """
 abstract type BosonLike <: AbstractParticleType end
 
 is_boson(::BosonLike) = true
 
 """
-Abstract base type for bosons as distinct from its anti-particle counterpart `AntiBoson`. 
+Abstract base type for bosons as distinct from its anti-particle counterpart [`AntiBoson`](@ref).
     
 !!! note "particle interface"
     All subtypes of `Boson` have
@@ -146,7 +139,7 @@ is_particle(::Boson) = true
 is_anti_particle(::Boson) = false
 
 """
-Abstract base type for anti-bosons as distinct from its particle counterpart `Bosons`. 
+Abstract base type for anti-bosons as distinct from its particle counterpart [`Boson`](@ref).
     
 !!! note "particle interface"
     All subtypes of `AntiBoson` have
@@ -199,13 +192,12 @@ Abstract base type for the directions of particles in the context of processes, 
 abstract type ParticleDirection end
 
 """
-
     Incoming <: ParticleDirection
 
-Concrete implementation of a `ParticleDirection` to indicate that a particle is *incoming* in the context of a given process. Mostly used for dispatch.
+Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a particle is *incoming* in the context of a given process. Mostly used for dispatch.
 
 !!! note "ParticleDirection Interface"
-    Besides being a subtype of `ParticleDirection`, `Incoming` has
+    Besides being a subtype of [`ParticleDirection`](@ref), `Incoming` has
 
     ```julia
     is_incoming(::Incoming) = true
@@ -213,17 +205,16 @@ Concrete implementation of a `ParticleDirection` to indicate that a particle is 
     ```
 """
 struct Incoming <: ParticleDirection end
-Base.@pure is_incoming(::Incoming) = true
-Base.@pure is_outgoing(::Incoming) = false
+is_incoming(::Incoming) = true
+is_outgoing(::Incoming) = false
 
 """
-
     Outgoing <: ParticleDirection
 
-Concrete implementation of a `ParticleDirection` to indicate that a particle is *outgoing* in the context of a given process. Mostly used for dispatch.
+Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a particle is *outgoing* in the context of a given process. Mostly used for dispatch.
 
 !!! note "ParticleDirection Interface"
-    Besides being a subtype of `ParticleDirection`, `Outgoing` has
+    Besides being a subtype of [`ParticleDirection`](@ref), `Outgoing` has
 
     ```julia
     is_incoming(::Outgoing) = false
@@ -231,15 +222,15 @@ Concrete implementation of a `ParticleDirection` to indicate that a particle is 
     ```
 """
 struct Outgoing <: ParticleDirection end
-Base.@pure is_incoming(::Outgoing) = false
-Base.@pure is_outgoing(::Outgoing) = true
+is_incoming(::Outgoing) = false
+is_outgoing(::Outgoing) = true
 
 ####
 # spins and polarizations
 ####
 
 """
-Abstract base type for the spin or polarization of particles. 
+Abstract base type for the spin or polarization of [`FermionLike`](@ref) or [`BosonLike`](@ref) particles, respectively.
 """
 abstract type AbstractSpinOrPolarization end
 
@@ -432,11 +423,11 @@ using QEDprocesses
 mass = 1.0                              # set electron mass to 1.0
 px,py,pz = rand(3)                      # generate random spatial components
 E = sqrt(px^2 + py^2 + pz^2 + mass^2)   # compute energy, i.e. the electron is on-shell
-mom = SFourMomentum(E,px,py,pz)         # initialize the four-momentum of the electron
+mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the electron
 
 # compute the state of an incoming electron with spin = SpinUp
 # note: base_state is not exported!
-electron_state = QEDProcesses.base_state(Electron(),Incoming(),mom, SpinUp)
+electron_state = QEDProcesses.base_state(Electron(), Incoming(), mom, SpinUp)
         
 ```
 
