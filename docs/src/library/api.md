@@ -42,6 +42,6 @@ Order   = [:type,:function]
 
 ```@autodocs
 Modules = [QEDbase]
-Pages   = ["particles.jl", "interfaces/particle_interface.jl"]
+Pages   = ["particles/particle_direction.jl", "particles/particle_spin_pol.jl", "particles/particle_spinors.jl", "particles/particle_states.jl", "particles/particle_types.jl", "interfaces/particle_interface.jl"]
 Order   = [:type,:function]
 ```

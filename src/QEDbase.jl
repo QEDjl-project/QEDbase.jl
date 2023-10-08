@@ -72,7 +72,6 @@ include("lorentz_vector.jl")
 include("gamma_matrices.jl")
 
 include("four_momentum.jl") # maybe go to a kinematics module!!
-include("particle_spinors.jl")
 
 include("interfaces/particle_interface.jl")
 include("particles.jl")
