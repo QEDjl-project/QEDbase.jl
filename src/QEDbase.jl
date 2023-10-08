@@ -60,7 +60,7 @@ export AbstractSpinOrPolarization, AbstractPolarization, AbstractSpin
 export AbstractDefinitePolarization, AbstractIndefinitePolarization
 export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
-export SpinUp, SpinDown, SpinAll
+export SpinUp, SpinDown, AllSpin
 
 using StaticArrays
 using LinearAlgebra

@@ -249,7 +249,7 @@ abstract type AbstractDefiniteSpin <: AbstractSpin end
 """
 Abstract base type for indefinite spins of [`FermionLike`](@ref) particles.
 
-One concrete type is [`SpinAll`](@ref).
+One concrete type is [`AllSpin`](@ref).
 """
 abstract type AbstractIndefiniteSpin <: AbstractSpin end
 
@@ -266,7 +266,7 @@ struct SpinDown <: AbstractDefiniteSpin end
 """
 Concrete type indicating that a [`FermionLike`](@ref) has an indefinite spin and should average or sum over all spins, depending on direction.
 """
-struct SpinAll <: AbstractIndefiniteSpin end
+struct AllSpin <: AbstractIndefiniteSpin end
 
 """
     $(TYPEDSIGNATURES)
