@@ -98,7 +98,7 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 ```jldoctest
 julia> using QEDbase
 
-julia> PolX === PolarizationX
+julia> PolarizationX === PolX
 true
 ```
 """
@@ -118,7 +118,7 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 ```jldoctest
 julia> using QEDbase
 
-julia> PolY === PolarizationY
+julia> PolarizationY === PolY
 true
 ```
 """

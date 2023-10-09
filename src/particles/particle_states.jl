@@ -18,7 +18,6 @@ end
 
 Return the base state of a directed on-shell particle with a given four-momentum. For internal usage only.
 
-
 # Input
 
 - `particle` -- the type of the particle, i.e. `Electron`, `Positron`, or `Photon`
@@ -32,23 +31,23 @@ The output type of `base_state` depends on wether the spin or polarization of th
 If `spin_or_pol` is passed, the output of `base_state` is
 
 ```julia
-base_state(::Fermion,     ::Incoming, mom, spin_or_pol) -> BiSpinor
-base_state(::AntiFermion, ::Incoming, mom, spin_or_pol) -> AdjointBiSpinor
-base_state(::Fermion,     ::Outgoing, mom, spin_or_pol) -> AdjointBiSpinor
-base_state(::AntiFermion, ::Outgoing, mom, spin_or_pol) -> BiSpinor
-base_state(::Photon,      ::Incoming, mom, spin_or_pol) -> SLorentzVector{ComplexF64}
-base_state(::Photon,      ::Outgoing, mom, spin_or_pol) -> SLorentzVector{ComplexF64}
+base_state(::Fermion,     ::Incoming, mom, spin_or_pol) # -> BiSpinor
+base_state(::AntiFermion, ::Incoming, mom, spin_or_pol) # -> AdjointBiSpinor
+base_state(::Fermion,     ::Outgoing, mom, spin_or_pol) # -> AdjointBiSpinor
+base_state(::AntiFermion, ::Outgoing, mom, spin_or_pol) # -> BiSpinor
+base_state(::Photon,      ::Incoming, mom, spin_or_pol) # -> SLorentzVector{ComplexF64}
+base_state(::Photon,      ::Outgoing, mom, spin_or_pol) # -> SLorentzVector{ComplexF64}
 ```
 
 If `spin_or_pol` is not passed to `base_state`, the output is a `StaticVector` with both spin/polarization alignments:
 
 ```julia
-base_state(::Fermion,     ::Incoming, mom) -> SVector{2,BiSpinor}
-base_state(::AntiFermion, ::Incoming, mom) -> SVector{2,AdjointBiSpinor}
-base_state(::Fermion,     ::Outgoing, mom) -> SVector{2,AdjointBiSpinor}
-base_state(::AntiFermion, ::Outgoing, mom) -> SVector{2,BiSpinor}
-base_state(::Photon,      ::Incoming, mom) -> SVector{2,SLorentzVector{ComplexF64}}
-base_state(::Photon,      ::Outgoing, mom) -> SVector{2,SLorentzVector{ComplexF64}}
+base_state(::Fermion,     ::Incoming, mom) # -> SVector{2,BiSpinor}
+base_state(::AntiFermion, ::Incoming, mom) # -> SVector{2,AdjointBiSpinor}
+base_state(::Fermion,     ::Outgoing, mom) # -> SVector{2,AdjointBiSpinor}
+base_state(::AntiFermion, ::Outgoing, mom) # -> SVector{2,BiSpinor}
+base_state(::Photon,      ::Incoming, mom) # -> SVector{2,SLorentzVector{ComplexF64}}
+base_state(::Photon,      ::Outgoing, mom) # -> SVector{2,SLorentzVector{ComplexF64}}
 ```
 
 # Example
