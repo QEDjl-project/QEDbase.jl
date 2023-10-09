@@ -5,8 +5,6 @@
 # implement the abstact particle interface accordingly. 
 ###############
 
-using StaticArrays
-
 """
     AbstractParticleType <: AbstractParticle
 

@@ -73,14 +73,16 @@ abstract type AbstractIndefinitePolarization <: AbstractPolarization end
 """
 Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarization and should average or sum over all polarizations, depending on direction.
 
-!!! info
-    There is a built-in alias for `AllPolarization`:
-```jldoctest
-julia> using QEDbase
+!!! info "Alias"
 
-julia> AllPolarization === AllPol
-true
-```
+    There is a built-in alias for `AllPolarization`:
+
+    ```jldoctest
+    julia> using QEDbase
+
+    julia> AllPolarization === AllPol
+    true
+    ```
 """
 struct AllPolarization <: AbstractIndefinitePolarization end
 const AllPol = AllPolarization
@@ -93,14 +95,15 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
     The notion of axes, e.g. ``x``- and ``y``-direction is just to distinguish two orthogonal polarization directions.
     However, if the three-momentum of the [`BosonLike`](@ref) is aligned to the ``z``-axis of a coordinate system, the polarization axes define the ``x``- or ``y``-axis, respectively.
 
-!!! info 
-    There is a built-in alias for `PolarizationX`:
-```jldoctest
-julia> using QEDbase
+!!! info "Alias"
 
-julia> PolarizationX === PolX
-true
-```
+    There is a built-in alias for `PolarizationX`:
+    ```jldoctest
+    julia> using QEDbase
+
+    julia> PolarizationX === PolX
+    true
+    ```
 """
 struct PolarizationX <: AbstractDefinitePolarization end
 const PolX = PolarizationX
@@ -113,14 +116,15 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
     The notion of axes, e.g. ``x``- and ``y``-direction is just to distinguish two orthogonal polarization directions.
     However, if the three-momentum of the [`BosonLike`](@ref) is aligned to the ``z``-axis of a coordinate system, the polarization axes define the ``x``- or ``y``-axis, respectively.
 
-!!! info 
-    There is a built-in alias for `PolarizationY`:
-```jldoctest
-julia> using QEDbase
+!!! info "Alias"
 
-julia> PolarizationY === PolY
-true
-```
+    There is a built-in alias for `PolarizationY`:
+    ```jldoctest
+    julia> using QEDbase
+
+    julia> PolarizationY === PolY
+    true
+    ```
 """
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY

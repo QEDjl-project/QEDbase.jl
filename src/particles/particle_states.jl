@@ -20,10 +20,10 @@ Return the base state of a directed on-shell particle with a given four-momentum
 
 # Input
 
-- `particle` -- the type of the particle, i.e. `Electron`, `Positron`, or `Photon`
-- `direction` -- the direction of the particle, i.e. `Incoming` or `Outgoing`
+- `particle` -- the type of the particle, e.g. [`Electron`](@ref), [`Positron`](@ref), or [`Photon`](@ref).
+- `direction` -- the direction of the particle, i.e. [`Incoming`](@ref) or [`Outgoing`](@ref).
 - `momentum` -- the four-momentum of the particle
-- `[spin_or_pol]` -- if given, the spin or polarization of the particle, i.e. `SpinUp`/`SpinDown` or `PolX`/`PolY`
+- `[spin_or_pol]` -- if given, the spin or polarization of the particle, e.g. [`SpinUp`](@ref)/[`SpinDown`](@ref) or [`PolarizationX`](@ref)/[`PolarizationY`](@ref).
 
 # Output
 The output type of `base_state` depends on wether the spin or polarization of the particle passed in is specified or not.
@@ -64,7 +64,7 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 
 # compute the state of an incoming electron with spin = SpinUp
 # note: base_state is not exported!
-electron_state = QEDProcesses.base_state(Electron(), Incoming(), mom, SpinUp)
+electron_state = QEDProcesses.base_state(Electron(), Incoming(), mom, SpinUp())
         
 ```
 
@@ -96,7 +96,7 @@ electron_state = QEDProcesses.base_state(Electron(), Incoming(), mom, SpinUp)
     \\chi_2 = (0, 0, 0, 1)^T
     ```
 
-    For outgoing fermions and incoming anti-fermion with momentum ``p``, the base state is given as the Dirac-adjoint of the respective incoming fermion- or outgoing anti-fermion state:
+    For outgoing fermions and incoming anti-fermions with momentum ``p``, the base state is given as the Dirac-adjoint of the respective incoming fermion or outgoing anti-fermion state:
 
     ```math
     \\overline{u}_\\sigma(p) = u_\\sigma^\\dagger \\gamma^0\\\\
