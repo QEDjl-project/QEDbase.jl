@@ -33,7 +33,7 @@ Concrete type indicating that a [`FermionLike`](@ref) has spin-down.
 struct SpinDown <: AbstractDefiniteSpin end
 
 """
-Concrete type indicating that a [`FermionLike`](@ref) has an indefinite spin and should average or sum over all spins, depending on direction.
+Concrete type indicating that a [`FermionLike`](@ref) has an indefinite spin and the differential cross section calculation should average or sum over all spins, depending on the direction ([`Incoming`](@ref) or [`Outgoing`](@ref)) of the particle in question.
 """
 struct AllSpin <: AbstractIndefiniteSpin end
 
@@ -71,7 +71,7 @@ One concrete type is [`AllPolarization`](@ref).
 abstract type AbstractIndefinitePolarization <: AbstractPolarization end
 
 """
-Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarization and should average or sum over all polarizations, depending on direction.
+Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarization and the differential cross section calculation should average or sum over all polarizations, depending on the direction ([`Incoming`](@ref) or [`Outgoing`](@ref)) of the particle in question.
 
 !!! info "Alias"
 
