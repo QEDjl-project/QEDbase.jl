@@ -4,7 +4,7 @@ using Pkg
 # targeting the correct source code
 # this asumes the make.jl script is located in QEDbase.jl/docs
 project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
-Pkg.develop(path=project_path)
+Pkg.develop(; path=project_path)
 
 using Documenter
 using QEDbase
@@ -12,7 +12,6 @@ using QEDbase
 #DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
 
 using DocumenterCitations
-
 
 bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
 
