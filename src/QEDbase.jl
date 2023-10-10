@@ -42,6 +42,26 @@ export IncomingFermionSpinor,
 export SpinorU, SpinorUbar, SpinorV, SpinorVbar
 export @valid_spinor_input
 
+# particle interface
+export AbstractParticle
+export is_fermion, is_boson, is_particle, is_anti_particle
+export base_state
+export mass, charge
+
+# particle types
+export AbstractParticleType
+export FermionLike, Fermion, AntiFermion, MajoranaFermion
+export BosonLike, Boson, AntiBoson, MajoranaBoson
+export Electron, Positron, Photon
+export ParticleDirection, Incoming, Outgoing
+
+# polarizations and spins
+export AbstractSpinOrPolarization, AbstractPolarization, AbstractSpin
+export AbstractDefinitePolarization, AbstractIndefinitePolarization
+export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
+export AbstractDefiniteSpin, AbstractIndefiniteSpin
+export SpinUp, SpinDown, AllSpin
+
 using StaticArrays
 using LinearAlgebra
 using DocStringExtensions
@@ -52,6 +72,12 @@ include("lorentz_vector.jl")
 include("gamma_matrices.jl")
 
 include("four_momentum.jl") # maybe go to a kinematics module!!
-include("particle_spinors.jl")
+
+include("interfaces/particle_interface.jl")
+include("particles/particle_types.jl")
+include("particles/particle_direction.jl")
+include("particles/particle_spin_pol.jl")
+include("particles/particle_spinors.jl")
+include("particles/particle_states.jl")
 
 end #QEDbase

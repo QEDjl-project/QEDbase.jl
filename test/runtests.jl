@@ -10,4 +10,6 @@ using Test
 
     include("particle_spinors.jl")
     include("four_momentum.jl")
+
+    include("particles.jl")
 end
