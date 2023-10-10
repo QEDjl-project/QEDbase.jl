@@ -109,7 +109,7 @@ struct PolarizationX <: AbstractDefinitePolarization end
 const PolX = PolarizationX
 
 """
-Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``x``-direction.
+Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``y``-direction.
 
 !!! note "Coordinate axes"
 
