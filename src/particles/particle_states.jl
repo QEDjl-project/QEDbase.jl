@@ -7,12 +7,12 @@ function _booster_antifermion(mom::QEDbase.AbstractFourMomentum, mass::Real)
 end
 
 """
-```julia 
+```julia
     base_state(
-        particle::AbstractParticleType,             
-        direction::ParticleDirection,               
-        momentum::QEDbase.AbstractFourMomentum,     
-        [spin_or_pol::AbstractSpinOrPolarization]   
+        particle::AbstractParticleType,
+        direction::ParticleDirection,
+        momentum::QEDbase.AbstractFourMomentum,
+        [spin_or_pol::AbstractSpinOrPolarization]
     )
 ```
 
@@ -55,7 +55,6 @@ base_state(::Photon,      ::Outgoing, mom) # -> SVector{2,SLorentzVector{Complex
 ```julia
 
 using QEDbase
-using QEDprocesses
 
 mass = 1.0                              # set electron mass to 1.0
 px,py,pz = rand(3)                      # generate random spatial components
@@ -64,8 +63,8 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 
 # compute the state of an incoming electron with spin = SpinUp
 # note: base_state is not exported!
-electron_state = QEDProcesses.base_state(Electron(), Incoming(), mom, SpinUp())
-        
+electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
+
 ```
 
 !!! note "Conventions"
