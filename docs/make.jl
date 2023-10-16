@@ -32,13 +32,14 @@ makedocs(;
     modules=[QEDbase],
     checkdocs=:exports,
     authors="Uwe Hernandez Acosta",
-    repo="https://gitlab.hzdr.de/hernan68/QEDbase.jl/blob/{commit}{path}#{line}",
+    repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
     sitename="QEDbase.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://hernan68.gitlab.io/QEDbase.jl",
+        canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
         assets=String[],
     ),
     pages=pages,
     plugins=[bib],
 )
+deploydocs(; repo="github.com/QEDjl-project/QEDbase.jl.git", push_preview=false)
