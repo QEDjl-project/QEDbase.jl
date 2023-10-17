@@ -67,6 +67,29 @@ electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
 
 ```
 
+```jldoctest
+julia> using QEDbase
+
+julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)
+4-element SFourMomentum with indices SOneTo(4):
+ 1.0677078252031311
+ 0.1
+ 0.2
+ 0.3
+
+julia> electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
+4-element StaticArraysCore.SVector{4, ComplexF64} with indices SOneTo(4):
+   1.4379526505428235 + 0.0im
+                  0.0 + 0.0im
+ -0.20862995724285552 + 0.0im
+ -0.06954331908095185 - 0.1390866381619037im
+
+julia> electron_states = base_state(Electron(), Incoming(), mom, AllSpin())
+2-element StaticArraysCore.SVector{2, BiSpinor} with indices SOneTo(2):
+ [1.4379526505428235 + 0.0im, 0.0 + 0.0im, -0.20862995724285552 + 0.0im, -0.06954331908095185 - 0.1390866381619037im]
+ [0.0 + 0.0im, 1.4379526505428235 + 0.0im, -0.06954331908095185 + 0.1390866381619037im, 0.20862995724285552 + 0.0im]
+```
+
 !!! note "Conventions"
 
     For an incoming fermion with momentum ``p``, we use the explicit formula:
