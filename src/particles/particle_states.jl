@@ -31,15 +31,15 @@ The output type of `base_state` depends on wether the spin or polarization of th
 If `spin_or_pol` is passed, the output of `base_state` is
 
 ```julia
-base_state(::Fermion,     ::Incoming, mom, spin_or_pol) # -> BiSpinor
-base_state(::AntiFermion, ::Incoming, mom, spin_or_pol) # -> AdjointBiSpinor
-base_state(::Fermion,     ::Outgoing, mom, spin_or_pol) # -> AdjointBiSpinor
-base_state(::AntiFermion, ::Outgoing, mom, spin_or_pol) # -> BiSpinor
-base_state(::Photon,      ::Incoming, mom, spin_or_pol) # -> SLorentzVector{ComplexF64}
-base_state(::Photon,      ::Outgoing, mom, spin_or_pol) # -> SLorentzVector{ComplexF64}
+base_state(::Fermion,     ::Incoming, mom, spin_or_pol) # -> SVector{1,BiSpinor}
+base_state(::AntiFermion, ::Incoming, mom, spin_or_pol) # -> SVector{1,AdjointBiSpinor}
+base_state(::Fermion,     ::Outgoing, mom, spin_or_pol) # -> SVector{1,AdjointBiSpinor}
+base_state(::AntiFermion, ::Outgoing, mom, spin_or_pol) # -> SVector{1,BiSpinor}
+base_state(::Photon,      ::Incoming, mom, spin_or_pol) # -> SVector{1,SLorentzVector{ComplexF64}}
+base_state(::Photon,      ::Outgoing, mom, spin_or_pol) # -> SVector{1,SLorentzVector{ComplexF64}}
 ```
 
-If `spin_or_pol` is not passed to `base_state`, the output is a `StaticVector` with both spin/polarization alignments:
+If `spin_or_pol` is of type [`AllPolarization`](@ref) or [`AllSpin`](@ref), the output is an `SVector` with both spin/polarization alignments:
 
 ```julia
 base_state(::Fermion,     ::Incoming, mom) # -> SVector{2,BiSpinor}
@@ -119,25 +119,35 @@ electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
 function base_state end
 
 function base_state(
-    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::Fermion,
+    ::Incoming,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_fermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin)])
+    return SVector(BiSpinor(booster[:, _spin_index(spin)]))
 end
 
-function base_state(particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_fermion(mom, mass(particle))
     return SVector(BiSpinor(booster[:, 1]), BiSpinor(booster[:, 2]))
 end
 
 function base_state(
-    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::AntiFermion,
+    ::Incoming,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_antifermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin) + 2])) * GAMMA[1]
+    return SVector(AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin) + 2])) * GAMMA[1])
 end
 
-function base_state(particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_antifermion(mom, mass(particle))
     return SVector(
         AdjointBiSpinor(BiSpinor(booster[:, 3])) * GAMMA[1],
@@ -146,13 +156,18 @@ function base_state(particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFour
 end
 
 function base_state(
-    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::Fermion,
+    ::Outgoing,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_fermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin)])) * GAMMA[1]
+    return SVector(AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin)])) * GAMMA[1])
 end
 
-function base_state(particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_fermion(mom, mass(particle))
     return SVector(
         AdjointBiSpinor(BiSpinor(booster[:, 1])) * GAMMA[1],
@@ -161,18 +176,23 @@ function base_state(particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMome
 end
 
 function base_state(
-    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::AntiFermion,
+    ::Outgoing,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_antifermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin) + 2])
+    return SVector(BiSpinor(booster[:, _spin_index(spin) + 2]))
 end
 
-function base_state(particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_antifermion(mom, mass(particle))
     return SVector(BiSpinor(booster[:, 3]), BiSpinor(booster[:, 4]))
 end
 
-function _photon_state(mom::QEDbase.AbstractFourMomentum)
+function _photon_state(pol::AllPolarization, mom::QEDbase.AbstractFourMomentum)
     cth = getCosTheta(mom)
     sth = sqrt(1 - cth^2)
     sin_phi = getSinPhi(mom)
@@ -188,19 +208,19 @@ function _photon_state(pol::PolarizationX, mom::QEDbase.AbstractFourMomentum)
     sth = sqrt(1 - cth^2)
     sin_phi = getSinPhi(mom)
     cos_phi = sqrt(1 - sin_phi^2)
-    return SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth)
+    return SVector(SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth))
 end
 
 function _photon_state(pol::PolarizationY, mom::QEDbase.AbstractFourMomentum)
     sin_phi = getSinPhi(mom)
     cos_phi = sqrt(1 - sin_phi^2)
-    return SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0)
+    return SVector(SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0))
 end
 
 @inline function base_state(
-    particle::Photon, ::ParticleDirection, mom::QEDbase.AbstractFourMomentum
+    particle::Photon, ::ParticleDirection, mom::QEDbase.AbstractFourMomentum, pol::AllPolarization
 )
-    return _photon_state(mom)
+    return _photon_state(pol, mom)
 end
 
 @inline function base_state(

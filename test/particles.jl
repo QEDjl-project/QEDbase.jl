@@ -26,7 +26,7 @@ x, y, z = rand(rng, 3)
                 mom, particle_mass
             )
             groundtruth_tuple = SVector(groundtruth_states(1), groundtruth_states(2))
-            @test base_state(P(), D(), mom) == groundtruth_tuple
+            @test base_state(P(), D(), mom, AllSpin()) == groundtruth_tuple
             @test base_state(P(), D(), mom, SpinUp()) == groundtruth_tuple[1]
             @test base_state(P(), D(), mom, SpinDown()) == groundtruth_tuple[2]
         end
@@ -98,7 +98,7 @@ end
 
         mom = SFourMomentum(sqrt(x^2 + y^2 + z^2 + mass(Photon())^2), x, y, z)
         @testset "$D" for D in [Incoming, Outgoing]
-            both_photon_states = base_state(Photon(), D(), mom)
+            both_photon_states = base_state(Photon(), D(), mom, AllPolarization())
 
             # property test the photon states
             @test isapprox((both_photon_states[1] * mom), 0.0, atol=ATOL)
