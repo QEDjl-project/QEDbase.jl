@@ -241,7 +241,10 @@ function _photon_state(pol::PolarizationY, mom::QEDbase.AbstractFourMomentum)
 end
 
 @inline function base_state(
-    particle::Photon, ::ParticleDirection, mom::QEDbase.AbstractFourMomentum, pol::AllPolarization
+    particle::Photon,
+    ::ParticleDirection,
+    mom::QEDbase.AbstractFourMomentum,
+    pol::AllPolarization,
 )
     return _photon_state(pol, mom)
 end
