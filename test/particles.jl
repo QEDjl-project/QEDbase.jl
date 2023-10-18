@@ -29,6 +29,17 @@ x, y, z = rand(rng, 3)
             @test base_state(P(), D(), mom, AllSpin()) == groundtruth_tuple
             @test base_state(P(), D(), mom, SpinUp()) == groundtruth_tuple[1]
             @test base_state(P(), D(), mom, SpinDown()) == groundtruth_tuple[2]
+
+            @test QEDbase._as_svec(base_state(P(), D(), mom, AllSpin())) isa SVector
+            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinUp())) isa SVector
+            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinDown())) isa SVector
+
+            @test QEDbase._as_svec(base_state(P(), D(), mom, AllSpin())) ==
+                groundtruth_tuple
+            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinUp()))[1] ==
+                groundtruth_tuple[1]
+            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinDown()))[1] ==
+                groundtruth_tuple[2]
         end
     end
 
@@ -112,6 +123,19 @@ end
             @test base_state(Photon(), D(), mom, PolarizationY()) == both_photon_states[2]
             @test base_state(Photon(), D(), mom, PolX()) == both_photon_states[1]
             @test base_state(Photon(), D(), mom, PolY()) == both_photon_states[2]
+
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, PolX())) isa SVector
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, PolY())) isa SVector
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, AllPol())) isa SVector
+
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, PolX()))[1] ==
+                both_photon_states[1]
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, PolY()))[1] ==
+                both_photon_states[2]
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, AllPol()))[1] ==
+                both_photon_states[1]
+            @test QEDbase._as_svec(base_state(Photon(), D(), mom, AllPol()))[2] ==
+                both_photon_states[2]
         end
     end
 end
