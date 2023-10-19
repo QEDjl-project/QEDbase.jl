@@ -6,6 +6,7 @@ using Pkg
 project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
 Pkg.develop(; path=project_path)
 
+
 using Documenter
 using QEDbase
 
@@ -31,6 +32,7 @@ pages = [
 makedocs(;
     modules=[QEDbase],
     checkdocs=:exports,
+
     authors="Uwe Hernandez Acosta",
     repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
     sitename="QEDbase.jl",
