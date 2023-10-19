@@ -4,14 +4,14 @@
 
 [diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/0c70f66...release-0.1.5)
 
+### Breaking changes
+
+no breaking changes
+
 ### New features
 
 * Move particle definitions from QEDprocesses.jl to QEDbase.jl https://github.com/QEDjl-project/QEDbase.jl/pull/25
 * Base state fix https://github.com/QEDjl-project/QEDbase.jl/pull/37
-
-### Breaking changes
-
-no breaking changes
 
 ### Maintenance
 
