@@ -16,7 +16,7 @@ no breaking changes
 ### Maintenance
 
 * CompatHelper: bump compat for DocStringExtensions to 0.9, (keep existing compat) https://github.com/QEDjl-project/QEDbase.jl/pull/40
-* add CompatHelper CI Job #35
+* add CompatHelper CI Job https://github.com/QEDjl-project/QEDbase.jl/pull/35
 * run unit tests for Julia 1.6 until 1.9
 https://github.com/QEDjl-project/QEDbase.jl/pull/29
 * add documentation build and deploy job
