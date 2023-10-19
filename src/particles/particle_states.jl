@@ -39,7 +39,7 @@ base_state(::Photon,      ::Incoming, mom, spin_or_pol) # -> SLorentzVector{Comp
 base_state(::Photon,      ::Outgoing, mom, spin_or_pol) # -> SLorentzVector{ComplexF64}
 ```
 
-If `spin_or_pol` is not passed to `base_state`, the output is a `StaticVector` with both spin/polarization alignments:
+If `spin_or_pol` is of type [`AllPolarization`](@ref) or [`AllSpin`](@ref), the output is an `SVector` with both spin/polarization alignments:
 
 ```julia
 base_state(::Fermion,     ::Incoming, mom) # -> SVector{2,BiSpinor}
@@ -66,6 +66,39 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
 
 ```
+
+```jldoctest
+julia> using QEDbase
+
+julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)
+4-element SFourMomentum with indices SOneTo(4):
+ 1.0677078252031311
+ 0.1
+ 0.2
+ 0.3
+
+julia> electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
+4-element BiSpinor with indices SOneTo(4):
+   1.4379526505428235 + 0.0im
+                  0.0 + 0.0im
+ -0.20862995724285552 + 0.0im
+ -0.06954331908095185 - 0.1390866381619037im
+
+julia> electron_states = base_state(Electron(), Incoming(), mom, AllSpin())
+2-element StaticArraysCore.SVector{2, BiSpinor} with indices SOneTo(2):
+ [1.4379526505428235 + 0.0im, 0.0 + 0.0im, -0.20862995724285552 + 0.0im, -0.06954331908095185 - 0.1390866381619037im]
+ [0.0 + 0.0im, 1.4379526505428235 + 0.0im, -0.06954331908095185 + 0.1390866381619037im, 0.20862995724285552 + 0.0im]
+```
+
+!!! note "Iterator convenience"
+    The returned objects of `base_state` can be consistently wrapped in an `SVector` for iteration using [`_as_svec`](@ref).
+
+    This way, a loop like the following becomes possible when `spin` may be definite or indefinite.
+    ```julia
+    for state in QEDbase._as_svec(base_state(Electron(), Incoming(), momentum, spin))
+        # ...
+    end
+    ```
 
 !!! note "Conventions"
 
@@ -119,25 +152,35 @@ electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
 function base_state end
 
 function base_state(
-    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::Fermion,
+    ::Incoming,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_fermion(mom, mass(particle))
     return BiSpinor(booster[:, _spin_index(spin)])
 end
 
-function base_state(particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_fermion(mom, mass(particle))
     return SVector(BiSpinor(booster[:, 1]), BiSpinor(booster[:, 2]))
 end
 
 function base_state(
-    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::AntiFermion,
+    ::Incoming,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_antifermion(mom, mass(particle))
     return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin) + 2])) * GAMMA[1]
 end
 
-function base_state(particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_antifermion(mom, mass(particle))
     return SVector(
         AdjointBiSpinor(BiSpinor(booster[:, 3])) * GAMMA[1],
@@ -146,13 +189,18 @@ function base_state(particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFour
 end
 
 function base_state(
-    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::Fermion,
+    ::Outgoing,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_fermion(mom, mass(particle))
     return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin)])) * GAMMA[1]
 end
 
-function base_state(particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_fermion(mom, mass(particle))
     return SVector(
         AdjointBiSpinor(BiSpinor(booster[:, 1])) * GAMMA[1],
@@ -161,18 +209,23 @@ function base_state(particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMome
 end
 
 function base_state(
-    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AbstractSpin
+    particle::AntiFermion,
+    ::Outgoing,
+    mom::QEDbase.AbstractFourMomentum,
+    spin::AbstractDefiniteSpin,
 )
     booster = _booster_antifermion(mom, mass(particle))
     return BiSpinor(booster[:, _spin_index(spin) + 2])
 end
 
-function base_state(particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum)
+function base_state(
+    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
+)
     booster = _booster_antifermion(mom, mass(particle))
     return SVector(BiSpinor(booster[:, 3]), BiSpinor(booster[:, 4]))
 end
 
-function _photon_state(mom::QEDbase.AbstractFourMomentum)
+function _photon_state(pol::AllPolarization, mom::QEDbase.AbstractFourMomentum)
     cth = getCosTheta(mom)
     sth = sqrt(1 - cth^2)
     sin_phi = getSinPhi(mom)
@@ -198,9 +251,12 @@ function _photon_state(pol::PolarizationY, mom::QEDbase.AbstractFourMomentum)
 end
 
 @inline function base_state(
-    particle::Photon, ::ParticleDirection, mom::QEDbase.AbstractFourMomentum
+    particle::Photon,
+    ::ParticleDirection,
+    mom::QEDbase.AbstractFourMomentum,
+    pol::AllPolarization,
 )
-    return _photon_state(mom)
+    return _photon_state(pol, mom)
 end
 
 @inline function base_state(
@@ -211,3 +267,16 @@ end
 )
     return _photon_state(pol, mom)
 end
+
+"""
+    _as_svec(x)
+
+Accepts a single object, an `SVector` of objects or a tuple of objects, and returns them in a single "layer" of SVector.
+
+Intended for usage with [`base_state`](@ref).
+"""
+function _as_svec end
+
+@inline _as_svec(x) = SVector((x,))
+@inline _as_svec(x::SVector{N,T}) where {N,T} = x
+@inline _as_svec(x::NTuple) = SVector(x)
