@@ -1,20 +1,19 @@
 
-# TODO: remove this walkaround, if QEDbase is registered (or there is a better way to do that).
-#using Pkg
-#Pkg.add(path=joinpath(@__DIR__,".."))
+using Pkg
 
-#push!(LOAD_PATH,"../src/")
+# targeting the correct source code
+# this asumes the make.jl script is located in QEDbase.jl/docs
+project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
+Pkg.develop(; path=project_path)
 
 using Documenter
 using QEDbase
-
 
 #DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
 
 using DocumenterCitations
 
-
-bib = CitationBibliography(joinpath(@__DIR__,"Bibliography.bib"), sorting = :y)
+bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
 
 pages = [
     "Home" => "index.md",
@@ -25,21 +24,22 @@ pages = [
         "Contents" => "library/outline.md",
         "API" => "library/api.md",
         "Function index" => "library/function_index.md",
-        ],
-    "refs.md"
+    ],
+    "refs.md",
 ]
 
-
-makedocs(bib;
+makedocs(;
     modules=[QEDbase],
-    checkdocs = :exports,
+    checkdocs=:exports,
     authors="Uwe Hernandez Acosta",
-    repo="https://gitlab.hzdr.de/hernan68/QEDbase.jl/blob/{commit}{path}#{line}",
+    repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
     sitename="QEDbase.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://hernan68.gitlab.io/QEDbase.jl",
+        canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
         assets=String[],
     ),
     pages=pages,
+    plugins=[bib],
 )
+deploydocs(; repo="github.com/QEDjl-project/QEDbase.jl.git", push_preview=false)

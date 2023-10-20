@@ -20,8 +20,6 @@ Abstract type for Dirac matrices, i.e. matrix representations for linear mapping
 """
 abstract type AbstractDiracMatrix{T} <: FieldMatrix{4,4,T} end
 
-
-
 #######
 #
 # Concrete Dirac Tensor types
@@ -55,8 +53,6 @@ end
 AdjointBiSpinor(spn::BiSpinor) = AdjointBiSpinor(conj(SVector(spn)))
 BiSpinor(spn::AdjointBiSpinor) = BiSpinor(conj(SVector(spn)))
 
-
-
 """
 $(TYPEDEF)
 
@@ -81,8 +77,6 @@ struct DiracMatrix <: AbstractDiracMatrix{ComplexF64}
     el44::ComplexF64
 end
 
-
-
 #######
 #
 # Concrete implementation of multiplication for Dirac Tensors
@@ -97,11 +91,10 @@ Tensor product of an adjoint with a standard bi-spinor resulting in a scalar.
     This also overloads the `*` operator for this types.
 
 """
-function mul(aBS::AdjointBiSpinor,BS::BiSpinor)::ComplexF64
-    aBS'*BS
+function mul(aBS::AdjointBiSpinor, BS::BiSpinor)::ComplexF64
+    return transpose(aBS) * BS
 end
-@inline *(aBS::AdjointBiSpinor,BS::BiSpinor) = mul(aBS::AdjointBiSpinor,BS::BiSpinor)
-
+@inline *(aBS::AdjointBiSpinor, BS::BiSpinor) = mul(aBS::AdjointBiSpinor, BS::BiSpinor)
 
 """
 $(TYPEDSIGNATURES)
@@ -112,10 +105,10 @@ Tensor product of a standard with an adjoint bi-spinor resulting in a Dirac matr
     This also overloads the `*` operator for this types.
 
 """
-function mul(BS::BiSpinor,aBS::AdjointBiSpinor)::DiracMatrix
-    DiracMatrix(BS*aBS')
+function mul(BS::BiSpinor, aBS::AdjointBiSpinor)::DiracMatrix
+    return DiracMatrix(BS * transpose(aBS))
 end
-@inline *(BS::BiSpinor,aBS::AdjointBiSpinor) = mul(BS::BiSpinor,aBS::AdjointBiSpinor)
+@inline *(BS::BiSpinor, aBS::AdjointBiSpinor) = mul(BS::BiSpinor, aBS::AdjointBiSpinor)
 
 """
 $(TYPEDSIGNATURES)
@@ -126,8 +119,8 @@ Tensor product of an Dirac matrix with a standard bi-spinor resulting in another
     This also overloads the `*` operator for this types.
 
 """
-function mul(DM::DiracMatrix,BS::BiSpinor)::BiSpinor
-    DM*BS
+function mul(DM::DiracMatrix, BS::BiSpinor)::BiSpinor
+    return DM * BS
 end
 
 """
@@ -139,10 +132,10 @@ Tensor product of an adjoint bi-spinor with a Dirac matrix resulting in another 
     This also overloads the `*` operator for this types.
 
 """
-function mul(aBS::AdjointBiSpinor,DM::DiracMatrix)::AdjointBiSpinor
-    aBS'*DM
+function mul(aBS::AdjointBiSpinor, DM::DiracMatrix)::AdjointBiSpinor
+    return transpose(aBS) * DM
 end
-@inline *(aBS::AdjointBiSpinor,DM::DiracMatrix) = mul(aBS::AdjointBiSpinor,DM::DiracMatrix)
+@inline *(aBS::AdjointBiSpinor, DM::DiracMatrix) = mul(aBS, DM)
 
 """
 $(TYPEDSIGNATURES)
@@ -153,8 +146,8 @@ Tensor product two Dirac matrices resulting in another Dirac matrix.
     This also overloads the `*` operator for this types.
 
 """
-function mul(DM1::DiracMatrix,DM2::DiracMatrix)::DiracMatrix
-    DM1*DM2
+function mul(DM1::DiracMatrix, DM2::DiracMatrix)::DiracMatrix
+    return DM1 * DM2
 end
 
 """
@@ -162,6 +155,6 @@ $(TYPEDSIGNATURES)
 
 Tensor product of Dirac matrix sandwiched between an adjoint and a standard bi-spinor resulting in a scalar.
 """
-function mul(aBS::AdjointBiSpinor,DM::DiracMatrix,BS::BiSpinor)::ComplexF64
-    aBS'*DM*BS
+function mul(aBS::AdjointBiSpinor, DM::DiracMatrix, BS::BiSpinor)::ComplexF64
+    return transpose(aBS) * DM * BS
 end

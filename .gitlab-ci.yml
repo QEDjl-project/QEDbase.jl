@@ -1,24 +1,122 @@
-image: julia:latest       # image comes from Docker hub
+stages:
+  - unit-test
+  - generate_integration_test
+  - run_integration_test
+  - verify-unit-test-deps
 
-before_script:
-  # workaround for https://github.com/JuliaDocs/Documenter.jl/issues/686
-  - apt-get -qq update; apt-get -y install git
-  - julia --project=@. -e "import Pkg; Pkg.build()"
-
-default:
+.untit_test_template:
+  stage: unit-test
   script:
-    - julia --project=@. -e "import Pkg; Pkg.test(; coverage = true)"
-    - julia --project=test/coverage -e 'import Pkg; Pkg.instantiate()'
-    - julia --project=test/coverage test/coverage/coverage-summary.jl
+    - apt update && apt install -y git
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
+        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml NO_MESSAGE
+      else
+        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml
+      fi
+    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
+    - julia --project=. -e 'import Pkg; Pkg.test(; coverage = true)'
+  interruptible: true
+  tags:
+    - cpuonly
 
-pages:
-  stage: deploy
+unit_tests_releases:
+  extends: .untit_test_template
+  parallel:
+    matrix:
+      - JULIA_VERSION: ["1.6", "1.7", "1.8", "1.9"]
+  image: julia:$JULIA_VERSION
+
+unit_tests_nightly:
+  extends: .untit_test_template
+  # use the same baseimage like the official julia images
+  image: debian:bookworm-slim
+  variables:
+    # path where julia tar bal should be downloaded
+    JULIA_DONWLOAD: /julia/download
+    # path where julia should be extracted
+    JULIA_EXTRACT: /julia/extract
+  before_script:
+    - apt update && apt install -y wget
+    - mkdir -p $JULIA_DONWLOAD
+    - mkdir -p $JULIA_EXTRACT
+    - >
+      if [[ $CI_RUNNER_EXECUTABLE_ARCH == "linux/arm64" ]]; then
+        wget https://julialangnightlies-s3.julialang.org/bin/linux/aarch64/julia-latest-linux-aarch64.tar.gz -O $JULIA_DONWLOAD/julia-nightly.tar.gz
+      elif [[ $CI_RUNNER_EXECUTABLE_ARCH == "linux/amd64" ]]; then
+        wget https://julialangnightlies-s3.julialang.org/bin/linux/x86_64/julia-latest-linux-x86_64.tar.gz -O $JULIA_DONWLOAD/julia-nightly.tar.gz
+      else
+        echo "unknown runner architecture -> $CI_RUNNER_EXECUTABLE_ARCH"
+        exit 1
+      fi
+    - tar -xf $JULIA_DONWLOAD/julia-nightly.tar.gz -C $JULIA_EXTRACT
+    # we need to search for the julia base folder name, because the second part of the name is the git commit hash
+    # e.g. julia-b0c6781676f
+    - JULIA_EXTRACT_FOLDER=${JULIA_EXTRACT}/$(ls $JULIA_EXTRACT | grep -m1 julia)
+    # copy everything to /usr to make julia public available
+    # mv is not possible, because it cannot merge folder
+    - cp -r $JULIA_EXTRACT_FOLDER/* /usr
+  allow_failure: true
+  tags:
+    - cpuonly
+
+generate_integration_tests:
+  image: julia:1.9
+  stage: generate_integration_test
   script:
-    - julia --project=docs -e 'using Pkg; Pkg.instantiate(); Pkg.develop(PackageSpec(path=pwd()))'
-    - julia --project=docs --color=yes docs/make.jl
-    - mv docs/build public # move to the directory picked up by Gitlab pages
+    # extract package name
+    - export CI_DEPENDENCY_NAME=$(cat $CI_PROJECT_DIR/Project.toml | grep name | awk '{ print $3 }' | tr -d '"')
+    - echo "CI_DEPENDENCY_NAME -> $CI_DEPENDENCY_NAME"
+    - apt update && apt install -y git
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - cd /QEDjl/.ci/integTestGen/
+    # use local registry of the QED project
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
+    # needs to add General registry again, if local registry was added
+    - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
+    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
+    # paths of artifacts are relative to CI_PROJECT_DIR
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
+        julia --project=. src/integTestGen.jl NO_MESSAGE > $CI_PROJECT_DIR/integrationjobs.yaml
+      else
+        julia --project=. src/integTestGen.jl > $CI_PROJECT_DIR/integrationjobs.yaml
+      fi
+    - cat $CI_PROJECT_DIR/integrationjobs.yaml
   artifacts:
     paths:
-      - public
-  only:
-  - main
+      - integrationjobs.yaml
+    expire_in: 1 week
+  interruptible: true
+  tags:
+    - cpuonly
+
+run_integration_tests:
+  stage: run_integration_test
+  trigger:
+    include:
+      - artifact: integrationjobs.yaml
+        job: generate_integration_tests
+    strategy: depend
+
+verify-unit-test-deps_julia1.9:
+  image: julia:1.9
+  stage: verify-unit-test-deps
+  script:
+    - apt update && apt install -y git
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - >
+      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
+        # does not check for custom package URLs on the main and dev branch
+        echo "no custom package URL check necessary"
+      else
+        julia /QEDjl/.ci/verify_env.jl
+      fi
+  interruptible: true
+  tags:
+    - cpuonly
