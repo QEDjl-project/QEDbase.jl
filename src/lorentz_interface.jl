@@ -173,10 +173,10 @@ function register_LorentzVectorLike(T::Type)
 
     @eval @traitimpl IsLorentzVectorLike{$T}
 
-    if hasmethod(setT!, Tuple{T,Union{}}) &&
-        hasmethod(setX!, Tuple{T,Union{}}) &&
-        hasmethod(setY!, Tuple{T,Union{}}) &&
-        hasmethod(setZ!, Tuple{T,Union{}})
+    if hasmethod(setT!, Tuple{T,<:Union{}}) &&
+        hasmethod(setX!, Tuple{T,<:Union{}}) &&
+        hasmethod(setY!, Tuple{T,<:Union{}}) &&
+        hasmethod(setZ!, Tuple{T,<:Union{}})
         @eval @traitimpl IsMutableLorentzVectorLike{$T}
     end
     return nothing

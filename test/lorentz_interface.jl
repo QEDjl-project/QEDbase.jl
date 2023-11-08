@@ -95,7 +95,7 @@ lorentz_setter = [
         QEDbase.register_LorentzVectorLike(MutableCustomType)
 
         for fun in lorentz_setter
-            @test hasmethod(fun, Tuple{MutableCustomType,Union{}})
+            @test hasmethod(fun, Tuple{MutableCustomType,<:Union{}})
         end
     end
 end # LorentzVectorInterface
