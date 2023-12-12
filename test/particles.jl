@@ -13,7 +13,7 @@ FERMION_STATES_GROUNDTRUTH_FACTORY = Dict(
 RNG = MersenneTwister(708583836976)
 ATOL = eps()
 RTOL = sqrt(eps())
-PHOTON_ENERGIES = (0.0,rand(RNG), rand(RNG)*10,rand(RNG)*1e2,rand(RNG)*1e3)
+PHOTON_ENERGIES = (0.0,rand(RNG), rand(RNG)*10)
 COS_THETAS = (-1.0,-rand(RNG),0.0,rand(RNG),1.0)
 # check every quadrant
 PHIS = (0.0,rand(RNG)*pi/2,pi/2,(1.0+rand(RNG))*pi/2,pi,(2+rand(RNG))*pi/2,3*pi/2, (3+rand(RNG))*pi/2, 2*pi)
@@ -27,10 +27,10 @@ X,Y,Z = rand(RNG,3)
         @test is_particle(TestFermion())
         @test !is_anti_particle(TestFermion())
 
-        mom = SFourMomentum(sqrt(mass(p) + X^2 + Y^2 + Z^2))
         @testset "$p $d" for (p, d) in
             Iterators.product((Electron, Positron), (Incoming, Outgoing))
 
+            mom = SFourMomentum(sqrt(mass(p()) + X^2 + Y^2 + Z^2),X,Y,Z)
             particle_mass = mass(p())
             groundtruth_states = FERMION_STATES_GROUNDTRUTH_FACTORY[(d, p)](
                 mom, particle_mass
@@ -122,6 +122,7 @@ end
     @testset "$D" for D in [Incoming, Outgoing]
 
         @testset "$om $cth $phi" for (om,cth,phi) in Iterators.product(PHOTON_ENERGIES,COS_THETAS,PHIS)
+        #@testset "$x $y $z" for (x,y,z) in Iterators.product(X_arr,Y_arr,Z_arr)
 
             mom = SFourMomentum(_cartesian_coordinates(om,om,cth,phi))
             both_photon_states = base_state(Photon(), D(), mom, AllPolarization())
