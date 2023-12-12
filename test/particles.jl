@@ -1,4 +1,5 @@
 using QEDbase
+using StaticArrays
 using Random
 
 include("utils.jl")
@@ -12,7 +13,7 @@ FERMION_STATES_GROUNDTRUTH_FACTORY = Dict(
 
 RNG = MersenneTwister(708583836976)
 ATOL = eps()
-RTOL = sqrt(eps())
+RTOL = 0.0
 PHOTON_ENERGIES = (0.0, rand(RNG), rand(RNG) * 10)
 COS_THETAS = (-1.0, -rand(RNG), 0.0, rand(RNG), 1.0)
 # check every quadrant

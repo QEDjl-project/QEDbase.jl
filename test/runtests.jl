@@ -1,15 +1,32 @@
 using QEDbase
 using Test
+using SafeTestsets
 
-@testset "QEDbase.jl" begin
-    include("dirac_tensor.jl")
-    include("lorentz_vector.jl")
-    include("lorentz_interface.jl")
+begin
+    @time @safetestset "Dirac tensors" begin    
+        include("dirac_tensor.jl")
+    end
+        
+    @time @safetestset "Lorentz Vectors" begin    
+        include("lorentz_vector.jl")
+    end
+        
+    @time @safetestset "Lorentz interface" begin    
+        include("lorentz_interface.jl")
+    end
+    @time @safetestset "Gamma matrices" begin    
+        include("gamma_matrices.jl")
+    end
 
-    include("gamma_matrices.jl")
+    @time @safetestset "particle spinors" begin    
+        include("particle_spinors.jl")
+    end
+        
+    @time @safetestset "four momentum" begin    
+        include("four_momentum.jl")
+    end
 
-    include("particle_spinors.jl")
-    include("four_momentum.jl")
-
-    include("particles.jl")
+    @time @safetestset "particles" begin    
+        include("particles.jl")
+    end
 end
