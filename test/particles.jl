@@ -1,6 +1,8 @@
 using QEDbase
 using Random
 
+include("utils.jl")
+
 FERMION_STATES_GROUNDTRUTH_FACTORY = Dict(
     (Incoming, Electron) => IncomingFermionSpinor,
     (Outgoing, Electron) => OutgoingFermionSpinor,
@@ -8,8 +10,15 @@ FERMION_STATES_GROUNDTRUTH_FACTORY = Dict(
     (Outgoing, Positron) => OutgoingAntiFermionSpinor,
 )
 
-rng = MersenneTwister(708583836976)
-x, y, z = rand(rng, 3)
+RNG = MersenneTwister(708583836976)
+ATOL = eps()
+RTOL = sqrt(eps())
+PHOTON_ENERGIES = (0.0,rand(RNG), rand(RNG)*10,rand(RNG)*1e2,rand(RNG)*1e3)
+COS_THETAS = (-1.0,-rand(RNG),0.0,rand(RNG),1.0)
+# check every quadrant
+PHIS = (0.0,rand(RNG)*pi/2,pi/2,(1.0+rand(RNG))*pi/2,pi,(2+rand(RNG))*pi/2,3*pi/2, (3+rand(RNG))*pi/2, 2*pi)
+
+X,Y,Z = rand(RNG,3)
 
 @testset "fermion likes" begin
     @testset "fermion" begin
@@ -18,27 +27,28 @@ x, y, z = rand(rng, 3)
         @test is_particle(TestFermion())
         @test !is_anti_particle(TestFermion())
 
-        mom = SFourMomentum(sqrt(x^2 + y^2 + z^2 + mass(Electron())^2), x, y, z)
-        @testset "$P $D" for (P, D) in
-                             Iterators.product((Electron, Positron), (Incoming, Outgoing))
-            particle_mass = mass(P())
-            groundtruth_states = FERMION_STATES_GROUNDTRUTH_FACTORY[(D, P)](
+        mom = SFourMomentum(sqrt(mass(p) + X^2 + Y^2 + Z^2))
+        @testset "$p $d" for (p, d) in
+            Iterators.product((Electron, Positron), (Incoming, Outgoing))
+
+            particle_mass = mass(p())
+            groundtruth_states = FERMION_STATES_GROUNDTRUTH_FACTORY[(d, p)](
                 mom, particle_mass
             )
             groundtruth_tuple = SVector(groundtruth_states(1), groundtruth_states(2))
-            @test base_state(P(), D(), mom, AllSpin()) == groundtruth_tuple
-            @test base_state(P(), D(), mom, SpinUp()) == groundtruth_tuple[1]
-            @test base_state(P(), D(), mom, SpinDown()) == groundtruth_tuple[2]
+            @test base_state(p(), d(), mom, AllSpin()) == groundtruth_tuple
+            @test base_state(p(), d(), mom, SpinUp()) == groundtruth_tuple[1]
+            @test base_state(p(), d(), mom, SpinDown()) == groundtruth_tuple[2]
 
-            @test QEDbase._as_svec(base_state(P(), D(), mom, AllSpin())) isa SVector
-            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinUp())) isa SVector
-            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinDown())) isa SVector
+            @test QEDbase._as_svec(base_state(p(), d(), mom, AllSpin())) isa SVector 
+            @test QEDbase._as_svec(base_state(p(), d(), mom, SpinUp())) isa SVector 
+            @test QEDbase._as_svec(base_state(p(), d(), mom, SpinDown())) isa SVector 
 
-            @test QEDbase._as_svec(base_state(P(), D(), mom, AllSpin())) ==
+            @test QEDbase._as_svec(base_state(p(), d(), mom, AllSpin())) ==
                 groundtruth_tuple
-            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinUp()))[1] ==
+            @test QEDbase._as_svec(base_state(p(), d(), mom, SpinUp()))[1] ==
                 groundtruth_tuple[1]
-            @test QEDbase._as_svec(base_state(P(), D(), mom, SpinDown()))[1] ==
+            @test QEDbase._as_svec(base_state(p(), d(), mom, SpinDown()))[1] ==
                 groundtruth_tuple[2]
         end
     end
@@ -99,24 +109,30 @@ end
         @test is_anti_particle(TestMajoranaBoson())
     end
 
-    @testset "photon" begin
-        @test !is_fermion(Photon())
-        @test is_boson(Photon())
-        @test is_particle(Photon())
-        @test is_anti_particle(Photon())
-        @test charge(Photon()) == 0.0
-        @test mass(Photon()) == 0.0
+end
 
-        mom = SFourMomentum(sqrt(x^2 + y^2 + z^2 + mass(Photon())^2), x, y, z)
-        @testset "$D" for D in [Incoming, Outgoing]
+@testset "photon" begin
+    @test !is_fermion(Photon())
+    @test is_boson(Photon())
+    @test is_particle(Photon())
+    @test is_anti_particle(Photon())
+    @test charge(Photon()) == 0.0
+    @test mass(Photon()) == 0.0
+
+    @testset "$D" for D in [Incoming, Outgoing]
+
+        @testset "$om $cth $phi" for (om,cth,phi) in Iterators.product(PHOTON_ENERGIES,COS_THETAS,PHIS)
+
+            mom = SFourMomentum(_cartesian_coordinates(om,om,cth,phi))
             both_photon_states = base_state(Photon(), D(), mom, AllPolarization())
 
             # property test the photon states
-            @test isapprox((both_photon_states[1] * mom), 0.0, atol=ATOL)
-            @test isapprox((both_photon_states[2] * mom), 0.0, atol=ATOL)
-            @test isapprox((both_photon_states[1] * both_photon_states[1]), -1.0)
-            @test isapprox((both_photon_states[2] * both_photon_states[2]), -1.0)
-            @test isapprox((both_photon_states[1] * both_photon_states[2]), 0.0, atol=ATOL)
+            @test isapprox((both_photon_states[1] * mom), 0.0, atol=ATOL, rtol=RTOL)
+            @test isapprox((both_photon_states[2] * mom), 0.0, atol=ATOL, rtol=RTOL)
+            @test isapprox((both_photon_states[1] * both_photon_states[1]), -1.0, atol=ATOL, rtol=RTOL)
+            @test isapprox((both_photon_states[2] * both_photon_states[2]), -1.0, atol=ATOL, rtol=RTOL)
+            @test isapprox((both_photon_states[1] * both_photon_states[2]), 0.0, atol=ATOL, rtol=RTOL)
+
 
             # test the single polarization states
             @test base_state(Photon(), D(), mom, PolarizationX()) == both_photon_states[1]
@@ -139,3 +155,4 @@ end
         end
     end
 end
+
