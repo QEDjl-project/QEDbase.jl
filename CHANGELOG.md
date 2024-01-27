@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.1.6
+
+
 ## Version 0.1.5
 
 [diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/0c70f66...release-0.1.5)
