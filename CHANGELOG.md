@@ -2,6 +2,22 @@
 
 ## Version 0.1.6
 
+[diff since 0.1.5](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.5...release-0.1.6)
+
+### Breaking changes
+
+No breaking changes.
+
+### New features
+
+No new features.
+
+### Maintenance
+
+* CompatHelper runs only on upstream https://github.com/QEDjl-project/QEDbase.jl/commit/82aa2653e2cbf6c36a2654f7cdc8226611c066cb
+* Bugfix for Julia 1.10  https://github.com/QEDjl-project/QEDbase.jl/commit/d128ba43d74a460bcec5d2f7b49d39fde7a22c42
+* Remove custom registry from unti tests https://github.com/QEDjl-project/QEDbase.jl/commit/9ef6247e385165156fbd66e29b4ad8de61f90b09
+* Improve test coverage https://github.com/QEDjl-project/QEDbase.jl/commit/9ad10bb0b1d0262f1193bbbe0a0d4cf646d0bc64
 
 ## Version 0.1.5
 
