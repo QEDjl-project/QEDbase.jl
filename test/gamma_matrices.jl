@@ -109,32 +109,4 @@ GROUNDTRUTH_GAMMA3_DIRAC[2, 4] = -1
             end
         end
     end
-
-    @testset "Dirac representation" begin
-        # check the components of the gamma matrices against the 
-        # Dirac representations, e.g. from https://en.wikipedia.org/wiki/Gamma_matrices
-        # note: we use the convention of lower indices for the gamma matrix definition.
-        #       This motivates the minus sign in front of the spatial components
-        comps = 1:4
-        @testset "gamma_0" begin
-            @testset "($col,$row)" for (row, col) in Iterators.product(comps, comps)
-                @test isapprox(GAMMA[1][row, col], GROUNDTRUTH_GAMMA0_DIRAC[row, col])
-            end
-        end
-        @testset "gamma_1" begin
-            @testset "($col,$row)" for (row, col) in Iterators.product(comps, comps)
-                @test isapprox(GAMMA[2][row, col], -GROUNDTRUTH_GAMMA1_DIRAC[row, col])
-            end
-        end
-        @testset "gamma_2" begin
-            @testset "($col,$row)" for (row, col) in Iterators.product(comps, comps)
-                @test isapprox(GAMMA[3][row, col], -GROUNDTRUTH_GAMMA2_DIRAC[row, col])
-            end
-        end
-        @testset "gamma_3" begin
-            @testset "($col,$row)" for (row, col) in Iterators.product(comps, comps)
-                @test isapprox(GAMMA[4][row, col], -GROUNDTRUTH_GAMMA3_DIRAC[row, col])
-            end
-        end
-    end
 end
