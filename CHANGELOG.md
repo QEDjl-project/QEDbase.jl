@@ -1,5 +1,24 @@
 # Changelog
 
+## Version 0.1.6
+
+This is a maintenance release, which resolves, among others, some issues with the git history.
+
+### Breaking changes
+
+No breaking changes.
+
+### New features
+
+No new features. 
+
+### Maintenance
+
+* Bugfix in base state https://github.com/QEDjl-project/QEDbase.jl/issues/49
+* Improve parameter coverage in unit test https://github.com/QEDjl-project/QEDbase.jl/pull/50
+* Bugfix in Lorentz interface https://github.com/QEDjl-project/QEDbase.jl/pull/46
+* cleanup of the CI https://github.com/QEDjl-project/QEDbase.jl/pull/41 https://github.com/QEDjl-project/QEDbase.jl/pull/47
+
 ## Version 0.1.5
 
 [diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/0c70f66...release-0.1.5)
