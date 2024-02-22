@@ -3,7 +3,7 @@
 
 [![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
-[![Build Status](https://github.com/QEDjl-project/QEDbase.jl/actions/workflows/BuildDelopyDoc.yml/badge.svg)](https://github.com/QEDjl-project/QEDbase.jl/actions)
+[![Build Status](https://gitlab.com/hzdr/qedjl-project/QEDbase-jl/badges/-/pipeline.svg)](https://github.com/QEDjl-project/QEDbase.jl/actions)
 [![Coverage](https://codebase.helmholtz.cloud/QEDjl/QEDbase.jl/badges/main/coverage.svg)](https://github.com/QEDjl-project/QEDbase.jl/commit/)
 [![Coverage](https://codecov.io/gh/qedjl/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/qedjl/QEDbase.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
