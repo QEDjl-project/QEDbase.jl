@@ -92,7 +92,7 @@ Tensor product of an adjoint with a standard bi-spinor resulting in a scalar.
 
 """
 function mul(aBS::AdjointBiSpinor, BS::BiSpinor)::ComplexF64
-    return transpose(aBS) * BS
+    return aBS.el1 * BS.el1 + aBS.el2 * BS.el2 + aBS.el3 * BS.el3 + aBS.el4 * BS.el4
 end
 @inline *(aBS::AdjointBiSpinor, BS::BiSpinor) = mul(aBS::AdjointBiSpinor, BS::BiSpinor)
 
