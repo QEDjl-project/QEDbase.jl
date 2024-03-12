@@ -31,7 +31,7 @@ groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray
     ]
 
     @testset "BiSpinor" begin
-        BS = BiSpinor(rand(4))
+        BS = BiSpinor{ComplexF64}(rand(4))
 
         @test size(BS) == (4,)
         @test length(BS) == 4
@@ -51,7 +51,7 @@ groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray
     end #BiSpinor
 
     @testset "AdjointBiSpinor" begin
-        aBS = AdjointBiSpinor(rand(4))
+        aBS = AdjointBiSpinor{ComplexF64}(rand(4))
 
         @test size(aBS) == (4,)
         @test length(aBS) == 4
@@ -72,7 +72,7 @@ groundtruth_mul(a::DiracMatrix, b::DiracMatrix) = DiracMatrix(SArray(a) * SArray
     end #AdjointBiSpinor
 
     @testset "DiracMatrix" begin
-        DM = DiracMatrix(rand(4, 4))
+        DM = DiracMatrix{ComplexF64}(rand(4, 4))
 
         @test size(DM) == (4, 4)
         @test length(DM) == 16

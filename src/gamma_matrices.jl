@@ -26,28 +26,28 @@ struct DiracGammaRepresentation <: AbstractGammaRepresentation end
 
 #! format: off
 function _gamma0(::Type{DiracGammaRepresentation})::DiracMatrix
-    return DiracMatrix(1, 0, 0, 0,
+    return DiracMatrix{ComplexF64}(1, 0, 0, 0,
                        0, 1, 0, 0,
                        0, 0, -1, 0,
                        0, 0, 0, -1)
 end
 
 function _gamma1(::Type{DiracGammaRepresentation})::DiracMatrix
-    return DiracMatrix(0, 0, 0, 1,
+    return DiracMatrix{ComplexF64}(0, 0, 0, 1,
                        0, 0, 1, 0,
                        0, -1, 0, 0,
                        -1, 0, 0, 0)
 end
 
 function _gamma2(::Type{DiracGammaRepresentation})::DiracMatrix
-    return DiracMatrix( 0,0,0,1im,
+    return DiracMatrix{ComplexF64}( 0,0,0,1im,
                         0,0,-1im,0,
                         0,-1im,0,0,
                         1im,0,0,0)
 end
 
 function _gamma3(::Type{DiracGammaRepresentation})::DiracMatrix
-    return DiracMatrix(0, 0, 1, 0,
+    return DiracMatrix{ComplexF64}(0, 0, 1, 0,
                        0, 0, 0, -1,
                        -1, 0, 0, 0,
                        0, 1, 0, 0)
