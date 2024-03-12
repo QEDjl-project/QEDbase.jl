@@ -1,7 +1,7 @@
 name = "QEDbase"
 uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
 authors = ["Uwe Hernandez Acosta <u.hernandez@hzdr.de>", "Simeon Ehrig", "Klaus Steiniger", "Tom Jungnickel", "Anton Reinhard"]
-version = "0.1.5"
+version = "0.1.6"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
@@ -24,7 +24,8 @@ StaticArrays = "1.2.13"
 julia = "1.6"
 
 [extras]
+SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["SafeTestsets","Test"]
