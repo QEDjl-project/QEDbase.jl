@@ -54,6 +54,7 @@ export FermionLike, Fermion, AntiFermion, MajoranaFermion
 export BosonLike, Boson, AntiBoson, MajoranaBoson
 export Electron, Positron, Photon
 export ParticleDirection, Incoming, Outgoing
+export is_incoming, is_outgoing
 
 # polarizations and spins
 export AbstractSpinOrPolarization, AbstractPolarization, AbstractSpin
