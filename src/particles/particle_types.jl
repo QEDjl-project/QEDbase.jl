@@ -82,6 +82,13 @@ is_anti_particle(::MajoranaFermion) = true
 """
 Concrete type for *electrons* as a particle species. Mostly used for dispatch. 
 
+```jldoctest
+julia> using QEDbase
+
+julia> Electron()
+electron
+```
+
 !!! note "particle interface"
     Besides being a subtype of [`Fermion`](@ref), objects of type `Electron` have
 
@@ -93,9 +100,17 @@ Concrete type for *electrons* as a particle species. Mostly used for dispatch.
 struct Electron <: Fermion end
 mass(::Electron) = 1.0
 charge(::Electron) = -1.0
+Base.show(io::IO, ::MIME"text/plain", ::Electron) = print(io, "electron")
 
 """
 Concrete type for *positrons* as a particle species. Mostly used for dispatch. 
+
+```jldoctest
+julia> using QEDbase
+
+julia> Positron()
+positron
+```
 
 !!! note "particle interface"
     Besides being a subtype of [`AntiFermion`](@ref), objects of type `Positron` have
@@ -109,6 +124,7 @@ Concrete type for *positrons* as a particle species. Mostly used for dispatch.
 struct Positron <: AntiFermion end
 mass(::Positron) = 1.0
 charge(::Positron) = 1.0
+Base.show(io::IO, ::MIME"text/plain", ::Positron) = print(io, "positron")
 
 """
 Abstract base types for particle species that act like bosons in the sense of particle statistics. 
@@ -171,6 +187,13 @@ is_anti_particle(::MajoranaBoson) = true
 """
 Concrete type for the *photons* as a particle species. Mostly used for dispatch. 
 
+```jldoctest
+julia> using QEDbase
+
+julia> Photon()
+photon
+```
+
 !!! note "particle interface"
     Besides being a subtype of `MajoranaBoson`, `Photon` has
 
@@ -183,3 +206,4 @@ Concrete type for the *photons* as a particle species. Mostly used for dispatch.
 struct Photon <: MajoranaBoson end
 mass(::Photon) = 0.0
 charge(::Photon) = 0.0
+Base.show(io::IO, ::MIME"text/plain", ::Photon) = print(io, "photon")

@@ -24,18 +24,42 @@ abstract type AbstractIndefiniteSpin <: AbstractSpin end
 
 """
 Concrete type indicating that a [`FermionLike`](@ref) has spin-up.
+
+```jldoctest
+julia> using QEDbase
+
+julia> SpinUp()
+spin up
+```
 """
 struct SpinUp <: AbstractDefiniteSpin end
+Base.show(io::IO, ::MIME"text/plain", ::SpinUp) = print(io, "spin up")
 
 """
 Concrete type indicating that a [`FermionLike`](@ref) has spin-down.
+
+```jldoctest
+julia> using QEDbase
+
+julia> SpinDown()
+spin down
+```
 """
 struct SpinDown <: AbstractDefiniteSpin end
+Base.show(io::IO, ::MIME"text/plain", ::SpinDown) = print(io, "spin down")
 
 """
 Concrete type indicating that a [`FermionLike`](@ref) has an indefinite spin and the differential cross section calculation should average or sum over all spins, depending on the direction ([`Incoming`](@ref) or [`Outgoing`](@ref)) of the particle in question.
+
+```jldoctest
+julia> using QEDbase
+
+julia> AllSpin()
+all spins
+```
 """
 struct AllSpin <: AbstractIndefiniteSpin end
+Base.show(io::IO, ::MIME"text/plain", ::AllSpin) = print(io, "all spins")
 
 """
     $(TYPEDSIGNATURES)
@@ -73,6 +97,13 @@ abstract type AbstractIndefinitePolarization <: AbstractPolarization end
 """
 Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarization and the differential cross section calculation should average or sum over all polarizations, depending on the direction ([`Incoming`](@ref) or [`Outgoing`](@ref)) of the particle in question.
 
+```jldoctest
+julia> using QEDbase
+
+julia> AllPol()
+all polarizations
+```
+
 !!! info "Alias"
 
     There is a built-in alias for `AllPolarization`:
@@ -86,9 +117,17 @@ Concrete type indicating that a [`BosonLike`](@ref) has an indefinite polarizati
 """
 struct AllPolarization <: AbstractIndefinitePolarization end
 const AllPol = AllPolarization
+Base.show(io::IO, ::MIME"text/plain", ::AllPol) = print(io, "all polarizations")
 
 """
 Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``x``-direction.
+
+```jldoctest
+julia> using QEDbase
+
+julia> PolX()
+x-polarized
+```
 
 !!! note "Coordinate axes"
 
@@ -107,9 +146,17 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 """
 struct PolarizationX <: AbstractDefinitePolarization end
 const PolX = PolarizationX
+Base.show(io::IO, ::MIME"text/plain", ::PolX) = print(io, "x-polarized")
 
 """
 Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``y``-direction.
+
+```jldoctest
+julia> using QEDbase
+
+julia> PolY()
+y-polarized
+```
 
 !!! note "Coordinate axes"
 
@@ -128,3 +175,4 @@ Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``
 """
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
+Base.show(io::IO, ::MIME"text/plain", ::PolY) = print(io, "y-polarized")
