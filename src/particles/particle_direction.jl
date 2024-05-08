@@ -8,6 +8,13 @@ abstract type ParticleDirection end
 
 Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a particle is *incoming* in the context of a given process. Mostly used for dispatch.
 
+```jldoctest
+julia> using QEDbase
+
+julia> Incoming()
+incoming
+```
+
 !!! note "ParticleDirection Interface"
     Besides being a subtype of [`ParticleDirection`](@ref), `Incoming` has
 
@@ -19,11 +26,19 @@ Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a part
 struct Incoming <: ParticleDirection end
 is_incoming(::Incoming) = true
 is_outgoing(::Incoming) = false
+Base.show(io::IO, ::Incoming) = print(io, "incoming")
 
 """
     Outgoing <: ParticleDirection
 
 Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a particle is *outgoing* in the context of a given process. Mostly used for dispatch.
+
+```jldoctest
+julia> using QEDbase
+
+julia> Outgoing()
+outgoing
+```
 
 !!! note "ParticleDirection Interface"
     Besides being a subtype of [`ParticleDirection`](@ref), `Outgoing` has
@@ -36,3 +51,4 @@ Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a part
 struct Outgoing <: ParticleDirection end
 is_incoming(::Outgoing) = false
 is_outgoing(::Outgoing) = true
+Base.show(io::IO, ::Outgoing) = print(io, "outgoing")
