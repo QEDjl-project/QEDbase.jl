@@ -26,7 +26,7 @@ incoming
 struct Incoming <: ParticleDirection end
 is_incoming(::Incoming) = true
 is_outgoing(::Incoming) = false
-Base.show(io::IO, ::Incoming) = print(io, "incoming")
+Base.show(io::IO, ::MIME"text/plain", ::Incoming) = print(io, "incoming")
 
 """
     Outgoing <: ParticleDirection
@@ -51,4 +51,4 @@ outgoing
 struct Outgoing <: ParticleDirection end
 is_incoming(::Outgoing) = false
 is_outgoing(::Outgoing) = true
-Base.show(io::IO, ::Outgoing) = print(io, "outgoing")
+Base.show(io::IO, ::MIME"text/plain", ::Outgoing) = print(io, "outgoing")
