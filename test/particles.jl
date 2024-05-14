@@ -36,20 +36,20 @@ test_broadcast(x::AbstractParticle) = x
 test_broadcast(x::ParticleDirection) = x
 test_broadcast(x::AbstractSpinOrPolarization) = x
 
-
 @testset "scalar broadcasting" begin
     @testset "directions" begin
-        @testset "dir" for dir in (Incoming(),Outgoing())
+        @testset "dir" for dir in (Incoming(), Outgoing())
             @test test_broadcast.(dir) == dir
         end
     end
 
     @testset "spins and polarization" begin
-        @testset "spin_or_pol" for spin_or_pol in (SpinUp(),SpinDown(),AllSpin(),PolX(),PolY(),AllPol())
-            @test test_broadcast.(spin_or_pol) == spin_or_pol 
+        @testset "spin_or_pol" for spin_or_pol in (
+            SpinUp(), SpinDown(), AllSpin(), PolX(), PolY(), AllPol()
+        )
+            @test test_broadcast.(spin_or_pol) == spin_or_pol
         end
     end
-
 end
 
 @testset "fermion likes" begin
