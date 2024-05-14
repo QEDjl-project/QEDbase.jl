@@ -25,6 +25,7 @@ The second type of functions define a hard interface for `AbstractParticle`:
 These functions must be implemented in order to have the subtype of `AbstractParticle` work with the functionalities of `QEDprocesses.jl`.
 """
 abstract type AbstractParticle end
+Base.broadcastable(part::AbstractParticle) = Ref(part)
 
 """
     $(TYPEDSIGNATURES)

@@ -31,12 +31,16 @@ PHIS = (
 
 X, Y, Z = rand(RNG, 3)
 
+# test function to test scalar broadcasting
+test_broadcast(x::AbstractParticle) = x
+
 @testset "fermion likes" begin
     @testset "fermion" begin
         struct TestFermion <: Fermion end
         @test is_fermion(TestFermion())
         @test is_particle(TestFermion())
         @test !is_anti_particle(TestFermion())
+        @test test_broadcast.(TestFermion()) == TestFermion()
 
         @testset "$p $d" for (p, d) in
                              Iterators.product((Electron, Positron), (Incoming, Outgoing))
@@ -68,6 +72,7 @@ X, Y, Z = rand(RNG, 3)
         @test is_fermion(TestAntiFermion())
         @test !is_particle(TestAntiFermion())
         @test is_anti_particle(TestAntiFermion())
+        @test test_broadcast.(TestAntiFermion()) == TestAntiFermion()
     end
 
     @testset "majorana fermion" begin
@@ -75,6 +80,7 @@ X, Y, Z = rand(RNG, 3)
         @test is_fermion(TestMajoranaFermion())
         @test is_particle(TestMajoranaFermion())
         @test is_anti_particle(TestMajoranaFermion())
+        @test test_broadcast.(TestMajoranaFermion()) == TestMajoranaFermion()
     end
 
     @testset "electron" begin
@@ -83,6 +89,7 @@ X, Y, Z = rand(RNG, 3)
         @test !is_anti_particle(Electron())
         @test mass(Electron()) == 1.0
         @test charge(Electron()) == -1.0
+        @test test_broadcast.(Electron()) == Electron()
     end
 
     @testset "positron" begin
@@ -91,6 +98,7 @@ X, Y, Z = rand(RNG, 3)
         @test is_anti_particle(Positron())
         @test mass(Positron()) == 1.0
         @test charge(Positron()) == 1.0
+        @test test_broadcast.(Positron()) == Positron()
     end
 end
 
@@ -101,6 +109,7 @@ end
         @test is_boson(TestBoson())
         @test is_particle(TestBoson())
         @test !is_anti_particle(TestBoson())
+        @test test_broadcast.(TestBoson()) == TestBoson()
     end
 
     @testset "antiboson" begin
@@ -109,6 +118,7 @@ end
         @test is_boson(TestAntiBoson())
         @test !is_particle(TestAntiBoson())
         @test is_anti_particle(TestAntiBoson())
+        @test test_broadcast.(TestAntiBoson()) == TestAntiBoson()
     end
 
     @testset "majorana boson" begin
@@ -117,6 +127,7 @@ end
         @test is_boson(TestMajoranaBoson())
         @test is_particle(TestMajoranaBoson())
         @test is_anti_particle(TestMajoranaBoson())
+        @test test_broadcast.(TestMajoranaBoson()) == TestMajoranaBoson()
     end
 end
 
@@ -127,6 +138,7 @@ end
     @test is_anti_particle(Photon())
     @test charge(Photon()) == 0.0
     @test mass(Photon()) == 0.0
+    @test test_broadcast.(Photon()) == Photon()
 
     @testset "$D" for D in [Incoming, Outgoing]
         @testset "$om $cth $phi" for (om, cth, phi) in
