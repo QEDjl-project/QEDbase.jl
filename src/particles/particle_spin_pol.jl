@@ -2,6 +2,7 @@
 Abstract base type for the spin or polarization of [`FermionLike`](@ref) or [`BosonLike`](@ref) particles, respectively.
 """
 abstract type AbstractSpinOrPolarization end
+Base.broadcastable(spin_or_pol::AbstractSpinOrPolarization) = Ref(spin_or_pol)
 
 """
 Abstract base type for the spin of [`FermionLike`](@ref) particles.
