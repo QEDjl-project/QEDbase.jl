@@ -33,6 +33,13 @@ X, Y, Z = rand(RNG, 3)
 
 # test function to test scalar broadcasting
 test_broadcast(x::AbstractParticle) = x
+test_broadcast(x::ParticleDirection) = x
+
+@testset "broadcast directions" begin
+    @testset "dir" for dir in (Incoming(),Outgoing())
+        @test test_broadcast.(dir) == dir
+    end
+end
 
 @testset "fermion likes" begin
     @testset "fermion" begin
