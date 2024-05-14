@@ -44,7 +44,7 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
     end
 
     @testset "spins and polarization" begin
-        @testset "spin_or_pol" for spin_or_pol in (
+        @testset "$spin_or_pol" for spin_or_pol in (
             SpinUp(), SpinDown(), AllSpin(), PolX(), PolY(), AllPol()
         )
             @test test_broadcast.(spin_or_pol) == spin_or_pol
