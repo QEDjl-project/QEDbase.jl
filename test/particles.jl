@@ -52,6 +52,19 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
     end
 end
 
+@testset "number of spins or pols" begin
+    @testset "single" begin
+        @testset "$spin_or_pol" for spin_or_pol in (SpinUp(),SpinDown(),PolX(),PolY())
+            @test number_of_spin_pol(spin_or_pol) == 1
+        end
+    end
+    @testset "multiple" begin
+        @testset "$spin_or_pol" for spin_or_pol in (AllSpin(),AllPol())
+            @test number_of_spin_pol(spin_or_pol) == 2
+        end
+    end
+end
+
 @testset "fermion likes" begin
     @testset "fermion" begin
         struct TestFermion <: Fermion end

@@ -177,3 +177,18 @@ y-polarized
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
 Base.show(io::IO, ::MIME"text/plain", ::PolY) = print(io, "y-polarized")
+
+"""
+    number_of_spin_pol(spin_or_pol)
+
+Return the number of spins or polarizations respresented by `spin_or_pol`, e.g. `number_of_spin_pol(SpinUp()) == 1`.
+
+"""
+function number_of_spin_pol end
+number_of_spin_pol(::AbstractDefinitePolarization) = 1
+number_of_spin_pol(::AbstractDefiniteSpin) = 1
+number_of_spin_pol(::AbstractIndefinitePolarization) = 2
+number_of_spin_pol(::AbstractIndefiniteSpin) = 2
+
+
+
