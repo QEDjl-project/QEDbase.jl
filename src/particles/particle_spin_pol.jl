@@ -34,7 +34,7 @@ spin up
 ```
 """
 struct SpinUp <: AbstractDefiniteSpin end
-Base.show(io::IO, ::MIME"text/plain", ::SpinUp) = print(io, "spin up")
+Base.show(io::IO, ::SpinUp) = print(io, "spin up")
 
 """
 Concrete type indicating that a [`FermionLike`](@ref) has spin-down.
@@ -47,7 +47,7 @@ spin down
 ```
 """
 struct SpinDown <: AbstractDefiniteSpin end
-Base.show(io::IO, ::MIME"text/plain", ::SpinDown) = print(io, "spin down")
+Base.show(io::IO, ::SpinDown) = print(io, "spin down")
 
 """
 Concrete type indicating that a [`FermionLike`](@ref) has an indefinite spin and the differential cross section calculation should average or sum over all spins, depending on the direction ([`Incoming`](@ref) or [`Outgoing`](@ref)) of the particle in question.
@@ -60,7 +60,7 @@ all spins
 ```
 """
 struct AllSpin <: AbstractIndefiniteSpin end
-Base.show(io::IO, ::MIME"text/plain", ::AllSpin) = print(io, "all spins")
+Base.show(io::IO, ::AllSpin) = print(io, "all spins")
 
 """
     $(TYPEDSIGNATURES)
@@ -118,7 +118,7 @@ all polarizations
 """
 struct AllPolarization <: AbstractIndefinitePolarization end
 const AllPol = AllPolarization
-Base.show(io::IO, ::MIME"text/plain", ::AllPol) = print(io, "all polarizations")
+Base.show(io::IO, ::AllPol) = print(io, "all polarizations")
 
 """
 Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``x``-direction.
@@ -147,7 +147,7 @@ x-polarized
 """
 struct PolarizationX <: AbstractDefinitePolarization end
 const PolX = PolarizationX
-Base.show(io::IO, ::MIME"text/plain", ::PolX) = print(io, "x-polarized")
+Base.show(io::IO, ::PolX) = print(io, "x-polarized")
 
 """
 Concrete type which indicates, that a [`BosonLike`](@ref) has polarization in ``y``-direction.
@@ -176,7 +176,7 @@ y-polarized
 """
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
-Base.show(io::IO, ::MIME"text/plain", ::PolY) = print(io, "y-polarized")
+Base.show(io::IO, ::PolY) = print(io, "y-polarized")
 
 """
     multiplicity(spin_or_pol)

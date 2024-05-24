@@ -100,7 +100,7 @@ electron
 struct Electron <: Fermion end
 mass(::Electron) = 1.0
 charge(::Electron) = -1.0
-Base.show(io::IO, ::MIME"text/plain", ::Electron) = print(io, "electron")
+Base.show(io::IO, ::Electron) = print(io, "electron")
 
 """
 Concrete type for *positrons* as a particle species. Mostly used for dispatch. 
@@ -124,7 +124,7 @@ positron
 struct Positron <: AntiFermion end
 mass(::Positron) = 1.0
 charge(::Positron) = 1.0
-Base.show(io::IO, ::MIME"text/plain", ::Positron) = print(io, "positron")
+Base.show(io::IO, ::Positron) = print(io, "positron")
 
 """
 Abstract base types for particle species that act like bosons in the sense of particle statistics. 
@@ -206,4 +206,4 @@ photon
 struct Photon <: MajoranaBoson end
 mass(::Photon) = 0.0
 charge(::Photon) = 0.0
-Base.show(io::IO, ::MIME"text/plain", ::Photon) = print(io, "photon")
+Base.show(io::IO, ::Photon) = print(io, "photon")
