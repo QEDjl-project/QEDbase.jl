@@ -61,30 +61,6 @@ abstract type AbstractComputationSetup end
 _is_computation_setup(::AbstractComputationSetup) = true
 
 """
-Abstract base type for exceptions indicating invalid input. See [`InvalidInputError`](@ref) for a simple concrete implementation. 
-Concrete implementations should at least implement 
-
-```Julia
-
-Base.showerror(io::IO, err::CustomInvalidError) where {CustomInvalidError<:AbstractInvalidInputException}
-
-```
-"""
-abstract type AbstractInvalidInputException <: Exception end
-
-"""
-    InvalidInputError(msg::String)
-
-Exception which is thrown if a given input is invalid, e.g. passed to [`_assert_valid_input`](@ref).
-"""
-struct InvalidInputError <: AbstractInvalidInputException
-    msg::String
-end
-function Base.showerror(io::IO, err::InvalidInputError)
-    return println(io, "InvalidInputError: $(err.msg)")
-end
-
-"""
     _assert_valid_input(stp::AbstractComputationSetup, input::Any)
 
 Interface function, which asserts that the given `input` is valid, and throws an [`InvalidInputError`](@ref) if not.

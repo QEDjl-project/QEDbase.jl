@@ -72,11 +72,14 @@ export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
 
 # Abstract setup interface
-export AbstractComputationSetup, InvalidInputError, compute
+export AbstractComputationSetup, compute
 export AbstractProcessSetup, scattering_process, physical_model
 
 # Abstract phase space interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
+
+# errors
+export InvalidInputError, RegistryError, OnshellError
 
 using StaticArrays
 using LinearAlgebra
@@ -86,11 +89,18 @@ using SimpleTraits
 using ArgCheck
 using ConstructionBase
 
+include("errors.jl")
 include("utils.jl")
 
 include("interfaces/dirac_tensors.jl")
 include("interfaces/gamma_matrices.jl")
-include("interfaces/lorentz.jl")
+
+include("interfaces/lorentz_vectors/types.jl")
+include("interfaces/lorentz_vectors/registry.jl")
+include("interfaces/lorentz_vectors/arithmetic.jl")
+include("interfaces/lorentz_vectors/fields.jl")
+include("interfaces/lorentz_vectors/utility.jl")
+
 include("interfaces/four_momentum.jl")
 include("interfaces/model.jl")
 
