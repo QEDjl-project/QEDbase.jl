@@ -55,3 +55,11 @@ end
 function Base.showerror(io::IO, err::InvalidInputError)
     return println(io, "InvalidInputError: $(err.msg)")
 end
+
+mutable struct SpinorConstructionError <: Exception
+    var::String
+end
+
+function Base.showerror(io::IO, e::SpinorConstructionError)
+    return print(io, "SpinorConstructionError: ", e.var)
+end

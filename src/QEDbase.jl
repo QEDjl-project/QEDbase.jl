@@ -80,7 +80,7 @@ export AbstractProcessSetup, scattering_process, physical_model
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
 
 # errors
-export InvalidInputError, RegistryError, OnshellError
+export InvalidInputError, RegistryError, OnshellError, SpinorConstructionError
 
 using StaticArrays
 using LinearAlgebra
