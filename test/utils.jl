@@ -1,5 +1,4 @@
 """
-
 Returns the cartesian coordinates (E,px,py,pz) for given spherical coordiantes
 (E, rho, cos_theta, phi), where rho denotes the length of the respective three-momentum, 
 theta is the polar- and phi the azimuthal angle. 

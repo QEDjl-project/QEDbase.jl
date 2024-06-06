@@ -56,6 +56,7 @@ export BosonLike, Boson, AntiBoson, MajoranaBoson
 export Electron, Positron, Photon
 export ParticleDirection, Incoming, Outgoing
 export is_incoming, is_outgoing
+export propagator
 
 # polarizations and spins
 export AbstractSpinOrPolarization, AbstractPolarization, AbstractSpin
@@ -69,6 +70,26 @@ using StaticArrays
 using LinearAlgebra
 using DocStringExtensions
 
+# probabilities
+export differential_probability, unsafe_differential_probability
+export total_probability
+
+# differential cross section
+export differential_cross_section, unsafe_differential_cross_section
+export total_cross_section
+
+# Abstract model interface
+export AbstractModelDefinition, fundamental_interaction_type
+
+# Abstract process interface
+export AbstractProcessDefinition, incoming_particles, outgoing_particles
+export number_incoming_particles, number_outgoing_particles
+export particles, number_particles
+
+# Abstract setup interface
+export AbstractComputationSetup, InvalidInputError, compute
+export AbstractProcessSetup, scattering_process, physical_model
+
 include("dirac_tensors.jl")
 include("lorentz_interface.jl")
 include("lorentz_vector.jl")
@@ -77,6 +98,9 @@ include("gamma_matrices.jl")
 include("four_momentum.jl") # maybe go to a kinematics module!!
 
 include("interfaces/particle_interface.jl")
+include("interfaces/model_interface.jl")
+include("interfaces/setup_interface.jl")
+
 include("particles/particle_types.jl")
 include("particles/particle_direction.jl")
 include("particles/particle_spin_pol.jl")
