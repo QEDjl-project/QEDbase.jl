@@ -90,15 +90,10 @@ export particles, number_particles
 export AbstractComputationSetup, InvalidInputError, compute
 export AbstractProcessSetup, scattering_process, physical_model
 
-include("dirac_tensors.jl")
-include("lorentz_interface.jl")
-include("lorentz_vector.jl")
-include("gamma_matrices.jl")
-
-include("four_momentum.jl") # maybe go to a kinematics module!!
-
-include("interfaces/particle_interface.jl")
 include("interfaces/model_interface.jl")
+include("interfaces/momentum_generation_interface.jl")
+include("interfaces/particle_interface.jl")
+include("interfaces/process_interface.jl")
 include("interfaces/setup_interface.jl")
 
 include("particles/particle_types.jl")
@@ -106,5 +101,12 @@ include("particles/particle_direction.jl")
 include("particles/particle_spin_pol.jl")
 include("particles/particle_spinors.jl")
 include("particles/particle_states.jl")
+
+include("dirac_tensors.jl")
+include("four_momentum.jl") # maybe go to a kinematics module!!
+include("four_polarisation.jl")
+include("gamma_matrices.jl")
+include("lorentz_interface.jl")
+include("lorentz_vector.jl")
 
 end #QEDbase
