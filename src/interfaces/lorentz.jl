@@ -38,7 +38,7 @@ With this done, we can aleady register the `CustomType` as a `LorentzVectorLike`
 ```julia
 register_LorentzVectorLike(CustomType)
 ```
-If something goes wrong, this function call will raise an `RegistryError` indicating, what is missing. With this done, `CustomType` is ready to be used as a LorentzVectorLike
+If something goes wrong, this function call will raise an `RegistryError` indicating what is missing. With this done, `CustomType` is ready to be used as a `LorentzVectorLike`
 ```julia
 L = CustomType(2.0,1.0,0.0,-1.0)
 
