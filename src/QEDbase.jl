@@ -91,7 +91,6 @@ export AbstractComputationSetup, InvalidInputError, compute
 export AbstractProcessSetup, scattering_process, physical_model
 
 include("interfaces/model_interface.jl")
-include("interfaces/momentum_generation_interface.jl")
 include("interfaces/particle_interface.jl")
 include("interfaces/process_interface.jl")
 include("interfaces/setup_interface.jl")
