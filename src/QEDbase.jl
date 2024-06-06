@@ -1,6 +1,6 @@
 module QEDbase
 
-import Base: *
+import Base: *, /
 import StaticArrays: similar_type
 
 export minkowski_dot, mdot, register_LorentzVectorLike
