@@ -1,10 +1,3 @@
-function _booster_fermion(mom::QEDbase.AbstractFourMomentum, mass::Real)
-    return (slashed(mom) + mass * one(DiracMatrix)) / (sqrt(abs(getT(mom)) + mass))
-end
-
-function _booster_antifermion(mom::QEDbase.AbstractFourMomentum, mass::Real)
-    return (mass * one(DiracMatrix) - slashed(mom)) / (sqrt(abs(getT(mom)) + mass))
-end
 
 """
 ```julia
@@ -68,7 +61,7 @@ electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
 ```
 
 ```jldoctest
-julia> using QEDbase
+julia> using QEDbase; using QEDcore
 
 julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)
 4-element SFourMomentum with indices SOneTo(4):
@@ -150,133 +143,3 @@ julia> electron_states = base_state(Electron(), Incoming(), mom, AllSpin())
     In the current implementation there are **no checks** built-in, which verify the passed arguments whether they describe on-shell particles, i.e. `p*p≈mass^2`. Using `base_state` with off-shell particles will cause unpredictable behavior.
 """
 function base_state end
-
-function base_state(
-    particle::Fermion,
-    ::Incoming,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin)])
-end
-
-function base_state(
-    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return SVector(BiSpinor(booster[:, 1]), BiSpinor(booster[:, 2]))
-end
-
-function base_state(
-    particle::AntiFermion,
-    ::Incoming,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin) + 2])) * GAMMA[1]
-end
-
-function base_state(
-    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return SVector(
-        AdjointBiSpinor(BiSpinor(booster[:, 3])) * GAMMA[1],
-        AdjointBiSpinor(BiSpinor(booster[:, 4])) * GAMMA[1],
-    )
-end
-
-function base_state(
-    particle::Fermion,
-    ::Outgoing,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin)])) * GAMMA[1]
-end
-
-function base_state(
-    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return SVector(
-        AdjointBiSpinor(BiSpinor(booster[:, 1])) * GAMMA[1],
-        AdjointBiSpinor(BiSpinor(booster[:, 2])) * GAMMA[1],
-    )
-end
-
-function base_state(
-    particle::AntiFermion,
-    ::Outgoing,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin) + 2])
-end
-
-function base_state(
-    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return SVector(BiSpinor(booster[:, 3]), BiSpinor(booster[:, 4]))
-end
-
-function _photon_state(pol::AllPolarization, mom::QEDbase.AbstractFourMomentum)
-    cth = getCosTheta(mom)
-    sth = sqrt(1 - cth^2)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SVector(
-        SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth),
-        SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0),
-    )
-end
-
-function _photon_state(pol::PolarizationX, mom::QEDbase.AbstractFourMomentum)
-    cth = getCosTheta(mom)
-    sth = sqrt(1 - cth^2)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth)
-end
-
-function _photon_state(pol::PolarizationY, mom::QEDbase.AbstractFourMomentum)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0)
-end
-
-@inline function base_state(
-    particle::Photon,
-    ::ParticleDirection,
-    mom::QEDbase.AbstractFourMomentum,
-    pol::AllPolarization,
-)
-    return _photon_state(pol, mom)
-end
-
-@inline function base_state(
-    particle::Photon,
-    ::ParticleDirection,
-    mom::QEDbase.AbstractFourMomentum,
-    pol::AbstractPolarization,
-)
-    return _photon_state(pol, mom)
-end
-
-"""
-    _as_svec(x)
-
-Accepts a single object, an `SVector` of objects or a tuple of objects, and returns them in a single "layer" of SVector.
-
-Intended for usage with [`base_state`](@ref).
-"""
-function _as_svec end
-
-@inline _as_svec(x) = SVector((x,))
-@inline _as_svec(x::SVector{N,T}) where {N,T} = x
-@inline _as_svec(x::NTuple) = SVector(x)

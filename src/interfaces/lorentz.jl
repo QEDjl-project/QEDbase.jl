@@ -1,3 +1,15 @@
+#######
+#
+# Abstract types
+#
+#######
+"""
+$(TYPEDEF)
+
+Abstract type to model generic Lorentz vectors, i.e. elements of a minkowski-like space, where the component space is arbitray.
+"""
+abstract type AbstractLorentzVector{T} <: FieldVector{4,T} end
+
 """
 ## Definition of LorentzVector interface.
 
@@ -72,7 +84,6 @@ end
 @traitdef IsMutableLorentzVectorLike{T}
 
 """
-
     getT(lv)
 
 Return the 0-component of a given `LorentzVectorLike`.
@@ -85,7 +96,6 @@ Return the 0-component of a given `LorentzVectorLike`.
 function getT end
 
 """
-
     getX(lv)
 
 Return the 1-component of a given `LorentzVectorLike`.
@@ -98,7 +108,6 @@ Return the 1-component of a given `LorentzVectorLike`.
 function getX end
 
 """
-
     getY(lv)
 
 Return the 2-component of a given `LorentzVectorLike`.
@@ -111,7 +120,6 @@ Return the 2-component of a given `LorentzVectorLike`.
 function getY end
 
 """
-
     getZ(lv)
 
 Return the 3-component of a given `LorentzVectorLike`.
@@ -124,7 +132,6 @@ Return the 3-component of a given `LorentzVectorLike`.
 function getZ end
 
 """
-
     setT!(lv,value)
 
 Sets the 0-component of a given `LorentzVectorLike` to the given `value`.
@@ -132,7 +139,6 @@ Sets the 0-component of a given `LorentzVectorLike` to the given `value`.
 function setT! end
 
 """
-
     setX!(lv,value)
 
 Sets the 1-component of a given `LorentzVectorLike` to the given `value`.
@@ -140,7 +146,6 @@ Sets the 1-component of a given `LorentzVectorLike` to the given `value`.
 function setX! end
 
 """
-
     setY!(lv,value)
 
 Sets the 2-component of a given `LorentzVectorLike` to the given `value`.
@@ -148,7 +153,6 @@ Sets the 2-component of a given `LorentzVectorLike` to the given `value`.
 function setY! end
 
 """
-
     setZ!(lv,value)
 
 Sets the 3-component of a given `LorentzVectorLike` to the given `value`.
@@ -183,7 +187,6 @@ function register_LorentzVectorLike(T::Type)
 end
 
 """
-    
     minkowski_dot(v1,v2)
 
 Return the Minkowski dot product of two `LorentzVectorLike`. 
@@ -216,7 +219,6 @@ const mdot = minkowski_dot
 # getter
 ########
 """
-    
     getMagnitude2(lv)
 
 Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum of the squared spatial components. 
@@ -241,7 +243,6 @@ Functiom alias for [`getMagnitude2`](@ref).
 const getMag2 = getMagnitude2
 
 """
-
     getMagnitude(lv)
 
 Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spatial components. 
@@ -266,7 +267,6 @@ Functiom alias for [`getMagnitude`](@ref).
 const getMag = getMagnitude
 
 """
-
     getInvariantMass2(lv)
 
 Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minkowski dot with itself. 
@@ -285,7 +285,6 @@ end
 const getMass2 = getInvariantMass2
 
 """
-
     getInvariantMass(lv)
 
 Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square root of the minkowski dot with itself. 
@@ -319,7 +318,6 @@ const getMass = getInvariantMass
 ##########################
 
 """
-
     getE(lv)
 
 Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component. 
@@ -335,7 +333,6 @@ Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component
 const getEnergy = getE
 
 """
-
     getPx(lv)
 
 Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-component. 
@@ -348,7 +345,6 @@ Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-componen
 @inline @traitfn getPx(lv::T) where {T; IsLorentzVectorLike{T}} = getX(lv)
 
 """
-
     getPy(lv)
 
 Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-component. 
@@ -361,7 +357,6 @@ Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-componen
 @inline @traitfn getPy(lv::T) where {T; IsLorentzVectorLike{T}} = getY(lv)
 
 """
-
     getPz(lv)
 
 Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-component. 
@@ -374,7 +369,6 @@ Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-componen
 @inline @traitfn getPz(lv::T) where {T; IsLorentzVectorLike{T}} = getZ(lv)
 
 """
-
     getBeta(lv)
 
 Return magnitude of the beta vector for a given `LorentzVectorLike`, i.e. the magnitude of the `LorentzVectorLike` divided by its 0-component.
@@ -399,7 +393,6 @@ Return magnitude of the beta vector for a given `LorentzVectorLike`, i.e. the ma
 end
 
 """
-
     getGamma(lv)
 
 Return the relativistic gamma factor for a given `LorentzVectorLike`, i.e. the inverse square root of one minus the beta vector squared.
@@ -417,7 +410,6 @@ end
 # transverse coordinates
 ########################
 """
-
     getTransverseMomentum2(lv)
 
 Return the squared transverse momentum for a given `LorentzVectorLike`, i.e. the sum of its squared 1- and 2-component.
@@ -441,7 +433,6 @@ const getPt2 = getTransverseMomentum2
 const getPerp2 = getTransverseMomentum2
 
 """
-
     getTransverseMomentum(lv)
 
 Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitude of its transverse components.
@@ -466,7 +457,6 @@ const getPt = getTransverseMomentum
 const getPerp = getTransverseMomentum
 
 """
-
     getTransverseMass2(lv)
 
 Return the squared transverse mass for a given `LorentzVectorLike`, i.e. the difference of its squared 0- and 3-component.
@@ -480,7 +470,6 @@ Return the squared transverse mass for a given `LorentzVectorLike`, i.e. the dif
 
     The transverse components are defined w.r.t. to the 3-axis. 
 
-
 """
 @inline @traitfn function getTransverseMass2(lv::T) where {T; IsLorentzVectorLike{T}}
     return getT(lv)^2 - getZ(lv)^2
@@ -489,7 +478,6 @@ end
 const getMt2 = getTransverseMass2
 
 """
-
     getTransverseMass(lv)
 
 Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square root of its squared transverse mass.
@@ -521,7 +509,6 @@ end
 const getMt = getTransverseMass
 
 """
-
     getRapidity(lv)
 
 Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `LorentzVectorLike`.
@@ -550,7 +537,6 @@ const getRho2 = getMagnitude2
 const getRho = getMagnitude
 
 """
-
     getTheta(lv)
 
 Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of its spatial components in [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system).
@@ -575,7 +561,6 @@ Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of 
 end
 
 """
-
     getCosTheta(lv)
 
 Return the cosine of the theta angle for a given `LorentzVectorLike`.
@@ -591,7 +576,6 @@ Return the cosine of the theta angle for a given `LorentzVectorLike`.
 end
 
 """
-
     getPhi(lv)
 
 Return the phi angle for a given `LorentzVectorLike`, i.e. the azimuthal angle of its spatial components in [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system).
@@ -611,7 +595,6 @@ Return the phi angle for a given `LorentzVectorLike`, i.e. the azimuthal angle o
 end
 
 """
-
     getCosPhi(lv)
 
 Return the cosine of the phi angle for a given `LorentzVectorLike`.
@@ -627,7 +610,6 @@ Return the cosine of the phi angle for a given `LorentzVectorLike`.
 end
 
 """
-
     getSinPhi(lv)
 
 Return the sine of the phi angle for a given `LorentzVectorLike`.
@@ -646,7 +628,6 @@ end
 # light cone coordinates
 ########################
 """
-
     getPlus(lv)
 
 Return the plus component for a given `LorentzVectorLike` in [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates).
@@ -669,7 +650,6 @@ Return the plus component for a given `LorentzVectorLike` in [light-cone coordin
 end
 
 """
-
     getMinus(lv)
 
 Return the minus component for a given `LorentzVectorLike` in [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates).
@@ -698,7 +678,6 @@ end
 ####
 
 """
-
     setE!(lv,value)
 
 Sets the energy component of a given `LorentzVectorLike` to a given `value`.
@@ -715,7 +694,6 @@ end
 const setEnergy! = setE!
 
 """
-
     setPx!(lv,value)
 
 Sets the 1-component of a given `LorentzVectorLike` to a given `value`.
@@ -732,7 +710,6 @@ Sets the 1-component of a given `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setPy!(lv,value)
 
 Sets the 2-component of a given `LorentzVectorLike` to a given `value`.
@@ -749,7 +726,6 @@ Sets the 2-component of a given `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setPz!(lv,value)
 
 Sets the 3-component of a given `LorentzVectorLike` to a given `value`.
@@ -768,7 +744,6 @@ end
 # setter spherical coordinates
 
 """
-
     setTheta!(lv,value)
 
 Sets the theta angle of a `LorentzVectorLike` to a given `value`.
@@ -791,7 +766,6 @@ Sets the theta angle of a `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setCosTheta!(lv,value)
 
 Sets the cosine of the theta angle of a `LorentzVectorLike` to a given `value`.
@@ -816,7 +790,6 @@ Sets the cosine of the theta angle of a `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setPhi!(lv,value)
 
 Sets the phi angle of a `LorentzVectorLike` to a given `value`.
@@ -840,7 +813,6 @@ Sets the phi angle of a `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setRho!(lv,value)
 
 Sets the magnitude of a `LorentzVectorLike` to a given `value`.
@@ -864,7 +836,6 @@ end
 # setter light cone coordinates
 
 """
-
     setPlus!(lv,value)
 
 Sets the plus component of a `LorentzVectorLike` to a given `value`.
@@ -882,7 +853,6 @@ Sets the plus component of a `LorentzVectorLike` to a given `value`.
 end
 
 """
-
     setMinus!(lv,value)
 
 Sets the minus component of a `LorentzVectorLike` to a given `value`.
@@ -901,7 +871,6 @@ end
 
 # transverse coordinates
 """
-
     setTransverseMomentum!(lv,value)
 
 Sets the transverse momentum of a `LorentzVectorLike` to a given `value`.
@@ -928,7 +897,6 @@ const setPerp! = setTransverseMomentum!
 const setPt! = setTransverseMomentum!
 
 """
-
     setTransverseMass!(lv,value)
 
 Sets the transverse mass of a `LorentzVectorLike` to a given `value`.
@@ -953,7 +921,6 @@ end
 const setMt! = setTransverseMass!
 
 """
-
     setRapidity!(lv,value)
 
 Sets the rapidity of a `LorentzVectorLike` to a given `value`.

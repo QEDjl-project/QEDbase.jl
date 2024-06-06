@@ -1,9 +1,5 @@
 module QEDbase
 
-using SimpleTraits
-using ArgCheck
-using ConstructionBase
-
 import Base: *
 import StaticArrays: similar_type
 
@@ -28,20 +24,14 @@ export setTransverseMomentum!, setPerp!, setPt!
 export setTransverseMass!, setMt!
 export setRapidity!
 
-export AbstractLorentzVector, SLorentzVector, MLorentzVector, dot
-export AbstractFourMomentum, SFourMomentum, MFourMomentum
+export AbstractLorentzVector, dot
+export AbstractFourMomentum
 export isonshell, assert_onshell
 
-export BiSpinor, AdjointBiSpinor, DiracMatrix, mul
 export AbstractDiracVector, AbstractDiracMatrix
+export mul
 
-export gamma, GAMMA, AbstractGammaRepresentation, DiracGammaRepresentation, slashed
-
-export BASE_PARTICLE_SPINOR, BASE_ANTIPARTICLE_SPINOR
-export IncomingFermionSpinor,
-    OutgoingFermionSpinor, IncomingAntiFermionSpinor, OutgoingAntiFermionSpinor
-export SpinorU, SpinorUbar, SpinorV, SpinorVbar
-export @valid_spinor_input
+export AbstractGammaRepresentation
 
 # particle interface
 export AbstractParticle
@@ -66,10 +56,6 @@ export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
 export multiplicity
 
-using StaticArrays
-using LinearAlgebra
-using DocStringExtensions
-
 # probabilities
 export differential_probability, unsafe_differential_probability
 export total_probability
@@ -90,25 +76,34 @@ export particles, number_particles
 export AbstractComputationSetup, InvalidInputError, compute
 export AbstractProcessSetup, scattering_process, physical_model
 
-include("interfaces/phase_space.jl")
+# Abstract phase space interface
+export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
 
+using StaticArrays
+using LinearAlgebra
+using DocStringExtensions
+
+using SimpleTraits
+using ArgCheck
+using ConstructionBase
+
+include("utils.jl")
+
+include("interfaces/dirac_tensors.jl")
+include("interfaces/gamma_matrices.jl")
 include("interfaces/lorentz.jl")
-include("dirac_tensors.jl")
-include("lorentz_vector.jl")
-include("gamma_matrices.jl")
-include("four_momentum.jl") # maybe go to a kinematics module!!
-
-include("interfaces/particle.jl")
-include("particles/types.jl")
-include("particles/direction.jl")
-include("particles/spin_pol.jl")
-include("particles/spinors.jl")
-include("particles/states.jl")
-
+include("interfaces/four_momentum.jl")
 include("interfaces/model.jl")
 
-include("interfaces/process.jl")
+include("interfaces/particle.jl")
+include("interfaces/particle_types.jl")
+include("interfaces/particle_functions.jl")
 
+include("particles/direction.jl")
+include("particles/spin_pol.jl")
+
+include("interfaces/phase_space.jl")
+include("interfaces/process.jl")
 include("interfaces/setup.jl")
 
 end #QEDbase

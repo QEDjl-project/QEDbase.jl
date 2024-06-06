@@ -6,6 +6,13 @@
 ###############
 
 """
+    AbstractParticleSpinor
+
+TBW
+"""
+abstract type AbstractParticleSpinor end
+
+"""
     AbstractParticleType <: AbstractParticle
 
 This is the abstract base type for every species of particles. All functionalities defined on subtypes of `AbstractParticleType` should be static, i.e. known at compile time. 
