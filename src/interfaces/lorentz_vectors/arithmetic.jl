@@ -1,3 +1,11 @@
+function dot(p1::T1, p2::T2) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
+    return mdot(p1, p2)
+end
+@inline function *(
+    p1::T1, p2::T2
+) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
+    return dot(p1, p2)
+end
 
 """
     minkowski_dot(v1,v2)

@@ -1,5 +1,6 @@
 module QEDbase
 
+import Base: *
 import StaticArrays: similar_type
 
 export minkowski_dot, mdot, register_LorentzVectorLike
@@ -98,6 +99,7 @@ include("interfaces/gamma_matrices.jl")
 include("interfaces/lorentz_vectors/types.jl")
 include("interfaces/lorentz_vectors/registry.jl")
 include("interfaces/lorentz_vectors/arithmetic.jl")
+include("interfaces/lorentz_vectors/dirac_interaction.jl")
 include("interfaces/lorentz_vectors/fields.jl")
 include("interfaces/lorentz_vectors/utility.jl")
 

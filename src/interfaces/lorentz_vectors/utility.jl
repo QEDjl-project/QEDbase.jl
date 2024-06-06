@@ -1,4 +1,3 @@
-
 #######
 #
 # Utility functions on FourMomenta
