@@ -40,7 +40,7 @@ export base_state
 export mass, charge
 
 # particle types
-export AbstractParticleType
+export AbstractParticleType, AbstractParticleSpinor
 export FermionLike, Fermion, AntiFermion, MajoranaFermion
 export BosonLike, Boson, AntiBoson, MajoranaBoson
 export Electron, Positron, Photon
