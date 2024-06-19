@@ -34,19 +34,14 @@ export mul
 export AbstractGammaRepresentation
 
 # particle interface
-export AbstractParticle
+export AbstractParticle, AbstractParticleType
 export is_fermion, is_boson, is_particle, is_anti_particle
-export base_state
 export mass, charge
+export base_state, propagator
 
-# particle types
-export AbstractParticleType, AbstractParticleSpinor
-export FermionLike, Fermion, AntiFermion, MajoranaFermion
-export BosonLike, Boson, AntiBoson, MajoranaBoson
-export Electron, Positron, Photon
+# directions
 export ParticleDirection, Incoming, Outgoing
 export is_incoming, is_outgoing
-export propagator
 
 # polarizations and spins
 export AbstractSpinOrPolarization, AbstractPolarization, AbstractSpin
@@ -107,8 +102,6 @@ include("interfaces/four_momentum.jl")
 include("interfaces/model.jl")
 
 include("interfaces/particle.jl")
-include("interfaces/particle_types.jl")
-include("interfaces/particle_functions.jl")
 
 include("particles/direction.jl")
 include("particles/spin_pol.jl")

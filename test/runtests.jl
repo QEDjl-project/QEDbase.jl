@@ -3,7 +3,7 @@ using Test
 using SafeTestsets
 
 begin
-    # # Interfaces
+    # Interfaces
     @time @safetestset "model interface" begin
         include("interfaces/model.jl")
     end
@@ -13,6 +13,6 @@ begin
     end
 
     @time @safetestset "particles" begin
-        include("particles.jl")
+        include("particle_properties.jl")
     end
 end
