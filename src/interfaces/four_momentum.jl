@@ -5,7 +5,6 @@ Abstract base type for four-momentas, representing one energy and three spacial 
 
 Also see: [`SFourMomentum`](@ref)
 """
-
 abstract type AbstractFourMomentum <: AbstractLorentzVector{Float64} end
 
 function Base.getproperty(P::TM, sym::Symbol) where {TM<:AbstractFourMomentum}

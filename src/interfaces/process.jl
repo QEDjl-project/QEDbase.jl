@@ -70,8 +70,7 @@ function outgoing_particles end
         MODEL <: AbstractModelDefinition,
     }
 
-Interface function which returns the incident flux of the given scattering process for a given [`InPhaseSpacePoint`](@ref).
-
+Interface function which returns the incident flux of the given scattering process for a given `InPhaseSpacePoint`.
 """
 function _incident_flux end
 
@@ -148,7 +147,7 @@ function out_phase_space_dimension end
     }
 
 Interface function for the combination of a scattering process and a physical model. Return the total of a 
-given process and model for a passed [`InPhaseSpacePoint`](@ref).
+given process and model for a passed `InPhaseSpacePoint`.
 
 !!! note "total cross section"
     
@@ -156,6 +155,16 @@ given process and model for a passed [`InPhaseSpacePoint`](@ref).
 
 """
 function _total_probability end
+
+"""
+    total_cross_section(in_psp::InPhaseSpacePoint)
+
+Return the total cross section for a given `InPhaseSpacePoint`.
+"""
+#function total_cross_section(in_psp::AbstractInPhaseSpacePoint)
+#    I = 1 / (4 * _incident_flux(in_psp))
+#    return I * _total_probability(in_psp)
+#end
 
 #######################
 #
