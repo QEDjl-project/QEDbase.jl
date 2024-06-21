@@ -71,8 +71,14 @@ export particles, number_particles
 export AbstractComputationSetup, compute
 export AbstractProcessSetup, scattering_process, physical_model
 
-# Abstract phase space interface
+# Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
+
+# Abstract phase space point interface
+export AbstractParticleStateful, AbstractPhaseSpacePoint
+export particle_direction, particle_species, momentum
+export process, model, phase_space_definition, momenta
+export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
 # errors
 export InvalidInputError, RegistryError, OnshellError, SpinorConstructionError
@@ -111,5 +117,7 @@ include("interfaces/process.jl")
 include("interfaces/particle_stateful.jl")
 include("interfaces/phase_space_point.jl")
 include("interfaces/setup.jl")
+
+include("total_cross_section.jl")
 
 end #QEDbase

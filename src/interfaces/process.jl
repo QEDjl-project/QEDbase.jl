@@ -156,16 +156,6 @@ given process and model for a passed `InPhaseSpacePoint`.
 """
 function _total_probability end
 
-"""
-    total_cross_section(in_psp::InPhaseSpacePoint)
-
-Return the total cross section for a given `InPhaseSpacePoint`.
-"""
-#function total_cross_section(in_psp::AbstractInPhaseSpacePoint)
-#    I = 1 / (4 * _incident_flux(in_psp))
-#    return I * _total_probability(in_psp)
-#end
-
 #######################
 #
 # utility functions
