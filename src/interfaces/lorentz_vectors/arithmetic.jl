@@ -1,15 +1,4 @@
-# TODO: these overloads shouldn't be necessary, but are for some reason
-@inline function *(L::TL, NUM::Number) where {TL<:AbstractLorentzVector}
-    return constructorof(TL)(L[1] * NUM, L[2] * NUM, L[3] * NUM, L[4] * NUM)
-end
-
-@inline function *(NUM::Number, L::TL) where {TL<:AbstractLorentzVector}
-    return constructorof(TL)(L[1] * NUM, L[2] * NUM, L[3] * NUM, L[4] * NUM)
-end
-
-@inline function /(L::TL, NUM::Number) where {TL<:AbstractLorentzVector}
-    return constructorof(TL)(L[1] / NUM, L[2] / NUM, L[3] / NUM, L[4] / NUM)
-end
+import Base: *
 
 function dot(p1::T1, p2::T2) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
     return mdot(p1, p2)

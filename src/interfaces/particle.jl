@@ -129,7 +129,7 @@ Return the base state of a directed on-shell particle with a given four-momentum
 
 # Input
 
-- `particle` -- the type of the particle, e.g. `QEDcore.Electron`, `QEDcore.Positron`, or `QEDcore.Photon`.
+- `particle` -- the type of the particle, i.e., an instance of an [`AbstractParticleType`](@ref), e.g. `QEDcore.Electron`, `QEDcore.Positron`, or `QEDcore.Photon`.
 - `direction` -- the direction of the particle, i.e. [`Incoming`](@ref) or [`Outgoing`](@ref).
 - `momentum` -- the four-momentum of the particle
 - `[spin_or_pol]` -- if given, the spin or polarization of the particle, e.g. [`SpinUp`](@ref)/[`SpinDown`](@ref) or [`PolarizationX`](@ref)/[`PolarizationY`](@ref).
@@ -174,6 +174,7 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 electron_state = base_state(QEDcore.Electron(), Incoming(), mom, SpinUp())
 ```
 
+TODO: Reenable doctests
 ```Julia
 julia> using QEDbase; using QEDcore
 
