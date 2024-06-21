@@ -45,7 +45,7 @@ to enable the calculation of total probabilities and cross sections.
 """
 abstract type AbstractProcessDefinition end
 
-# broadcast every model as a scalar
+# broadcast every process as a scalar
 Broadcast.broadcastable(proc::AbstractProcessDefinition) = Ref(proc)
 
 """

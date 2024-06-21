@@ -11,6 +11,7 @@ using QEDbase
 
 #DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
 
+# TODO: remove before release
 Pkg.add(; url="https://github.com/QEDjl-project/QEDcore.jl", rev="dev")
 
 using DocumenterCitations
