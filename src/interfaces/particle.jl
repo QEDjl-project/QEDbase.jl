@@ -1,11 +1,120 @@
-function _booster_fermion(mom::QEDbase.AbstractFourMomentum, mass::Real)
-    return (slashed(mom) + mass * one(DiracMatrix)) / (sqrt(abs(getT(mom)) + mass))
-end
+###############
+# The particle interface
+#
+# In this file, we define the interface for working with particles in a general
+# sense. 
+###############
 
-function _booster_antifermion(mom::QEDbase.AbstractFourMomentum, mass::Real)
-    return (mass * one(DiracMatrix) - slashed(mom)) / (sqrt(abs(getT(mom)) + mass))
-end
+"""
+Abstract base type for every type which might be considered a *particle* in the context of `QED.jl`. For every (concrete) subtype of `AbstractParticle`, there are two kinds of interface functions implemented: static functions and property functions. 
+The static functions provide information on what kind of particle it is (defaults are written in square brackets)
 
+```julia
+    is_fermion(::AbstractParticle)::Bool [= false]
+    is_boson(::AbstractParticle)::Bool [= false]
+    is_particle(::AbstractParticle)::Bool [= true]
+    is_anti_particle(::AbstractParticle)::Bool [= false]
+``` 
+If the output of those functions differ from the defaults for a subtype of `AbstractParticle`, these functions need to be overwritten.
+The second type of functions define a hard interface for `AbstractParticle`:
+
+```julia
+    mass(::AbstractParticle)::Real
+    charge(::AbstractParticle)::Real
+```
+These functions must be implemented in order to have the subtype of `AbstractParticle` work with the functionalities of `QEDprocesses.jl`.
+"""
+abstract type AbstractParticle end
+Base.broadcastable(part::AbstractParticle) = Ref(part)
+
+"""
+    AbstractParticleType <: AbstractParticle
+
+This is the abstract base type for every species of particles. All functionalities defined on subtypes of `AbstractParticleType` should be static, i.e. known at compile time. 
+For adding runtime information, e.g. four-momenta or particle states, to a particle, consider implementing a concrete subtype of [`AbstractParticle`](@ref) instead, which may have a type parameter `P<:AbstractParticleType`.
+
+Concrete built-in subtypes of `AbstractParticleType` are available in `QEDcore.jl` and should always be singletons..
+"""
+abstract type AbstractParticleType <: AbstractParticle end
+
+"""
+    $(TYPEDSIGNATURES)
+
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *fermion* in the sense of particle statistics, and `false` otherwise.
+The default implementation of `is_fermion` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
+"""
+is_fermion(::AbstractParticle) = false
+
+"""
+    $(TYPEDSIGNATURES)
+
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *boson* in the sense of particle statistics, and `false` otherwise.
+The default implementation of `is_boson` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
+"""
+is_boson(::AbstractParticle) = false
+
+"""
+    $(TYPEDSIGNATURES)
+    
+Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *particle* as distinct from anti-particles, and `false` otherwise.
+The default implementation of `is_particle` for every subtype of [`AbstractParticle`](@ref) will always return `true`.
+"""
+is_particle(::AbstractParticle) = true
+
+"""
+    $(TYPEDSIGNATURES)
+
+Interface function for particles. Return true if the passed subtype of [`AbstractParticle`](@ref) can be considered an *anti particle* as distinct from their particle counterpart, and `false` otherwise.
+The default implementation of `is_anti_particle` for every subtype of [`AbstractParticle`](@ref) will always return `false`.
+"""
+is_anti_particle(::AbstractParticle) = false
+
+"""
+    mass(particle::AbstractParticle)::Real
+
+Interface function for particles. Return the rest mass of a particle (in units of the electron mass).
+
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
+"""
+function mass end
+
+"""
+    charge(::AbstractParticle)::Real
+
+Interface function for particles. Return the electric charge of a particle (in units of the elementary electric charge).
+
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
+"""
+function charge end
+
+"""
+    propagator(particle::AbstractParticleType, mom::QEDbase.AbstractFourMomentum, [mass::Real])
+
+Return the propagator of a particle for a given four-momentum. If `mass` is passed, the respective propagator for massive particles is used, if not, it is assumed the particle passed in is massless.
+
+!!! note "Convention"
+    
+    There are two types of implementations for propagators given in `QEDProcesses`: 
+    For a `BosonLike` particle with four-momentum ``k`` and mass ``m``, the propagator is given as 
+
+    ```math
+    D(k) = \\frac{1}{k^2 - m^2}.
+    ```
+
+    For a `FermionLike` particle with four-momentum ``p`` and mass ``m``, the propagator is given as
+
+    ```math
+    S(p) = \\frac{\\gamma^\\mu p_\\mu + mass}{p^2 - m^2}.
+    ```
+
+!!! warning
+    
+    This function does not throw when the given particle is off-shell. If an off-shell particle is passed, the function `propagator` returns `Inf`.
+
+"""
+function propagator end
+
+# TODO: Turn the doctest on again when QEDcore has QEDprocesses functionality
 """
 ```julia
     base_state(
@@ -20,7 +129,7 @@ Return the base state of a directed on-shell particle with a given four-momentum
 
 # Input
 
-- `particle` -- the type of the particle, e.g. [`Electron`](@ref), [`Positron`](@ref), or [`Photon`](@ref).
+- `particle` -- the type of the particle, i.e., an instance of an [`AbstractParticleType`](@ref), e.g. `QEDcore.Electron`, `QEDcore.Positron`, or `QEDcore.Photon`.
 - `direction` -- the direction of the particle, i.e. [`Incoming`](@ref) or [`Outgoing`](@ref).
 - `momentum` -- the four-momentum of the particle
 - `[spin_or_pol]` -- if given, the spin or polarization of the particle, e.g. [`SpinUp`](@ref)/[`SpinDown`](@ref) or [`PolarizationX`](@ref)/[`PolarizationY`](@ref).
@@ -53,7 +162,6 @@ base_state(::Photon,      ::Outgoing, mom) # -> SVector{2,SLorentzVector{Complex
 # Example
 
 ```julia
-
 using QEDbase
 
 mass = 1.0                              # set electron mass to 1.0
@@ -63,12 +171,12 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 
 # compute the state of an incoming electron with spin = SpinUp
 # note: base_state is not exported!
-electron_state = base_state(Electron(), Incoming(), mom, SpinUp())
-
+electron_state = base_state(QEDcore.Electron(), Incoming(), mom, SpinUp())
 ```
 
-```jldoctest
-julia> using QEDbase
+TODO: Reenable doctests
+```Julia
+julia> using QEDbase; using QEDcore
 
 julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)
 4-element SFourMomentum with indices SOneTo(4):
@@ -150,133 +258,3 @@ julia> electron_states = base_state(Electron(), Incoming(), mom, AllSpin())
     In the current implementation there are **no checks** built-in, which verify the passed arguments whether they describe on-shell particles, i.e. `p*p≈mass^2`. Using `base_state` with off-shell particles will cause unpredictable behavior.
 """
 function base_state end
-
-function base_state(
-    particle::Fermion,
-    ::Incoming,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin)])
-end
-
-function base_state(
-    particle::Fermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return SVector(BiSpinor(booster[:, 1]), BiSpinor(booster[:, 2]))
-end
-
-function base_state(
-    particle::AntiFermion,
-    ::Incoming,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin) + 2])) * GAMMA[1]
-end
-
-function base_state(
-    particle::AntiFermion, ::Incoming, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return SVector(
-        AdjointBiSpinor(BiSpinor(booster[:, 3])) * GAMMA[1],
-        AdjointBiSpinor(BiSpinor(booster[:, 4])) * GAMMA[1],
-    )
-end
-
-function base_state(
-    particle::Fermion,
-    ::Outgoing,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return AdjointBiSpinor(BiSpinor(booster[:, _spin_index(spin)])) * GAMMA[1]
-end
-
-function base_state(
-    particle::Fermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_fermion(mom, mass(particle))
-    return SVector(
-        AdjointBiSpinor(BiSpinor(booster[:, 1])) * GAMMA[1],
-        AdjointBiSpinor(BiSpinor(booster[:, 2])) * GAMMA[1],
-    )
-end
-
-function base_state(
-    particle::AntiFermion,
-    ::Outgoing,
-    mom::QEDbase.AbstractFourMomentum,
-    spin::AbstractDefiniteSpin,
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return BiSpinor(booster[:, _spin_index(spin) + 2])
-end
-
-function base_state(
-    particle::AntiFermion, ::Outgoing, mom::QEDbase.AbstractFourMomentum, spin::AllSpin
-)
-    booster = _booster_antifermion(mom, mass(particle))
-    return SVector(BiSpinor(booster[:, 3]), BiSpinor(booster[:, 4]))
-end
-
-function _photon_state(pol::AllPolarization, mom::QEDbase.AbstractFourMomentum)
-    cth = getCosTheta(mom)
-    sth = sqrt(1 - cth^2)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SVector(
-        SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth),
-        SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0),
-    )
-end
-
-function _photon_state(pol::PolarizationX, mom::QEDbase.AbstractFourMomentum)
-    cth = getCosTheta(mom)
-    sth = sqrt(1 - cth^2)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SLorentzVector{Float64}(0.0, cth * cos_phi, cth * sin_phi, -sth)
-end
-
-function _photon_state(pol::PolarizationY, mom::QEDbase.AbstractFourMomentum)
-    cos_phi = getCosPhi(mom)
-    sin_phi = getSinPhi(mom)
-    return SLorentzVector{Float64}(0.0, -sin_phi, cos_phi, 0.0)
-end
-
-@inline function base_state(
-    particle::Photon,
-    ::ParticleDirection,
-    mom::QEDbase.AbstractFourMomentum,
-    pol::AllPolarization,
-)
-    return _photon_state(pol, mom)
-end
-
-@inline function base_state(
-    particle::Photon,
-    ::ParticleDirection,
-    mom::QEDbase.AbstractFourMomentum,
-    pol::AbstractPolarization,
-)
-    return _photon_state(pol, mom)
-end
-
-"""
-    _as_svec(x)
-
-Accepts a single object, an `SVector` of objects or a tuple of objects, and returns them in a single "layer" of SVector.
-
-Intended for usage with [`base_state`](@ref).
-"""
-function _as_svec end
-
-@inline _as_svec(x) = SVector((x,))
-@inline _as_svec(x::SVector{N,T}) where {N,T} = x
-@inline _as_svec(x::NTuple) = SVector(x)
