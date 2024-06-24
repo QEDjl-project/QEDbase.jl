@@ -5,36 +5,36 @@
 [diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.6...release-0.2.0)
 
 This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QED.jl/issues/35 for details).
-It is a breaking release, indicated by the bumped minor version, because we don't have a major version for this
+It is a breaking release, indicated by the bumped minor version because we don't have a major version for this
 yet.
 
 ### Breaking changes
 
-With this release, we remove the actual core functionality and move it to [`QEDcore.jl`](https://github.com/QEDjl-project/QEDcore.jl).
-The purpose of this package is transformed from the tool box status to the provider of all
+This release removes the core functionality and moves it to [`QEDcore.jl`](https://github.com/QEDjl-project/QEDcore.jl).
+The purpose of this package is to transform from the toolbox status to the provider of all
 common interfaces.
 
 ### New features
 
 This version introduces the interfaces used downstream in `QEDcore.jl` and
-`QEDprocesses.jl` . Among the interfaces already
+`QEDprocesses.jl`. Among the interfaces already
 present in `QEDbase.jl`, we add
 
 - the process interface from `QEDprocesses.jl`
 - the model interface from `QEDprocesses.jl`
 - the particle stateful interface
 - the phase space point interface
-- the differential probability and cross section interface from `QEDprocesses.jl`
+- the differential probability and cross-section interface from `QEDprocesses.jl`
 
 See https://github.com/QEDjl-project/QEDbase.jl/pull/68 for details.
 
 ### Maintenance
 
-Beside the new interfaces, this release contains some maintenance and minor changes and
+Besides the new interfaces, this release contains some maintenance and minor changes and
 fixes
 
 - pretty printing for particles and spin/polarization https://github.com/QEDjl-project/QEDbase.jl/pull/65 https://github.com/QEDjl-project/QEDbase.jl/pull/61
-- scalar broadcasting for particles, directions, spins and polarizations https://github.com/QEDjl-project/QEDbase.jl/pull/62
+- scalar broadcasting for particles, directions, spins, and polarizations https://github.com/QEDjl-project/QEDbase.jl/pull/62
 - spin-/polarization multiplicity convenience functions https://github.com/QEDjl-project/QEDbase.jl/pull/63
 - add `is_incoming` and `is_outgoing` to the exports https://github.com/QEDjl-project/QEDbase.jl/pull/60
 - add `AbstractFourMomentum` to the exports https://github.com/QEDjl-project/QEDbase.jl/pull/66
