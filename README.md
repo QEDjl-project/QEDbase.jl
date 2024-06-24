@@ -47,7 +47,7 @@ To install the locally downloaded package on Windows, change to the parent direc
 One can define a static four momentum component wise:
 
 ```julia
-julia> using QEDbase
+julia> using QEDbase; using QEDcore
 
 juila> mass = rand()*10
 
@@ -73,7 +73,7 @@ julia> @assert isapprox(getPlus(mom), 0.5*(E+pz))
 julia> @assert isapprox(getPerp(mom), px^2 + py^2)
 ```
 
-and a lot more (see [here](www.docs-to-the-lorentz-interface-getter.jl) for a complete list). There is also a mutable version of a four vector in `QEDbase.jl`, where the Lorentz-vector interface provides setters to different properties as well (see [here](www.docs-to-the-lorentz-interface-setter.jl) for details).
+and a lot more (see [here](www.docs-to-the-lorentz-interface-getter.jl) for a complete list). There is also a mutable version of a four vector in `QEDcore.jl`, where the Lorentz-vector interface provides setters to different properties as well (see [here](www.docs-to-the-lorentz-interface-setter.jl) for details).
 
 ## Testing
 

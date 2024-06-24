@@ -3,30 +3,16 @@ using Test
 using SafeTestsets
 
 begin
-    @time @safetestset "Dirac tensors" begin
-        include("dirac_tensor.jl")
-    end
-
-    @time @safetestset "Lorentz Vectors" begin
-        include("lorentz_vector.jl")
+    # Interfaces
+    @time @safetestset "model interface" begin
+        include("interfaces/model.jl")
     end
 
     @time @safetestset "Lorentz interface" begin
-        include("lorentz_interface.jl")
-    end
-    @time @safetestset "Gamma matrices" begin
-        include("gamma_matrices.jl")
-    end
-
-    @time @safetestset "particle spinors" begin
-        include("particle_spinors.jl")
-    end
-
-    @time @safetestset "four momentum" begin
-        include("four_momentum.jl")
+        include("interfaces/lorentz.jl")
     end
 
     @time @safetestset "particles" begin
-        include("particles.jl")
+        include("particle_properties.jl")
     end
 end

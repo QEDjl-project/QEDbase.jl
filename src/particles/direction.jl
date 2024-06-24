@@ -5,6 +5,22 @@ abstract type ParticleDirection end
 Base.broadcastable(dir::ParticleDirection) = Ref(dir)
 
 """
+    is_incoming(dir::ParticleDirection)
+    is_incoming(particle::AbstractParticleStateful)
+
+Convenience function that returns true for [`Incoming`](@ref) and incoming [`AbstractParticleStateful`](@ref) and false otherwise.
+"""
+function is_incoming end
+
+"""
+    is_outgoing(dir::ParticleDirection)
+    is_outgoing(particle::AbstractParticleStateful)
+
+Convenience function that returns true for [`Outgoing`](@ref) and outgoing [`AbstractParticleStateful`](@ref) and false otherwise.
+"""
+function is_outgoing end
+
+"""
     Incoming <: ParticleDirection
 
 Concrete implementation of a [`ParticleDirection`](@ref) to indicate that a particle is *incoming* in the context of a given process. Mostly used for dispatch.
