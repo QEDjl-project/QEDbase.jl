@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.2.1
+
+This is a hotfix which adds `ConstructionBase` to the dependencies and the respective
+tests. See https://github.com/QEDjl-project/QEDbase.jl/pull/84 for details.
+
+No further breaking or non-breaking changes.
+
 ## Version 0.2.0
 
 [diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.6...release-0.2.0)
