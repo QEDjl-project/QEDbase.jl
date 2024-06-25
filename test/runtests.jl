@@ -15,7 +15,7 @@ begin
     @time @safetestset "particles" begin
         include("particle_properties.jl")
     end
-    
+
     @time @safetestset "QEDcore: Lorentz vector" begin
         include("core_compat/lorentz_vector.jl")
     end
