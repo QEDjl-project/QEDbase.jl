@@ -1,6 +1,5 @@
 # QEDbase
 
-
 [![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
 [![Build Status](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/pipelines)
@@ -8,21 +7,23 @@
 [![Coverage](https://codecov.io/gh/qedjl/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/qedjl/QEDbase.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 
-This is `QEDbase.jl`, a julia package which provides the general data structures for calculations in relativistic particle physics.
-
 This package is part of the `QuantumElectrodynamics.jl` library. For the description of the interoperability with other packages of `QuantumElectrodynamics.jl` see [docs](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
 
-## Current features
+## Interfaces
 
-- Generic interface for Lorentz vectors
-- concrete implementations of static and mutable Lorentz-vector/four-momentum types
-- general Dirac bi-spinors, its adjoint counterpart as well as Dirac matrices
-- particle spinors, i.e. solutions of Dirac's equation in momentum space
-- Dirac's gamma matrices
+- **Lorentz vector:** enabling types to be used as Lorentz vector
+- **Particle:** particles with a mass, a charge, and all that.
+- **Computation model:** physical model, e.g. perturbative QED, to be used in
+  calculations
+- **Scattering process:** generic description of a scattering process to be used in
+  calculations.
+- **Differential probability:** common building blocks for the calculation of differential probabilities and
+  cross-sections.
+- **Phase spaces:** common functions to define phase spaces and work with phase space points.
 
 ## Installation
 
-To install the current stable version of `QEDbase.jl` you may use the standard julia package manager within the julia REPL
+To install the current stable version of `QEDbase.jl` you may use the standard Julia package manager within the Julia REPL
 
 ```julia
 julia> using Pkg
@@ -33,66 +34,67 @@ julia> Pkg.add("QEDbase")
 or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
-(@v1.10) pkg> add QEDbase
-```
-
-To install the locally downloaded package on Windows, change to the parent directory and type within the Pkg prompt
-
-```julia
-(@v1.10) pkg> add ./QEDbase.jl
+pkg> add QEDbase
 ```
 
 ## Quickstart
-#### Four momentum
-One can define a static four momentum component wise:
 
-```julia
-julia> using QEDbase; using QEDcore
+Say we have a toymodel with two scalar particles `A` and `B`. Say we have an analytical
+formula for the matrix element of the process $A(p_A)B(p_B) -> A(p_A')B(p_B')` given as
 
-juila> mass = rand()*10
+$$
+M(p_A, p_B, p_A', p_B') = \frac{i}{(p_A + p_B)^2} + \frac{i}{(p_A-p_A')^2}.
+$$
 
-julia> px,py,pz = rand(3)
+To implement this, we need to implement several interfaces
 
-julia> E = sqrt(px^2 + py^2 + pz^2 + mass^2) # on-shell condition
+````Julia
+using QEDbase # for interfaces
+using QEDcore # for functionality
 
-julia> P = SFourMomentum(E,px,py,pz)
-```
+#particle interface
 
-Such `SFourMomentum` behaves like a four element static array (with all the standard arithmetics), but with the `dot` product exchanged with the Minkowski product
+struct particle_A <: BosonLike end
+struct particle_B <: BosonLike end
 
-```julia
-julia> @assert dot(P,P) == P*P == getMass2(P) == P[1]^2 - sum(P[1:].^2)
-```
+# model interface
+struct MyToyModel <: AbstractModelDefinition end
+QEDbase.interaction_type(::MyToyModel) = :mytoyinteraction
 
-Furthermore, the Lorentz-vector interface provides a lot of properties for such a `SFourMomentum`, e.g.
+# process interface
+struct ABtoAB <: AbstractProcessDefinition end
+QEDbase.incoming_particles(::ABtoAB) = (particle_A(), particle_B())
+QEDbase.outgoing_particles(::ABtoAB) = (particle_A(), particle_B())
 
-```julia
+# phase space definition
+struct TrivialPhaseSpaceDef <: AbstractPhasespaceDefinition end
 
-julia> @assert isapprox(getRapidity(mom), 0.5*log((E+pz)/(E-pz)))
-julia> @assert isapprox(getPlus(mom), 0.5*(E+pz))
-julia> @assert isapprox(getPerp(mom), px^2 + py^2)
-```
+function QEDbase._incident_flux(in_psp::InPhaseSpacePoint{<:ABtoAB,<:MyToyModel})
+    in_moms = momenta(in_psp,Incoming())
+    return in_moms[1]*in_moms[2]
+end
 
-and a lot more (see [here](www.docs-to-the-lorentz-interface-getter.jl) for a complete list). There is also a mutable version of a four vector in `QEDcore.jl`, where the Lorentz-vector interface provides setters to different properties as well (see [here](www.docs-to-the-lorentz-interface-setter.jl) for details).
+function QEDbase._averaging_norm(proc::ABtoAB)
+    return 1.0
+end
 
-## Testing
+function QEDbase._matrix_element(psp::PhaseSpacePoint{<:ABtoAB,MyToyModel})
+    in_moms = momenta(psp, Incoming())
+    sum_in_moms = in_moms[1] + in_moms[2]
+    out_moms = momenta(psp, Outgoing())
+    diff_moms = in_moms[1] - out_moms[1]
+    out = inv(sum_in_moms*sum_in_moms) + inv(diff_moms*diff_moms))
+    return 1j*out
+end
 
-After installation it might be necessary to check if everything works properly. For that you can run the unittests by typing within the julia REPL
-
-```julia
-julia> using Pkg
-julia> using QEDbase
-julia> Pkg.test("QEDbase")
-
-...
-
-Testing Running tests...
-Test Summary: | Pass  Total
-QEDbase.jl    |  468    468
-     Testing QEDbase tests passed
-```
-
-If you see the last line, you can assume that `QEDbase.jl` works properly for you.
+function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{<:TestProcess,TestModel})
+    in_moms = momenta(psp, Incoming())
+    sum_in_moms = in_moms[1] + in_moms[2]
+    out_moms = momenta(psp, Outgoing())
+    sum_out_moms = out_moms[1] + out_moms[2]
+    return isapprox(sum_in_moms,sum_out_moms)
+end
+``` pandoc -f odt -o mydoc.pdf mydoc.odt --pdf-engine=pdflatex
 
 ## Contributing
 
@@ -114,3 +116,4 @@ This package would not be possible without many contributions done from the comm
 ## License
 
 [MIT](LICENSE) © Uwe Hernandez Acosta
+````
