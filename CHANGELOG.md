@@ -35,7 +35,7 @@ No further breaking or non-breaking changes.
 
 ## Version 0.2.0
 
-[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.6...release-0.2.0)
+[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.1.6...v0.2.0)
 
 This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QuantumElectrodynamics.jl/issues/35 for details).
 It is a breaking release, indicated by the bumped minor version because we don't have a major version for this
@@ -75,6 +75,8 @@ fixes
 
 ## Version 0.1.6
 
+[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/1f8b2d2340e5a92c700bff458bfc385b8904448f...v0.1.6)
+
 This is a maintenance release, which resolves, among others, some issues with the git history.
 
 ### Breaking changes
@@ -94,7 +96,7 @@ No new features.
 
 ## Version 0.1.5
 
-[diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/0c70f66...release-0.1.5)
+[diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.1.4...v0.1.5)
 
 ### Breaking changes
 
