@@ -86,7 +86,7 @@ using DocStringExtensions
 
 using SimpleTraits
 using ArgCheck
-#using ConstructionBase
+using ConstructionBase
 
 include("errors.jl")
 include("utils.jl")
