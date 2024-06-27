@@ -7,10 +7,11 @@ authors = [
     "Tom Jungnickel",
     "Anton Reinhard",
 ]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
+ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PhysicalConstants = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
@@ -26,11 +27,13 @@ PhysicalConstants = "0.2.1"
 SimpleTraits = "0.9.4"
 StaticArrays = "1.2.13"
 julia = "1.6"
+ConstructionBase = "1"
 
 [extras]
+QEDcore = "35dc0263-cb5f-4c33-a114-1d7f54ab753e"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["SafeTestsets", "Test", "Suppressor"]
+test = ["SafeTestsets", "Test", "Suppressor", "QEDcore"]
