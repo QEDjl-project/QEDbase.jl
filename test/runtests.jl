@@ -23,7 +23,7 @@ begin
     @time @safetestset "QEDcore: FourMomentum" begin
         include("core_compat/four_momentum.jl")
     end
-    
+
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
     end
