@@ -1,5 +1,3 @@
-import QEDbase.AbstractFourMomentum
-
 """
     _groundtruth_incident_flux(in_ps)
 

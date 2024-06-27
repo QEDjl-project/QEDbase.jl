@@ -1,7 +1,6 @@
-# TODO: rebase after latest change in QEDbase is backported
 using Random
-using QEDcore
 using QEDbase
+using QEDcore
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
@@ -72,8 +71,8 @@ TESTPSDEF = TestImplementation.TestPhasespaceDef()
             )
 
             groundtruth = TestImplementation._groundtruth_total_cross_section(p_in_phys)
-            totCS_on_moms = QEDprocesses.total_cross_section(IN_PS_POINT)
-            totCS_on_coords = QEDprocesses.total_cross_section(IN_PS_POINT_COORDS)
+            totCS_on_moms = total_cross_section(IN_PS_POINT)
+            totCS_on_coords = total_cross_section(IN_PS_POINT_COORDS)
 
             @test isapprox(totCS_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
             @test isapprox(totCS_on_coords, groundtruth, atol=ATOL, rtol=RTOL)
@@ -114,8 +113,8 @@ TESTPSDEF = TestImplementation.TestPhasespaceDef()
             )
 
             groundtruth = TestImplementation._groundtruth_total_probability(p_in_phys)
-            totCS_on_moms = total_probability(IN_PS_POINT)
-            totCS_on_coords = total_probability(IN_PS_POINT_COORDS)
+            totCS_on_moms = TestImplementation.total_probability(IN_PS_POINT)
+            totCS_on_coords = TestImplementation.total_probability(IN_PS_POINT_COORDS)
 
             @test isapprox(totCS_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
             @test isapprox(totCS_on_coords, groundtruth, atol=ATOL, rtol=RTOL)

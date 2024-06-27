@@ -1,6 +1,5 @@
 name = "QEDbase"
 uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
-<<<<<<< HEAD
 authors = [
     "Uwe Hernandez Acosta <u.hernandez@hzdr.de>",
     "Simeon Ehrig",
@@ -9,10 +8,6 @@ authors = [
     "Anton Reinhard",
 ]
 version = "0.2.1"
-=======
-authors = ["Uwe Hernandez Acosta <u.hernandez@hzdr.de>", "Simeon Ehrig", "Klaus Steiniger", "Tom Jungnickel", "Anton Reinhard"]
-version = "0.2.0"
->>>>>>> 954c82e (added cross section and tests)
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
@@ -27,12 +22,12 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 ArgCheck = "2.3.0"
+ConstructionBase = "1"
 DocStringExtensions = "0.8.5, 0.9"
 PhysicalConstants = "0.2.1"
 SimpleTraits = "0.9.4"
 StaticArrays = "1.2.13"
 julia = "1.6"
-ConstructionBase = "1"
 
 [extras]
 QEDcore = "35dc0263-cb5f-4c33-a114-1d7f54ab753e"
