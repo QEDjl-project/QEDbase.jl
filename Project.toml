@@ -1,5 +1,6 @@
 name = "QEDbase"
 uuid = "10e22c08-3ccb-4172-bfcf-7d7aa3d04d93"
+<<<<<<< HEAD
 authors = [
     "Uwe Hernandez Acosta <u.hernandez@hzdr.de>",
     "Simeon Ehrig",
@@ -8,6 +9,10 @@ authors = [
     "Anton Reinhard",
 ]
 version = "0.2.1"
+=======
+authors = ["Uwe Hernandez Acosta <u.hernandez@hzdr.de>", "Simeon Ehrig", "Klaus Steiniger", "Tom Jungnickel", "Anton Reinhard"]
+version = "0.2.0"
+>>>>>>> 954c82e (added cross section and tests)
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
