@@ -115,6 +115,9 @@ include("interfaces/particle_stateful.jl")
 include("interfaces/phase_space_point.jl")
 include("interfaces/setup.jl")
 
-include("total_cross_section.jl")
+include("cross_section/diff_probability.jl")
+include("cross_section/diff_cross_section.jl")
+include("cross_section/total_probability.jl")
+include("cross_section/total_cross_section.jl")
 
 end #QEDbase
