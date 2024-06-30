@@ -89,12 +89,24 @@ end
 
 function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{<:TestProcess,TestModel})
     in_moms = momenta(psp, Incoming())
-    sum_in_moms = in_moms[1] + in_moms[2]
+    sum_in_moms = in_moms[1] + in_moms[2] 
     out_moms = momenta(psp, Outgoing())
     sum_out_moms = out_moms[1] + out_moms[2]
     return isapprox(sum_in_moms,sum_out_moms)
 end
-``` pandoc -f odt -o mydoc.pdf mydoc.odt --pdf-engine=pdflatex
+``` 
+
+The implementation above can now be used to build phase-space points and calculate differential cross sections. 
+
+```Julia
+proc = ABtoAB()
+model = MyToyModel()
+ps_def = TrivialPhaseSpaceDef()
+
+
+
+```
+
 
 ## Contributing
 
