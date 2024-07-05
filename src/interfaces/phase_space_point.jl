@@ -64,6 +64,85 @@ function momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)
     return momentum(psp[dir, n])
 end
 
+function _momentum_helper(particles::Tuple{}, species::SPECIES, n::Val{N}) where {SPECIES,N}
+    throw(BoundsError("requested $species momentum is not in this phase space point"))
+end
+
+function _momentum_helper(
+    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
+    species::SPECIES,
+    n::Val{1},
+) where {DIR,SPECIES,EL}
+    return momentum(particles[1])
+end
+
+function _momentum_helper(
+    particles::Tuple{AbstractParticleStateful{DIR,SPECIES1,EL},Vararg},
+    species::SPECIES2,
+    n::Val{N},
+) where {DIR,SPECIES1,SPECIES2,EL,N}
+    return _momentum_helper(particles[2:end], species, n)
+end
+
+function _momentum_helper(
+    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
+    species::SPECIES,
+    n::Val{N},
+) where {DIR,SPECIES,EL,N}
+    return _momentum_helper(particles[2:end], species, Val(N - 1))
+end
+
+"""
+    momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType, n::Val{N})
+
+Returns the momentum of the `n`th particle in the given [`AbstractPhaseSpacePoint`](@ref) which has direction `dir` and species `species`. If `n` is outside the valid range for this phase space point, a `BoundsError` is thrown.
+
+!!! note
+    This function accepts n as a `Val{N}` type, i.e., a compile-time constant value (for example a literal `1` or `2`). This allows this function to add zero overhead, but **only** if `N` is actually known at compile time. 
+    If it is not, use the overload of this function that uses `n::Int` instead. That function is faster than calling this one with `Val(n)`.
+"""
+function momentum(
+    psp::AbstractPhaseSpacePoint,
+    dir::ParticleDirection,
+    species::AbstractParticleType,
+    n::Val{N},
+) where {N}
+    return _momentum_helper(particles(psp, dir), species, n)
+end
+
+"""
+    momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType, n::Int)
+
+Returns the momentum of the `n`th particle in the given [`AbstractPhaseSpacePoint`](@ref) which has direction `dir` and species `species`. If `n` is outside the valid range for this phase space point, a `BoundsError` is thrown.
+
+!!! note
+    This function accepts n as an `Int` value. If `n` is a compile-time constant (for example, a literal `1` or `2`), you can use `Val(n)` instead to call a zero overhead version of this function.
+"""
+function momentum(
+    psp::AbstractPhaseSpacePoint,
+    dir::ParticleDirection,
+    species::AbstractParticleType,
+    n::Int,
+)
+    i = 0
+    c = n
+    for p in particles(psp, dir)
+        i += 1
+        if particle_species(p) == species
+            c -= 1
+        end
+        if c == 0
+            break
+        end
+    end
+
+    if c != 0 || n <= 0
+        throw(BoundsError("could not get $n-th momentum of $dir $species, does not exist"))
+    end
+
+    return momenta(psp, dir)[i]
+end
+
 """
     momenta(psp::AbstractPhaseSpacePoint, ::ParticleDirection)
 
