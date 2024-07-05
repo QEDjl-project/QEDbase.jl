@@ -47,7 +47,7 @@ abstract type AbstractInvalidInputException <: Exception end
 """
     InvalidInputError(msg::String)
 
-Exception which is thrown if a given input is invalid, e.g. passed to [`_assert_valid_input`](@ref).
+Exception which is thrown if a function input is invalid.
 """
 struct InvalidInputError <: AbstractInvalidInputException
     msg::String
