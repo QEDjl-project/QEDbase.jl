@@ -9,7 +9,7 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
 
 @testset "scalar broadcasting" begin
     @testset "directions" begin
-        @testset "$dir" for dir in (Incoming(), Outgoing())
+        @testset "$dir" for dir in (Incoming(), Outgoing(), UnknownDirection())
             @test test_broadcast.(dir) == dir
         end
     end
