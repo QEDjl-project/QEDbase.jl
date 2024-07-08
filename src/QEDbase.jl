@@ -37,7 +37,7 @@ export mass, charge
 export base_state, propagator
 
 # directions
-export ParticleDirection, Incoming, Outgoing
+export ParticleDirection, Incoming, Outgoing, UnknownDirection
 export is_incoming, is_outgoing
 
 # polarizations and spins
