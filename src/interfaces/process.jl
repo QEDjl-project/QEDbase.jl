@@ -206,31 +206,20 @@ Convenience function dispatching to [`number_incoming_particles`](@ref) or [`num
 Return the number of particles of the given direction and species in the given process definition.
 """
 @inline function number_particles(
-    proc_def::AbstractProcessDefinition, dir::DIR, ::PT
+    proc_def::AbstractProcessDefinition, dir::DIR, species::PT
 ) where {DIR<:ParticleDirection,PT<:AbstractParticleType}
     return count(x -> x isa PT, particles(proc_def, dir))
 end
 
 """
     number_particles(proc_def::AbstractProcessDefinition, particle::AbstractParticleStateful)
-    number_particles(proc_def::AbstractProcessDefinition, particle_type::Type{AbstractParticleStateful})
 
 Return the number of particles of the given particle's direction and species in the given process definition.
 """
 @inline function number_particles(
-    proc_def::AbstractProcessDefinition, ::AbstractParticleStateful{DIR,PT,EL}
-) where {DIR<:ParticleDirection,PT<:AbstractParticleType,EL<:AbstractFourMomentum}
-    return number_particles(proc_def, DIR(), PT())
-end
-@inline function number_particles(
-    proc_def::AbstractProcessDefinition, ::Type{PS}
-) where {
-    DIR<:ParticleDirection,
-    PT<:AbstractParticleType,
-    EL<:AbstractFourMomentum,
-    PS<:AbstractParticleStateful{DIR,PT,EL},
-}
-    return number_particles(proc_def, DIR(), PT())
+    proc_def::AbstractProcessDefinition, ps::AbstractParticleStateful
+)
+    return number_particles(proc_def, particle_direction(ps), particle_species(ps))
 end
 
 #####
