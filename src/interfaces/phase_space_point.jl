@@ -125,7 +125,7 @@ function momentum(
     if (number_particles(process(psp), dir, species) != 1)
         throw(
             InvalidInputError(
-                "this overload only works when exactly one $dir $species exists in the phase space point",
+                "this overload only works when exactly one $dir $species exists in the phase space point, but $(number_paarticles(process(psp), dir, species)) exist in this one; to specify an index, use momentum(psp, dir, species, n)",
             ),
         )
     end
