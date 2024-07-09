@@ -114,51 +114,6 @@ function momentum(
     return _momentum_helper(particles(psp, dir), species, n)
 end
 
-function _assert_one_particle(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
-    dir::DIR,
-    species::SPECIES,
-    n::Val{1},
-) where {DIR,SPECIES,EL}
-    throw(
-        InvalidInputError(
-            "momentum(): more than one $dir $species exists in this phase space point"
-        ),
-    )
-end
-
-function _assert_one_particle(
-    particles::Tuple{}, dir::DIR, species::SPECIES, n::Val{0}
-) where {DIR,SPECIES}
-    throw(
-        InvalidInputError("momentum(): no $dir $species exists in this phase space point")
-    )
-end
-
-function _assert_one_particle(
-    particles::Tuple{}, dir::DIR, species::SPECIES, n::Val{1}
-) where {DIR,SPECIES}
-    return nothing
-end
-
-function _assert_one_particle(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
-    dir::DIR,
-    species::SPECIES,
-    n::Val{0},
-) where {DIR,SPECIES,EL}
-    return _assert_one_particle(particles[2:end], dir, species, Val(1))
-end
-
-function _assert_one_particle(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
-    dir::DIR2,
-    species::SPECIES2,
-    n::Val{N},
-) where {DIR,SPECIES,EL,DIR2,SPECIES2,N}
-    return _assert_one_particle(particles[2:end], dir, species, n)
-end
-
 """
     momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType)
 
@@ -167,7 +122,13 @@ Returns the momentum of the particle in the given [`AbstractPhaseSpacePoint`](@r
 function momentum(
     psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType
 )
-    _assert_one_particle(particles(psp, dir), dir, species, Val(0))
+    if (number_particles(process(psp), dir, species) != 1)
+        throw(
+            InvalidInputError(
+                "this overload only works when exactly one $dir $species exists in the phase space point",
+            ),
+        )
+    end
 
     return momentum(psp, dir, species, Val(1))
 end
