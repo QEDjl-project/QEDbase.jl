@@ -106,8 +106,8 @@ include("particles/direction.jl")
 include("particles/spin_pol.jl")
 
 include("interfaces/phase_space.jl")
-include("interfaces/process.jl")
 include("interfaces/particle_stateful.jl")
+include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
 include("cross_section/diff_probability.jl")
