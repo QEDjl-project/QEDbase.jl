@@ -79,7 +79,7 @@ struct TestPhasespaceDef_FAIL <: AbstractPhasespaceDefinition end
 # dummy implementation of the process interface
 
 function QEDbase._incident_flux(in_psp::InPhaseSpacePoint{<:TestProcess,<:TestModel})
-    return _groundtruth_incident_flux(momenta(in_psp, QEDbase.Incoming()))
+    return _groundtruth_incident_flux(momenta(in_psp, Incoming()))
 end
 
 function QEDbase._averaging_norm(proc::TestProcess)
@@ -87,22 +87,22 @@ function QEDbase._averaging_norm(proc::TestProcess)
 end
 
 function QEDbase._matrix_element(psp::PhaseSpacePoint{<:TestProcess,TestModel})
-    in_ps = momenta(psp, QEDbase.Incoming())
-    out_ps = momenta(psp, QEDbase.Outgoing())
+    in_ps = momenta(psp, Incoming())
+    out_ps = momenta(psp, Outgoing())
     return _groundtruth_matrix_element(in_ps, out_ps)
 end
 
 function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{<:TestProcess,TestModel})
-    in_ps = momenta(psp, QEDbase.Incoming())
-    out_ps = momenta(psp, QEDbase.Outgoing())
+    in_ps = momenta(psp, Incoming())
+    out_ps = momenta(psp, Outgoing())
     return _groundtruth_is_in_phasespace(in_ps, out_ps)
 end
 
 function QEDbase._phase_space_factor(
     psp::PhaseSpacePoint{<:TestProcess,TestModel,TestPhasespaceDef}
 )
-    in_ps = momenta(psp, QEDbase.Incoming())
-    out_ps = momenta(psp, QEDbase.Outgoing())
+    in_ps = momenta(psp, Incoming())
+    out_ps = momenta(psp, Outgoing())
     return _groundtruth_phase_space_factor(in_ps, out_ps)
 end
 
@@ -119,13 +119,14 @@ function QEDbase._generate_outgoing_momenta(
     proc::TestProcess,
     model::TestModel,
     phase_space_def::TestPhasespaceDef,
-    out_phase_space::NTuple{N,T},
-) where {N,T<:Real}
+    in_phase_space::NTuple{N,T},
+    out_phase_space::NTuple{M,T},
+) where {N,M,T<:Real}
     return _groundtruth_generate_momenta(out_phase_space)
 end
 
 function QEDbase._total_probability(
     in_psp::InPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
 )
-    return _groundtruth_total_probability(momenta(in_psp, QEDbase.Incoming()))
+    return _groundtruth_total_probability(momenta(in_psp, Incoming()))
 end
