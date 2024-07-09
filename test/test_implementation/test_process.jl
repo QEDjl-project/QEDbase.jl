@@ -119,9 +119,9 @@ function QEDbase._generate_outgoing_momenta(
     proc::TestProcess,
     model::TestModel,
     phase_space_def::TestPhasespaceDef,
-    in_phase_space::NTuple{N1,T1},
-    out_phase_space::NTuple{N2,T2},
-) where {N,T<:Real}
+    in_phase_space::NTuple{N,T},
+    out_phase_space::NTuple{M,T},
+) where {N,M,T<:Real}
     return _groundtruth_generate_momenta(out_phase_space)
 end
 
