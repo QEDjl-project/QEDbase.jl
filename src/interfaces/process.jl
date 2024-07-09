@@ -247,8 +247,8 @@ function _generate_incoming_momenta end
         model::AbstractModelDefinition,
         phase_space_def::AbstractPhasespaceDefinition,
         in_phase_space::NTuple{N,T},
-        out_phase_space::NTuple{N,T},
-    ) where {N,T<:Real}
+        out_phase_space::NTuple{M,T},
+    ) where {N,M,T<:Real}
 
 Interface function to generate the four-momenta of the outgoing particles from coordinates for a given phase-space definition.
 """
