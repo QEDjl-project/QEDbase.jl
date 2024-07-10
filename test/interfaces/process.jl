@@ -163,5 +163,17 @@ include("../test_implementation/TestImplementation.jl")
             QEDbase._generate_momenta(
             TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords
         )
+
+        groundtruth_psp = PhaseSpacePoint(
+            TESTPROC, TESTMODEL, TESTPSDEF, groundtruth_in_momenta, groundtruth_out_momenta
+        )
+        groundtruth_in_psp = InPhaseSpacePoint(
+            TESTPROC, TESTMODEL, TESTPSDEF, groundtruth_in_momenta
+        )
+
+        @test groundtruth_psp ==
+            PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords)
+        @test groundtruth_in_psp ==
+            InPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords)
     end
 end
