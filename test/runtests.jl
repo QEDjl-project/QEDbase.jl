@@ -12,6 +12,10 @@ begin
         include("interfaces/process.jl")
     end
 
+    @time @safetestset "phase space point interface" begin
+        include("interfaces/phase_space_point.jl")
+    end
+
     @time @safetestset "Lorentz interface" begin
         include("interfaces/lorentz.jl")
     end
