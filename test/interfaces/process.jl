@@ -127,4 +127,27 @@ include("../test_implementation/TestImplementation.jl")
         groundtruth = TestImplementation._groundtruth_phase_space_factor(IN_PS, OUT_PS)
         @test isapprox(test_phase_space_factor, groundtruth, atol=ATOL, rtol=RTOL)
     end
+
+    @testset "generate momenta" begin
+        ps_in_coords = Tuple(rand(RNG, 4 * N_INCOMING))
+        ps_out_coords = Tuple(rand(RNG, 4 * N_OUTGOING))
+
+        groundtruth_in_momenta = TestImplementation._groundtruth_generate_momenta(
+            ps_in_coords
+        )
+        groundtruth_out_momenta = TestImplementation._groundtruth_generate_momenta(
+            ps_out_coords
+        )
+
+        @test groundtruth_in_momenta == QEDbase._generate_incoming_momenta(
+            TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords
+        )
+        @test groundtruth_out_momenta == QEDbase._generate_outgoing_momenta(
+            TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords
+        )
+        @test (groundtruth_in_momenta, groundtruth_out_momenta) ==
+            QEDbase._generate_momenta(
+            TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords
+        )
+    end
 end
