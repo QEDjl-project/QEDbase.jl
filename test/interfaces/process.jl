@@ -66,8 +66,22 @@ include("../test_implementation/TestImplementation.jl")
     @testset "incoming/outgoing particles" begin
         @test incoming_particles(TESTPROC) == INCOMING_PARTICLES
         @test outgoing_particles(TESTPROC) == OUTGOING_PARTICLES
+        @test particles(TESTPROC, Incoming()) == INCOMING_PARTICLES
+        @test particles(TESTPROC, Outgoing()) == OUTGOING_PARTICLES
         @test number_incoming_particles(TESTPROC) == N_INCOMING
         @test number_outgoing_particles(TESTPROC) == N_OUTGOING
+        @test number_particles(TESTPROC, Incoming()) == N_INCOMING
+        @test number_particles(TESTPROC, Outgoing()) == N_OUTGOING
+
+        @testset "$dir $species" for (dir, species) in Iterators.product(
+            (Incoming(), Outgoing()), TestImplementation.PARTICLE_SET
+        )
+            groundtruth_particle_count = count(x -> x == species, particles(TESTPROC, dir))
+            test_ps = ParticleStateful(dir, species, zero(SFourMomentum))
+
+            @test number_particles(TESTPROC, dir, species) == groundtruth_particle_count
+            @test number_particles(TESTPROC, test_ps) == groundtruth_particle_count
+        end
     end
 
     @testset "incident flux" begin
