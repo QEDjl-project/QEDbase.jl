@@ -7,7 +7,7 @@ authors = [
     "Tom Jungnickel",
     "Anton Reinhard",
 ]
-version = "0.2.1"
+version = "0.2.2"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
