@@ -1,5 +1,31 @@
 # Changelog
 
+## Version 0.2.2
+
+[diff since 0.2.0](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.2.0...release-0.2.2)
+
+This release adds some convenience overloads to existing functions, some code maintenance and small fixes.
+
+### Breaking Changes
+
+This release removes the compute setup interface completely since it was deprecated already.
+See https://github.com/QEDjl-project/QEDbase.jl/pull/91 for details.
+
+### New features
+
+- Additional overloads for the `momentum` function on `PhaseSpacePoint`s. One can now request the n-th momentum of a particle with specified direction and species.
+- Additional overloads for `number_particles` for specific particle direction and species.
+- Implementation of `differential_probability`, `differential_cross_section`, `total_probability`, and `total_cross_section` on top of the `AbstractProcessDefinition` interface.
+- Added a new `ParticleDirection` type `UnknownDirection`.
+
+### Maintenance
+
+- Remove the deprecated compute setup interface.
+- Add tests for the `AbstractProcessDefinition` interface.
+- Update the Julia versions used by the CI for unit tests to include 1.10 and rc. Use 1.10 by default.
+- Reenable jldoctests for `base_state`.
+- Fix the description of the momentum generation interface.
+
 ## Version 0.2.1
 
 This is a hotfix which adds `ConstructionBase` to the dependencies and the respective
