@@ -8,6 +8,14 @@ begin
         include("interfaces/model.jl")
     end
 
+    @time @safetestset "process interface" begin
+        include("interfaces/process.jl")
+    end
+
+    @time @safetestset "phase space point interface" begin
+        include("interfaces/phase_space_point.jl")
+    end
+
     @time @safetestset "Lorentz interface" begin
         include("interfaces/lorentz.jl")
     end
