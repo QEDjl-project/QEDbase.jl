@@ -37,7 +37,7 @@ export mass, charge
 export base_state, propagator
 
 # directions
-export ParticleDirection, Incoming, Outgoing
+export ParticleDirection, Incoming, Outgoing, UnknownDirection
 export is_incoming, is_outgoing
 
 # polarizations and spins
@@ -63,10 +63,6 @@ export AbstractModelDefinition, fundamental_interaction_type
 export AbstractProcessDefinition, incoming_particles, outgoing_particles
 export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
-
-# Abstract setup interface
-export AbstractComputationSetup, compute
-export AbstractProcessSetup, scattering_process, physical_model
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
@@ -110,11 +106,13 @@ include("particles/direction.jl")
 include("particles/spin_pol.jl")
 
 include("interfaces/phase_space.jl")
-include("interfaces/process.jl")
 include("interfaces/particle_stateful.jl")
+include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
-include("interfaces/setup.jl")
 
-include("total_cross_section.jl")
+include("cross_section/diff_probability.jl")
+include("cross_section/diff_cross_section.jl")
+include("cross_section/total_probability.jl")
+include("cross_section/total_cross_section.jl")
 
 end #QEDbase
