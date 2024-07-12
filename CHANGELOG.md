@@ -9,22 +9,22 @@ This release adds some convenience overloads to existing functions, some code ma
 ### Breaking Changes
 
 This release removes the compute setup interface completely since it was deprecated already.
-See https://github.com/QEDjl-project/QEDbase.jl/pull/91 for details.
+See [#91](https://github.com/QEDjl-project/QEDbase.jl/pull/91) or [#73](https://github.com/QEDjl-project/QEDbase.jl/issues/73) for details.
 
 ### New features
 
-- Additional overloads for the `momentum` function on `PhaseSpacePoint`s. One can now request the n-th momentum of a particle with specified direction and species.
-- Additional overloads for `number_particles` for specific particle direction and species.
-- Implementation of `differential_probability`, `differential_cross_section`, `total_probability`, and `total_cross_section` on top of the `AbstractProcessDefinition` interface.
-- Added a new `ParticleDirection` type `UnknownDirection`.
+- [#87](https://github.com/QEDjl-project/QEDbase.jl/pull/87): Implementation of `differential_probability`, `differential_cross_section`, `total_probability`, and `total_cross_section` on top of the `AbstractProcessDefinition` interface.
+- [#88](https://github.com/QEDjl-project/QEDbase.jl/pull/88): Additional overloads for the `momentum` function on `PhaseSpacePoint`s. One can now request the n-th momentum of a particle with specified direction and species.
+- [#90](https://github.com/QEDjl-project/QEDbase.jl/pull/90): Additional overloads for `number_particles` for specific particle direction and species.
+- [#94](https://github.com/QEDjl-project/QEDbase.jl/pull/94): Added a new `ParticleDirection` type `UnknownDirection`.
 
 ### Maintenance
 
-- Remove the deprecated compute setup interface.
-- Add tests for the `AbstractProcessDefinition` interface.
-- Update the Julia versions used by the CI for unit tests to include 1.10 and rc. Use 1.10 by default.
-- Reenable jldoctests for `base_state`.
-- Fix the description of the momentum generation interface.
+- [#91](https://github.com/QEDjl-project/QEDbase.jl/pull/91): Remove the deprecated compute setup interface.
+- [#92](https://github.com/QEDjl-project/QEDbase.jl/pull/92): Reenable jldoctests for `base_state`.
+- [#93](https://github.com/QEDjl-project/QEDbase.jl/pull/93): Update the Julia versions used by the CI for unit tests to include 1.10 and rc. Use 1.10 by default.
+- [#95](https://github.com/QEDjl-project/QEDbase.jl/pull/95): Fix the description of the momentum generation interface.
+- [#96](https://github.com/QEDjl-project/QEDbase.jl/pull/96): Add tests for the `AbstractProcessDefinition` interface.
 
 ## Version 0.2.1
 
