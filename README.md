@@ -87,43 +87,51 @@ function QEDbase._matrix_element(psp::PhaseSpacePoint{<:ABtoAB,MyToyModel})
     return 1j*out
 end
 
-function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{<:TestProcess,TestModel})
+function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{<:ABtoAB,MyToyModel})
     in_moms = momenta(psp, Incoming())
-    sum_in_moms = in_moms[1] + in_moms[2] 
+    sum_in_moms = in_moms[1] + in_moms[2]
     out_moms = momenta(psp, Outgoing())
     sum_out_moms = out_moms[1] + out_moms[2]
     return isapprox(sum_in_moms,sum_out_moms)
 end
-``` 
+```
 
-The implementation above can now be used to build phase-space points and calculate differential cross sections. 
+The implementation above can now be used to build phase-space points and calculate differential cross sections.
 
 ```Julia
+using QEDcore
+
 proc = ABtoAB()
 model = MyToyModel()
 ps_def = TrivialPhaseSpaceDef()
 
+in_moms = Tuple(rand(RNG,SFourMomentum,2))
+out_mom1 = rand(RNG,SFourMomentum)
+out_moms = (out_mom1,sum(in_moms)-out_mom1)
 
-
+psp = PhaseSpacePoint(proc,model,ps_def,in_moms,out_moms)
 ```
 
+This `psp` contains all information about the scattering process and the phase space point.
 
 ## Contributing
 
 If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/dev_guide/).
 
-## Credits and contributers
+## Credits and contributors
 
 This work was partly funded by the Center for Advanced Systems Understanding (CASUS) that is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget approved by the Saxon State Parliament.
 
 The core code of the package `QEDbase.jl` is developed by a small team at the Center for Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
 
 - Uwe Hernandez Acosta (u.hernandez@hzdr.de)
+- Anton Reinhard (a.reinhard@hzdr.de)
+- Simeon Ehrig (s.ehrig@hzdr.de)
 
-This package would not be possible without many contributions done from the community as well. For that we want send big thanks to:
+This package would not be possible without many contributions done from the community as well. For that we want to send big thanks to:
 
 - my Mate supplier
-- the guy who will show me how to include the most recent contributers on github
+- the guy who will show me how to include the most recent contributors on GitHub
 
 ## License
 
