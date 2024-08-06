@@ -63,6 +63,7 @@ export AbstractModelDefinition, fundamental_interaction_type
 export AbstractProcessDefinition, incoming_particles, outgoing_particles
 export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
+export incoming_spin_pol, outgoing_spin_pol, spin_pol
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition

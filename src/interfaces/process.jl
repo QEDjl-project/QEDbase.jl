@@ -53,6 +53,8 @@ Broadcast.broadcastable(proc::AbstractProcessDefinition) = Ref(proc)
 
 Interface function for scattering processes. Return a tuple of the incoming particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
+
+See also: [`AbstractParticleType`](@ref)
 """
 function incoming_particles end
 
@@ -61,8 +63,30 @@ function incoming_particles end
 
 Interface function for scattering processes. Return the tuple of outgoing particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
+
+See also: [`AbstractParticleType`](@ref)
 """
 function outgoing_particles end
+
+"""
+    incoming_spin_pol(proc_def::AbstractProcessDefinition)
+
+Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`incoming_particles`](@ref).
+A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
+
+See also: [`AbstractSpinOrPolarization`](@ref)
+"""
+function incoming_spin_pol end
+
+"""
+    outgoing_spin_pol(proc_def::AbstractProcessDefinition)
+
+Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`outgoing_particles`](@ref).
+A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
+
+See also: [`AbstractSpinOrPolarization`](@ref)
+"""
+function outgoing_spin_pol end
 
 """
     _incident_flux(in_psp::InPhaseSpacePoint{PROC,MODEL}) where {
@@ -221,6 +245,30 @@ Return the number of particles of the given particle's direction and species in 
 )
     return number_particles(proc_def, particle_direction(ps), particle_species(ps))
 end
+
+# default implementation
+function incoming_spin_pol(proc_def::AbstractProcessDefinition)
+    return ntuple(
+        x -> is_fermion(incoming_particles(proc_def)[x]) ? AllSpin() : AllPolarization(),
+        number_incoming_particles(proc_def),
+    )
+end
+
+# default implementation
+function outgoing_spin_pol(proc_def::AbstractProcessDefinition)
+    return ntuple(
+        x -> is_fermion(outgoing_particles(proc_def)[x]) ? AllSpin() : AllPolarization(),
+        number_outgoing_particles(proc_def),
+    )
+end
+
+"""
+    spin_pol(proc_def::AbstractProcessDefinition, dir::ParticleDirection)
+
+Return the tuple of spins and polarizations for the process in the given direction. Dispatches to [`incoming_spin_pol`](@ref) or [`outgoing_spin_pol`](@ref).
+"""
+spin_pol(proc_def::AbstractProcessDefinition, dir::Incoming) = incoming_spin_pol(proc_def)
+spin_pol(proc_def::AbstractProcessDefinition, dir::Outgoing) = outgoing_spin_pol(proc_def)
 
 #####
 # Generation of four-momenta from coordinates
