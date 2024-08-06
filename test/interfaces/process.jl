@@ -34,6 +34,8 @@ include("../test_implementation/TestImplementation.jl")
         @testset "failed process interface" begin
             @test_throws MethodError incoming_particles(TESTPROC_FAIL_ALL)
             @test_throws MethodError outgoing_particles(TESTPROC_FAIL_ALL)
+            @test_throws MethodError incoming_spin_pol(TESTPROC_FAIL_ALL)
+            @test_throws MethodError outgoing_spin_pol(TESTPROC_FAIL_ALL)
         end
 
         @testset "$PROC $MODEL" for (PROC, MODEL) in Iterators.product(
@@ -82,6 +84,22 @@ include("../test_implementation/TestImplementation.jl")
             @test number_particles(TESTPROC, dir, species) == groundtruth_particle_count
             @test number_particles(TESTPROC, test_ps) == groundtruth_particle_count
         end
+    end
+
+    @testset "incoming/outgoing spins and polarizations" begin
+        groundtruth_incoming_spin_pols = ntuple(
+            x -> is_fermion(INCOMING_PARTICLES[x]) ? AllSpin() : AllPolarization(),
+            N_INCOMING,
+        )
+        groundtruth_outgoing_spin_pols = ntuple(
+            x -> is_fermion(OUTGOING_PARTICLES[x]) ? AllSpin() : AllPolarization(),
+            N_OUTGOING,
+        )
+
+        @test incoming_spin_pol(TESTPROC) == groundtruth_incoming_spin_pols
+        @test outgoing_spin_pol(TESTPROC) == groundtruth_outgoing_spin_pols
+        @test spin_pol(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
+        @test spin_pol(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
     end
 
     @testset "incident flux" begin
