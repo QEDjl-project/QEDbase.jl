@@ -17,6 +17,17 @@ outgoing_particles(proc_def::AbstractProcessDefinition)
 
 which return a tuple of the incoming and outgoing particles, respectively.
 
+An `AbstractProcessDefinition` is also expected to contain spin and polarization information of its particles.
+For this, the functions
+
+```Julia
+incoming_spin_pol(proc_def::AbstractProcessDefinition)
+outgoing_spin_pol(proc_def::AbstractProcessDefinition)
+```
+
+can be overloaded. They must return a tuple of [`AbstractSpinOrPolarization`], where the order must match the order of the process' particles.
+A default implementation is provided which assumes [`AllSpin`](@ref) for every [`is_fermion`](@ref) particle and [`AllPol`](@ref) for every [`is_boson`](@ref) particle.
+
 Furthermore, to calculate scattering probabilities and differential cross sections, the following 
 interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`, 
 `CustomModel<:AbstractModelDefinition`, and `CustomPhasespaceDefinition<:AbstractPhasespaceDefinition`.
