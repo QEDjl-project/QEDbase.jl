@@ -103,17 +103,19 @@ include("interfaces/model.jl")
 
 include("interfaces/particle.jl")
 
-include("particles/direction.jl")
-include("particles/spin_pol.jl")
+include("interfaces/particles/direction.jl")
+include("interfaces/particles/spin_pol.jl")
 
 include("interfaces/phase_space.jl")
 include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
-include("cross_section/diff_probability.jl")
-include("cross_section/diff_cross_section.jl")
-include("cross_section/total_probability.jl")
-include("cross_section/total_cross_section.jl")
+include("implementations/process.jl")
+
+include("implementations/cross_section/diff_probability.jl")
+include("implementations/cross_section/diff_cross_section.jl")
+include("implementations/cross_section/total_probability.jl")
+include("implementations/cross_section/total_cross_section.jl")
 
 end #QEDbase
