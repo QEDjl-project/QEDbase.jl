@@ -100,6 +100,15 @@ include("../test_implementation/TestImplementation.jl")
         @test outgoing_spin_pol(TESTPROC) == groundtruth_outgoing_spin_pols
         @test spin_pol(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
         @test spin_pol(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
+
+        for (pt, sp) in Iterators.flatten((
+            Iterators.zip(incoming_particles(TESTPROC), incoming_spin_pol(TESTPROC)),
+            Iterators.zip(outgoing_particles(TESTPROC), outgoing_spin_pol(TESTPROC)),
+        ))
+            @test is_boson(pt) ? sp isa AbstractPolarization : true
+            @test is_fermion(pt) ? sp isa AbstractSpin : true
+            @test is_boson(pt) || is_fermion(pt)
+        end
     end
 
     @testset "incident flux" begin
