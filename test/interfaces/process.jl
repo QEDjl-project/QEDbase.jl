@@ -34,6 +34,8 @@ include("../test_implementation/TestImplementation.jl")
         @testset "failed process interface" begin
             @test_throws MethodError incoming_particles(TESTPROC_FAIL_ALL)
             @test_throws MethodError outgoing_particles(TESTPROC_FAIL_ALL)
+            @test_throws MethodError incoming_spin_pols(TESTPROC_FAIL_ALL)
+            @test_throws MethodError outgoing_spin_pols(TESTPROC_FAIL_ALL)
         end
 
         @testset "$PROC $MODEL" for (PROC, MODEL) in Iterators.product(
@@ -81,6 +83,31 @@ include("../test_implementation/TestImplementation.jl")
 
             @test number_particles(TESTPROC, dir, species) == groundtruth_particle_count
             @test number_particles(TESTPROC, test_ps) == groundtruth_particle_count
+        end
+    end
+
+    @testset "incoming/outgoing spins and polarizations" begin
+        groundtruth_incoming_spin_pols = ntuple(
+            x -> is_fermion(INCOMING_PARTICLES[x]) ? AllSpin() : AllPolarization(),
+            N_INCOMING,
+        )
+        groundtruth_outgoing_spin_pols = ntuple(
+            x -> is_fermion(OUTGOING_PARTICLES[x]) ? AllSpin() : AllPolarization(),
+            N_OUTGOING,
+        )
+
+        @test incoming_spin_pols(TESTPROC) == groundtruth_incoming_spin_pols
+        @test outgoing_spin_pols(TESTPROC) == groundtruth_outgoing_spin_pols
+        @test spin_pols(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
+        @test spin_pols(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
+
+        for (pt, sp) in Iterators.flatten((
+            Iterators.zip(incoming_particles(TESTPROC), incoming_spin_pols(TESTPROC)),
+            Iterators.zip(outgoing_particles(TESTPROC), outgoing_spin_pols(TESTPROC)),
+        ))
+            @test is_boson(pt) ? sp isa AbstractPolarization : true
+            @test is_fermion(pt) ? sp isa AbstractSpin : true
+            @test is_boson(pt) || is_fermion(pt)
         end
     end
 
