@@ -26,7 +26,6 @@ export AbstractFourMomentum
 export isonshell, assert_onshell
 
 export AbstractDiracVector, AbstractDiracMatrix
-export mul
 
 export AbstractGammaRepresentation
 
