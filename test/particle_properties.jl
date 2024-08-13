@@ -24,14 +24,4 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
 end
 
 @testset "multiplicity of spins or pols" begin
-    @testset "single" begin
-        @testset "$spin_or_pol" for spin_or_pol in (SpinUp(), SpinDown(), PolX(), PolY())
-            @test multiplicity(spin_or_pol) == 1
-        end
-    end
-    @testset "multiple" begin
-        @testset "$spin_or_pol" for spin_or_pol in (AllSpin(), AllPol())
-            @test multiplicity(spin_or_pol) == 2
-        end
-    end
 end

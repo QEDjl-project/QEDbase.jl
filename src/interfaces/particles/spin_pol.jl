@@ -177,15 +177,3 @@ y-polarized
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
 Base.show(io::IO, ::PolY) = print(io, "y-polarized")
-
-"""
-    multiplicity(spin_or_pol)
-
-Return the number of spins or polarizations respresented by `spin_or_pol`, e.g. `multiplicity(SpinUp()) == 1`, but `multiplicity(AllSpin()) = 2`.
-
-"""
-function multiplicity end
-multiplicity(::AbstractDefinitePolarization) = 1
-multiplicity(::AbstractDefiniteSpin) = 1
-multiplicity(::AbstractIndefinitePolarization) = 2
-multiplicity(::AbstractIndefiniteSpin) = 2
