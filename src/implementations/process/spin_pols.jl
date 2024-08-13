@@ -23,6 +23,73 @@ Return the tuple of spins and polarizations for the process in the given directi
 spin_pols(proc_def::AbstractProcessDefinition, dir::Incoming) = incoming_spin_pols(proc_def)
 spin_pols(proc_def::AbstractProcessDefinition, dir::Outgoing) = outgoing_spin_pols(proc_def)
 
+@inline _multiplicity(::AbstractDefinitePolarization) = 1
+@inline _multiplicity(::AbstractDefiniteSpin) = 1
+@inline _multiplicity(::AllSpin) = 2
+@inline _multiplicity(::AllPol) = 2
+
+@inline _multiplicity(::SyncedPolarization{N}, seen_spin_pols::Tuple{}) where {N} = 2
+@inline _multiplicity(::SyncedSpin{N}, seen_spin_pols::Tuple{}) where {N} = 2
+
+@inline function _multiplicity(
+    sp::SyncedPolarization{N}, seen_pols::Tuple{Int,Vararg{Int}}
+) where {N}
+    if seen_pols[1] == N
+        return 1
+    else
+        return _multiplicity(sp, seen_pols[2:end])
+    end
+end
+
+@inline function _multiplicity(
+    ss::SyncedSpin{N}, seen_spins::Tuple{Int,Vararg{Int}}
+) where {N}
+    if seen_spins[1] == N
+        return 1
+    else
+        return _multiplicity(ss, seen_spins[2:end])
+    end
+end
+
+# multiplicity of the empty spin_pol set is 1
+@inline _multiplicity(::Tuple{}, _, _) = 1
+
+# recursion for abstract spins or pols that are not synced
+@inline function _multiplicity(
+    spin_pols::Tuple{AbstractSpin,Vararg{AbstractSpinOrPolarization}},
+    seen_spins::NTuple{S,Int},
+    seen_pols::NTuple{P,Int},
+) where {S,P}
+    return _multiplicity(spin_pols[1]) *
+           _multiplicity(spin_pols[2:end], seen_spins, seen_pols)
+end
+@inline function _multiplicity(
+    spin_pols::Tuple{AbstractPolarization,Vararg{AbstractSpinOrPolarization}},
+    seen_spins::NTuple{S,Int},
+    seen_pols::NTuple{P,Int},
+) where {S,P}
+    return _multiplicity(spin_pols[1]) *
+           _multiplicity(spin_pols[2:end], seen_spins, seen_pols)
+end
+
+# recursion for synced spins or pols
+@inline function _multiplicity(
+    spin_pols::Tuple{SyncedPolarization{N},Vararg{AbstractSpinOrPolarization}},
+    seen_spins::NTuple{S,Int},
+    seen_pols::NTuple{P,Int},
+) where {N,S,P}
+    return _multiplicity(spin_pols[1], seen_pols) *
+           _multiplicity(spin_pols[2:end], seen_spins, (seen_pols..., N))
+end
+@inline function _multiplicity(
+    spin_pols::Tuple{SyncedSpin{N},Vararg{AbstractSpinOrPolarization}},
+    seen_spins::NTuple{S,Int},
+    seen_pols::NTuple{P,Int},
+) where {N,S,P}
+    return _multiplicity(spin_pols[1], seen_spins) *
+           _multiplicity(spin_pols[2:end], (seen_spins..., N), seen_pols)
+end
+
 """
     multiplicity(proc::AbstractProcessDefinition)
 
@@ -33,4 +100,9 @@ will still have a multiplicity of 16.
 See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref)
 """
 function multiplicity(proc::AbstractProcessDefinition)
+    return _multiplicity(
+        (incoming_spin_pols(proc)..., outgoing_spin_pols(proc)...),
+        NTuple{0,Int}(),
+        NTuple{0,Int}(),
+    )
 end
