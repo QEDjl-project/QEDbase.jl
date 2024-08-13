@@ -275,4 +275,16 @@ end
         @test incoming_multiplicity(proc) == 2
         @test outgoing_multiplicity(proc) == 4
     end
+
+    @testset "synced polarization across in and out particles" begin
+        proc = TestImplementation.TestProcessSP(
+            (ntuple(_ -> boson, 2)..., fermion),
+            (ntuple(_ -> boson, 2)..., fermion),
+            (ntuple(i -> SyncedPolarization{i}(), 2)..., SpinUp()),
+            (ntuple(i -> SyncedPolarization{i}(), 2)..., SpinDown()),
+        )
+        @test multiplicity(proc) == 4
+        @test incoming_multiplicity(proc) == 4
+        @test outgoing_multiplicity(proc) == 4
+    end
 end
