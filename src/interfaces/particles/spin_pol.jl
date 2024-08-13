@@ -177,3 +177,35 @@ y-polarized
 struct PolarizationY <: AbstractDefinitePolarization end
 const PolY = PolarizationY
 Base.show(io::IO, ::PolY) = print(io, "y-polarized")
+
+"""
+    SyncedPolarization{N::Int} <: AbstractIndefinitePolarization
+
+An indefinite polarization type, indicating that multiple particles have a synced polarization.
+Two polarizations are considered synced when they have the same value for `N`. This means that
+the resulting multiplicity will be 2 total for all particles with the same `SyncedPolarization`.
+
+See also: [`multiplicity`](@ref)
+"""
+struct SyncedPolarization{N} <: AbstractIndefinitePolarization
+    function SyncedPolarization{N}() where {N}
+        @assert N isa Int "N must be of type Int"
+        return new{N}()
+    end
+end
+
+"""
+    SyncedSpin{N::Int} <: AbstractIndefiniteSpin
+
+An indefinite spin type, indicating that multiple particles have a synced spin.
+Two spins are considered synced when they have the same value for `N`. This means that
+the resulting multiplicity will be 2 total for all particles with the same `SyncedSpin`.
+
+See also: [`multiplicity`](@ref)
+"""
+struct SyncedSpin{N} <: AbstractIndefiniteSpin
+    function SyncedSpin{N}() where {N}
+        @assert N isa Int "N must be of type Int"
+        return new{N}()
+    end
+end

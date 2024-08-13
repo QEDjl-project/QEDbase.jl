@@ -45,7 +45,7 @@ export AbstractDefinitePolarization, AbstractIndefinitePolarization
 export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
-export multiplicity
+export SyncedSpin, SyncedPolarization
 
 # probabilities
 export differential_probability, unsafe_differential_probability
@@ -63,6 +63,7 @@ export AbstractProcessDefinition, incoming_particles, outgoing_particles
 export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
 export incoming_spin_pols, outgoing_spin_pols, spin_pols
+export multiplicity
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition

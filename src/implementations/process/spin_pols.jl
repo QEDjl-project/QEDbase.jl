@@ -33,5 +33,4 @@ will still have a multiplicity of 16.
 See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref)
 """
 function multiplicity(proc::AbstractProcessDefinition)
-    # TODO
 end
