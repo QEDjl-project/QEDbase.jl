@@ -28,6 +28,16 @@ outgoing_spin_pols(proc_def::AbstractProcessDefinition)
 can be overloaded. They must return a tuple of [`AbstractSpinOrPolarization`], where the order must match the order of the process' particles.
 A default implementation is provided which assumes [`AllSpin`](@ref) for every [`is_fermion`](@ref) particle and [`AllPolarization`](@ref) for every [`is_boson`](@ref) particle.
 
+On top of these spin and polarization functions, the following functions are automatically defined:
+
+```Julia
+multiplicity(proc_def::AbstractProcessDefinition)
+incoming_multiplicity(proc_def::AbstractProcessDefinition)
+outgoing_multiplicity(proc_def::AbstractProcessDefinition)
+```
+
+Which return the number of spin and polarization combinations that should be considered for the process. For more detail, refer to the functions' documentations.
+
 Furthermore, to calculate scattering probabilities and differential cross sections, the following 
 interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`, 
 `CustomModel<:AbstractModelDefinition`, and `CustomPhasespaceDefinition<:AbstractPhasespaceDefinition`.
@@ -52,7 +62,6 @@ Optional is the implementation of
 
 ```
 to enable the calculation of total probabilities and cross sections.
-
 """
 abstract type AbstractProcessDefinition end
 

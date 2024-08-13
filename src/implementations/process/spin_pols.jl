@@ -100,7 +100,10 @@ will still have a multiplicity of 16.
 !!! note Performance
     As long as [`incoming_spin_pols`](@ref) and [`outgoing_spin_pols`](@ref) can be evaluated at compile time, this function is completely compiled away.
 
-See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref)
+!!! note Incoming and Outgoing Spins/Polarizations
+    Note that the total multiplicity is not necessarily the incoming and outgoing multiplicities multiplied. This is the case when incoming and outgoing particles are synced with one another.
+
+See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref), [`incoming_multiplicity`](@ref), [`outgoing_multiplicity`](@ref)
 """
 function multiplicity(proc::AbstractProcessDefinition)
     return _multiplicity(
@@ -108,4 +111,34 @@ function multiplicity(proc::AbstractProcessDefinition)
         NTuple{0,Int}(),
         NTuple{0,Int}(),
     )
+end
+
+"""
+    incoming_multiplicity(proc::AbstractProcessDefinition)
+
+Return the number of spin and polarization combinations represented by `proc`s incoming particles. This function only considers the incoming particles' spins and polarizations, returned by
+[`incoming_spin_pols`](@ref) for `proc`.
+
+!!! note Incoming and Outgoing Spins/Polarizations
+    Note that the total multiplicity is not necessarily the incoming and outgoing multiplicities multiplied. For the total process multiplicity, see [`multiplicity`](@ref).
+
+See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref), [`multiplicity`](@ref), [`outgoing_multiplicity`](@ref)
+"""
+function incoming_multiplicity(proc::AbstractProcessDefinition)
+    return _multiplicity(incoming_spin_pols(proc), NTuple{0,Int}(), NTuple{0,Int}())
+end
+
+"""
+    outgoing_multiplicity(proc::AbstractProcessDefinition)
+
+Return the number of spin and polarization combinations represented by `proc`s outgoing particles. This function only considers the outgoing particles' spins and polarizations, returned by
+[`outgoing_spin_pols`](@ref) for `proc`.
+
+!!! note Incoming and Outgoing Spins/Polarizations
+    Note that the total multiplicity is not necessarily the incoming and outgoing multiplicities multiplied. For the total process multiplicity, see [`multiplicity`](@ref).
+
+See also: [`SyncedPolarization`](@ref), [`SyncedSpin`](@ref), [`multiplicity`](@ref), [`incoming_multiplicity`](@ref)
+"""
+function outgoing_multiplicity(proc::AbstractProcessDefinition)
+    return _multiplicity(outgoing_spin_pols(proc), NTuple{0,Int}(), NTuple{0,Int}())
 end
