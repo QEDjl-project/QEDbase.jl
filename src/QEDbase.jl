@@ -110,7 +110,9 @@ include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
-include("implementations/process.jl")
+include("implementations/process/momenta.jl")
+include("implementations/process/particles.jl")
+include("implementations/process/spin_pols.jl")
 
 include("implementations/cross_section/diff_probability.jl")
 include("implementations/cross_section/diff_cross_section.jl")
