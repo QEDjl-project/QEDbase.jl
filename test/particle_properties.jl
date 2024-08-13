@@ -28,4 +28,7 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
             @test test_broadcast.(spin_or_pol) == spin_or_pol
         end
     end
+
+    @test_throws AssertionError SyncedSpin{5.5}()
+    @test_throws AssertionError SyncedPolarization{:sym}()
 end

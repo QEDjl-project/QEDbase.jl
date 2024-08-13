@@ -111,6 +111,70 @@ include("../test_implementation/TestImplementation.jl")
         end
     end
 
+    @testset "process multiplicity" begin
+        boson = TestImplementation.TestParticleBoson()
+        fermion = TestImplementation.TestParticleFermion()
+
+        _mult(::AbstractDefinitePolarization) = 1
+        _mult(::AbstractDefiniteSpin) = 1
+        _mult(::AbstractIndefinitePolarization) = 2
+        _mult(::AbstractIndefiniteSpin) = 2
+
+        # test all possible combinations for fermion+boson->fermion+boson processes, without synced
+        spins = (SpinUp(), SpinDown(), AllSpin())
+        pols = (PolX(), PolY(), AllPol())
+        for (p1, s1, p2, s2) in Iterators.product(pols, spins, pols, spins)
+            @test multiplicity(
+                TestImplementation.TestProcessSP(
+                    (boson, fermion), (boson, fermion), (p1, s1), (p2, s2)
+                ),
+            ) == prod(_mult.((p1, s1, p2, s2)))
+        end
+
+        # some special cases for synced spins and pols testing
+        for i in 1:4
+            # i synced bosons
+            @test multiplicity(
+                TestImplementation.TestProcessSP(
+                    (ntuple(_ -> boson, i)..., fermion),
+                    (boson, fermion),
+                    (ntuple(_ -> SyncedPolarization{1}(), i)..., AllSpin()),
+                    (AllPol(), AllSpin()),
+                ),
+            ) == 16
+
+            @test multiplicity(
+                TestImplementation.TestProcessSP(
+                    (boson, fermion),
+                    (ntuple(_ -> boson, i)..., fermion),
+                    (AllPol(), SpinDown()),
+                    (ntuple(_ -> SyncedPolarization{1}(), i)..., AllSpin()),
+                ),
+            ) == 8
+
+            for j in 1:4
+                # ... with j synced fermions
+                @test multiplicity(
+                    TestImplementation.TestProcessSP(
+                        (ntuple(_ -> boson, i)..., fermion),
+                        (boson, ntuple(_ -> fermion, j)),
+                        (ntuple(_ -> SyncedPolarization{1}(), i)..., SpinDown()),
+                        (PolX(), ntuple(_ -> SyncedSpin{1}(), j)...),
+                    ),
+                ) == 4
+            end
+        end
+
+        @test multiplicity(
+            TestImplementation.TestProcessSP(
+                (ntuple(_ -> boson, 2)..., fermion),
+                (ntuple(_ -> boson, 2)..., fermion),
+                (ntuple(_ -> SyncedPolarization{1}(), 2)..., SpinUp()),
+                (ntuple(_ -> SyncedPolarization{2}(), 2)..., AllSpin()),
+            ),
+        ) == 8
+    end
+
     @testset "incident flux" begin
         test_incident_flux = QEDbase._incident_flux(
             InPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS)

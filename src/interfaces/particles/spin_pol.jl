@@ -185,6 +185,9 @@ An indefinite polarization type, indicating that multiple particles have a synce
 Two polarizations are considered synced when they have the same value for `N`. This means that
 the resulting multiplicity will be 2 total for all particles with the same `SyncedPolarization`.
 
+Having a single `SyncedPolarization{N}` in a process is legal. In this case, it behaves just
+like an [`AllPol`](@ref) would.
+
 See also: [`multiplicity`](@ref)
 """
 struct SyncedPolarization{N} <: AbstractIndefinitePolarization
@@ -200,6 +203,9 @@ end
 An indefinite spin type, indicating that multiple particles have a synced spin.
 Two spins are considered synced when they have the same value for `N`. This means that
 the resulting multiplicity will be 2 total for all particles with the same `SyncedSpin`.
+
+Having a single `SyncedSpin{N}` in a process is legal. In this case, it behaves just
+like an [`AllSpin`](@ref) would.
 
 See also: [`multiplicity`](@ref)
 """
