@@ -233,7 +233,7 @@ end
         proc = TestImplementation.TestProcessSP(
             (ntuple(_ -> boson, i)..., fermion),
             (boson, fermion),
-            (ntuple(_ -> SyncedPolarization{1}(), i)..., AllSpin()),
+            (ntuple(_ -> SyncedPolarization(1), i)..., AllSpin()),
             (AllPol(), AllSpin()),
         )
         @test multiplicity(proc) == 16
@@ -244,7 +244,7 @@ end
             (boson, fermion),
             (ntuple(_ -> boson, i)..., fermion),
             (AllPol(), SpinDown()),
-            (ntuple(_ -> SyncedPolarization{1}(), i)..., AllSpin()),
+            (ntuple(_ -> SyncedPolarization(1), i)..., AllSpin()),
         )
         @test multiplicity(proc) == 8
         @test incoming_multiplicity(proc) == 2
@@ -255,8 +255,8 @@ end
             proc = TestImplementation.TestProcessSP(
                 (ntuple(_ -> boson, i)..., fermion),
                 (boson, ntuple(_ -> fermion, j)),
-                (ntuple(_ -> SyncedPolarization{1}(), i)..., SpinDown()),
-                (PolX(), ntuple(_ -> SyncedSpin{1}(), j)...),
+                (ntuple(_ -> SyncedPolarization(1), i)..., SpinDown()),
+                (PolX(), ntuple(_ -> SyncedSpin(1), j)...),
             )
             @test multiplicity(proc) == 4
             @test incoming_multiplicity(proc) == 2
@@ -268,8 +268,8 @@ end
         proc = TestImplementation.TestProcessSP(
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(_ -> boson, 2)..., fermion),
-            (ntuple(_ -> SyncedPolarization{1}(), 2)..., SpinUp()),
-            (ntuple(_ -> SyncedPolarization{2}(), 2)..., AllSpin()),
+            (ntuple(_ -> SyncedPolarization(1), 2)..., SpinUp()),
+            (ntuple(_ -> SyncedPolarization(2), 2)..., AllSpin()),
         )
         @test multiplicity(proc) == 8
         @test incoming_multiplicity(proc) == 2
@@ -280,8 +280,8 @@ end
         proc = TestImplementation.TestProcessSP(
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(_ -> boson, 2)..., fermion),
-            (ntuple(i -> SyncedPolarization{i}(), 2)..., SpinUp()),
-            (ntuple(i -> SyncedPolarization{i}(), 2)..., SpinDown()),
+            (ntuple(i -> SyncedPolarization(i), 2)..., SpinUp()),
+            (ntuple(i -> SyncedPolarization(i), 2)..., SpinDown()),
         )
         @test multiplicity(proc) == 4
         @test incoming_multiplicity(proc) == 4

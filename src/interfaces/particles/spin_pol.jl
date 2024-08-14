@@ -191,8 +191,7 @@ like an [`AllPolarization`](@ref) would.
 See also: [`multiplicity`](@ref)
 """
 struct SyncedPolarization{N} <: AbstractIndefinitePolarization
-    function SyncedPolarization{N}() where {N}
-        @assert N isa Int "N must be of type Int"
+    function SyncedPolarization(N::Int)
         return new{N}()
     end
 end
@@ -210,8 +209,7 @@ like an [`AllSpin`](@ref) would.
 See also: [`multiplicity`](@ref)
 """
 struct SyncedSpin{N} <: AbstractIndefiniteSpin
-    function SyncedSpin{N}() where {N}
-        @assert N isa Int "N must be of type Int"
+    function SyncedSpin(N::Int)
         return new{N}()
     end
 end
