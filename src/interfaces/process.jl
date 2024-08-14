@@ -28,6 +28,9 @@ outgoing_spin_pols(proc_def::AbstractProcessDefinition)
 can be overloaded. They must return a tuple of [`AbstractSpinOrPolarization`], where the order must match the order of the process' particles.
 A default implementation is provided which assumes [`AllSpin`](@ref) for every [`is_fermion`](@ref) particle and [`AllPolarization`](@ref) for every [`is_boson`](@ref) particle.
 
+!!! note Performance
+    It is very beneficial for the performance of derived functions if these functions return compile-time-known values.
+
 On top of these spin and polarization functions, the following functions are automatically defined:
 
 ```Julia
@@ -74,6 +77,9 @@ Broadcast.broadcastable(proc::AbstractProcessDefinition) = Ref(proc)
 Interface function for scattering processes. Return a tuple of the incoming particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
 
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
 See also: [`AbstractParticleType`](@ref)
 """
 function incoming_particles end
@@ -83,6 +89,9 @@ function incoming_particles end
 
 Interface function for scattering processes. Return the tuple of outgoing particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
 
 See also: [`AbstractParticleType`](@ref)
 """
@@ -94,6 +103,9 @@ function outgoing_particles end
 Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`incoming_particles`](@ref).
 A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
 
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
 See also: [`AbstractSpinOrPolarization`](@ref)
 """
 function incoming_spin_pols end
@@ -103,6 +115,9 @@ function incoming_spin_pols end
 
 Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`outgoing_particles`](@ref).
 A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
 
 See also: [`AbstractSpinOrPolarization`](@ref)
 """
