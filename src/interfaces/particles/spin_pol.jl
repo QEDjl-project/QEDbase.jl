@@ -179,13 +179,37 @@ const PolY = PolarizationY
 Base.show(io::IO, ::PolY) = print(io, "y-polarized")
 
 """
-    multiplicity(spin_or_pol)
+    SyncedPolarization{N::Int} <: AbstractIndefinitePolarization
 
-Return the number of spins or polarizations respresented by `spin_or_pol`, e.g. `multiplicity(SpinUp()) == 1`, but `multiplicity(AllSpin()) = 2`.
+An indefinite polarization type, indicating that multiple particles have a synced polarization.
+Two polarizations are considered synced when they have the same value for `N`. This means that
+the resulting multiplicity will be 2 total for all particles with the same `SyncedPolarization`.
+
+Having a single `SyncedPolarization{N}` in a process is legal. In this case, it behaves just
+like an [`AllPolarization`](@ref) would.
+
+See also: [`multiplicity`](@ref)
+"""
+struct SyncedPolarization{N} <: AbstractIndefinitePolarization
+    function SyncedPolarization(N::Int)
+        return new{N}()
+    end
+end
 
 """
-function multiplicity end
-multiplicity(::AbstractDefinitePolarization) = 1
-multiplicity(::AbstractDefiniteSpin) = 1
-multiplicity(::AbstractIndefinitePolarization) = 2
-multiplicity(::AbstractIndefiniteSpin) = 2
+    SyncedSpin{N::Int} <: AbstractIndefiniteSpin
+
+An indefinite spin type, indicating that multiple particles have a synced spin.
+Two spins are considered synced when they have the same value for `N`. This means that
+the resulting multiplicity will be 2 total for all particles with the same `SyncedSpin`.
+
+Having a single `SyncedSpin{N}` in a process is legal. In this case, it behaves just
+like an [`AllSpin`](@ref) would.
+
+See also: [`multiplicity`](@ref)
+"""
+struct SyncedSpin{N} <: AbstractIndefiniteSpin
+    function SyncedSpin(N::Int)
+        return new{N}()
+    end
+end

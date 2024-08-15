@@ -45,7 +45,7 @@ export AbstractDefinitePolarization, AbstractIndefinitePolarization
 export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
-export multiplicity
+export SyncedSpin, SyncedPolarization
 
 # probabilities
 export differential_probability, unsafe_differential_probability
@@ -63,6 +63,7 @@ export AbstractProcessDefinition, incoming_particles, outgoing_particles
 export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
 export incoming_spin_pols, outgoing_spin_pols, spin_pols
+export multiplicity, incoming_multiplicity, outgoing_multiplicity
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
@@ -110,7 +111,9 @@ include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
-include("implementations/process.jl")
+include("implementations/process/momenta.jl")
+include("implementations/process/particles.jl")
+include("implementations/process/spin_pols.jl")
 
 include("implementations/cross_section/diff_probability.jl")
 include("implementations/cross_section/diff_cross_section.jl")
