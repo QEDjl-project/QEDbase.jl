@@ -9,11 +9,6 @@ Pkg.develop(; path=project_path)
 using Documenter
 using QEDbase
 
-#DocMeta.setdocmeta!(QEDbase, :DocTestSetup, :(using QEDbase); recursive=true)
-
-# TODO: remove before release
-Pkg.add(; url="https://github.com/QEDjl-project/QEDcore.jl", rev="dev")
-
 using DocumenterCitations
 
 bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
@@ -41,6 +36,9 @@ makedocs(;
         prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
         assets=String[],
+        # TODO: workaround
+        # should be fixed: https://github.com/QEDjl-project/QEDbase.jl/issues/4
+        size_threshold_ignore=["index.md"],
     ),
     pages=pages,
     plugins=[bib],
