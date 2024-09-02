@@ -33,13 +33,13 @@ julia> Pkg.add("QEDbase")
 or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
-(@v1.7) pkg> add QEDbase
+(@v1.10) pkg> add QEDbase
 ```
 
 To install the locally downloaded package on Windows, change to the parent directory and type within the Pkg prompt
 
 ```julia
-(@v1.7) pkg> add ./QEDbase.jl
+(@v1.10) pkg> add ./QEDbase.jl
 ```
 
 ## Quickstart
