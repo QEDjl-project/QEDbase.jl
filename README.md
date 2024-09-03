@@ -1,7 +1,7 @@
 # QEDbase
 
 
-[![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/main)
+[![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
 [![Build Status](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/pipelines)
 [![Coverage](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/coverage.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/commits/main)
@@ -33,13 +33,13 @@ julia> Pkg.add("QEDbase")
 or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
-(@v1.7) pkg> add QEDbase
+(@v1.10) pkg> add QEDbase
 ```
 
 To install the locally downloaded package on Windows, change to the parent directory and type within the Pkg prompt
 
 ```julia
-(@v1.7) pkg> add ./QEDbase.jl
+(@v1.10) pkg> add ./QEDbase.jl
 ```
 
 ## Quickstart
