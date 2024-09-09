@@ -45,7 +45,7 @@ export AbstractDefinitePolarization, AbstractIndefinitePolarization
 export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
-export SyncedSpin, SyncedPolarization
+export SyncedSpin, SyncedPolarization, SyncedPol
 export spin_pols_iter
 
 # probabilities
