@@ -38,6 +38,9 @@ julia> for sp_combo in spin_pols_iter(proc) println(sp_combo) end
 ((y-polarized, x-polarized, y-polarized, spin up), (x-polarized, spin down))
 ((x-polarized, y-polarized, x-polarized, spin up), (y-polarized, spin down))
 ((y-polarized, y-polarized, y-polarized, spin up), (y-polarized, spin down))
+
+julia> length(spin_pols_iter(proc))
+8
 ```
 """
 function spin_pols_iter(process::AbstractProcessDefinition)
@@ -104,8 +107,14 @@ function spin_pols_iter(process::AbstractProcessDefinition)
     )
 end
 
-function Base.iterate(iterator::SpinPolIter)
-    prod_iter_res = iterate(iterator.product_iter)
+function Base.iterate(iterator::SpinPolIter, state=nothing)
+    local prod_iter_res
+    if isnothing(state)
+        prod_iter_res = iterate(iterator.product_iter)
+    else
+        prod_iter_res = iterate(iterator.product_iter, state)
+    end
+
     if isnothing(prod_iter_res)
         return nothing
     end
@@ -118,16 +127,6 @@ function Base.iterate(iterator::SpinPolIter)
     return (in_t, out_t), state
 end
 
-function Base.iterate(iterator::SpinPolIter, state)
-    prod_iter_res = iterate(iterator.product_iter, state)
-    if isnothing(prod_iter_res)
-        return nothing
-    end
-    prod_iter_res, state = prod_iter_res
-
-    # translate prod_iter_res into actual result
-    in_t = ((prod_iter_res[i] for i in iterator.indexing_lut[1])...,)
-    out_t = ((prod_iter_res[i] for i in iterator.indexing_lut[2])...,)
-
-    return (in_t, out_t), state
+function Base.length(iterator::SpinPolIter)
+    return length(iterator.product_iter)
 end
