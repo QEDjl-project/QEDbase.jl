@@ -46,6 +46,7 @@ export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
 export SyncedSpin, SyncedPolarization
+export spin_pols_iter
 
 # probabilities
 export differential_probability, unsafe_differential_probability
@@ -114,6 +115,7 @@ include("interfaces/phase_space_point.jl")
 include("implementations/process/momenta.jl")
 include("implementations/process/particles.jl")
 include("implementations/process/spin_pols.jl")
+include("implementations/process/spin_pol_iterator.jl")
 
 include("implementations/cross_section/diff_probability.jl")
 include("implementations/cross_section/diff_cross_section.jl")

@@ -195,6 +195,8 @@ struct SyncedPolarization{N} <: AbstractIndefinitePolarization
         return new{N}()
     end
 end
+const SyncedPol = SyncedPolarization
+Base.show(io::IO, ::SyncedPolarization{N}) where {N} = print(io, "synced polarization $N")
 
 """
     SyncedSpin{N::Int} <: AbstractIndefiniteSpin
@@ -213,3 +215,4 @@ struct SyncedSpin{N} <: AbstractIndefiniteSpin
         return new{N}()
     end
 end
+Base.show(io::IO, ::SyncedSpin{N}) where {N} = print(io, "synced spin $N")
