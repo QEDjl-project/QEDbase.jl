@@ -8,7 +8,7 @@ stages:
   stage: unit-test
   script:
     - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
     - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
     - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
     - >
@@ -72,7 +72,7 @@ generate_integration_tests:
     - export CI_DEPENDENCY_NAME=$(cat $CI_PROJECT_DIR/Project.toml | grep name | awk '{ print $3 }' | tr -d '"')
     - echo "CI_DEPENDENCY_NAME -> $CI_DEPENDENCY_NAME"
     - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
     - cd /QEDjl/.ci/integTestGen/
     # use local registry of the QED project
     - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
@@ -109,7 +109,7 @@ verify-unit-test-deps_julia1.10:
   stage: verify-unit-test-deps
   script:
     - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QED.jl.git /QEDjl
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
     - >
       if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
         # does not check for custom package URLs on the main and dev branch

@@ -10,7 +10,7 @@
 
 This is `QEDbase.jl`, a julia package which provides the general data structures for calculations in relativistic particle physics.
 
-This package is part of the `QED.jl` library. For the description of the interoperability with other packages of `QED.jl` see [docs](www.docs-to-qed.jl).
+This package is part of the `QuantumElectrodynamics.jl` library. For the description of the interoperability with other packages of `QuantumElectrodynamics.jl` see [docs](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
 
 ## Current features
 
@@ -96,7 +96,7 @@ If you see the last line, you can assume that `QEDbase.jl` works properly for yo
 
 ## Contributing
 
-If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QED.jl` coherent, consider visiting the general [contribution guide of `QED.jl`](www.contribution-of-qed.jl).
+If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/dev_guide/).
 
 ## Credits and contributers
 
