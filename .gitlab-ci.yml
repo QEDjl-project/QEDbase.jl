@@ -8,7 +8,7 @@ stages:
   stage: unit-test
   script:
     - apt update && apt install -y git
-    - git clone --depth 1 -b rename-project https://github.com/AntonReinhard/QuantumElectrodynamics.jl.git /QEDjl
+    - git clone --depth 1 -b fix-regex https://github.com/AntonReinhard/QuantumElectrodynamics.jl.git /QEDjl
     - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
     - julia --project=. -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
     - >
