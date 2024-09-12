@@ -37,7 +37,7 @@ No further breaking or non-breaking changes.
 
 [diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.6...release-0.2.0)
 
-This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QED.jl/issues/35 for details).
+This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QuantumElectrodynamics.jl/issues/35 for details).
 It is a breaking release, indicated by the bumped minor version because we don't have a major version for this
 yet.
 
