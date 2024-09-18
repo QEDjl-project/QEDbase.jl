@@ -171,12 +171,8 @@ end
 
 Return a `Tuple` of all the particles' momenta for the given `ParticleDirection`.
 """
-function momenta(psp::AbstractPhaseSpacePoint, ::QEDbase.Incoming)
-    return momentum.(particles(psp, QEDbase.Incoming()))
-end
-
-function momenta(psp::AbstractPhaseSpacePoint, ::QEDbase.Outgoing)
-    return momentum.(particles(psp, QEDbase.Outgoing()))
+function momenta(psp::AbstractPhaseSpacePoint, dir::ParticleDirection)
+    return ntuple(i -> momentum(psp[dir, i]), number_particles(process(psp), dir))
 end
 
 """

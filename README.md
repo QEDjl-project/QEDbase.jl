@@ -1,7 +1,7 @@
 # QEDbase
 
 
-[![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/main)
+[![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
 [![Build Status](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/pipelines)
 [![Coverage](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/coverage.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/commits/main)
@@ -10,7 +10,7 @@
 
 This is `QEDbase.jl`, a julia package which provides the general data structures for calculations in relativistic particle physics.
 
-This package is part of the `QED.jl` library. For the description of the interoperability with other packages of `QED.jl` see [docs](www.docs-to-qed.jl).
+This package is part of the `QuantumElectrodynamics.jl` library. For the description of the interoperability with other packages of `QuantumElectrodynamics.jl` see [docs](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
 
 ## Current features
 
@@ -33,13 +33,13 @@ julia> Pkg.add("QEDbase")
 or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
 
 ```julia
-(@v1.7) pkg> add QEDbase
+(@v1.10) pkg> add QEDbase
 ```
 
 To install the locally downloaded package on Windows, change to the parent directory and type within the Pkg prompt
 
 ```julia
-(@v1.7) pkg> add ./QEDbase.jl
+(@v1.10) pkg> add ./QEDbase.jl
 ```
 
 ## Quickstart
@@ -96,7 +96,7 @@ If you see the last line, you can assume that `QEDbase.jl` works properly for yo
 
 ## Contributing
 
-If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QED.jl` coherent, consider visiting the general [contribution guide of `QED.jl`](www.contribution-of-qed.jl).
+If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/dev_guide/).
 
 ## Credits and contributers
 
