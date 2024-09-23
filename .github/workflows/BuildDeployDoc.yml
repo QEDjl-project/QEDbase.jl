@@ -34,7 +34,9 @@ jobs:
       - name: set dev dependencies
         if: (github.event_name == 'push' && github.ref_name != 'main') || (github.event_name == 'pull_request' && github.base_ref != 'main')
         run: |  
+          julia --project=. -e 'import Pkg; Pkg.instantiate()'
           julia --project=docs/ /tmp/integration_test_tools/.ci/set_dev_dependencies.jl
+          julia --project=. -e 'import Pkg; Pkg.instantiate()'
       - name: Build and deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
