@@ -114,7 +114,6 @@ Return the propagator of a particle for a given four-momentum. If `mass` is pass
 """
 function propagator end
 
-
 # FIXME: jldoctests seems to be broken
 """
 ```julia

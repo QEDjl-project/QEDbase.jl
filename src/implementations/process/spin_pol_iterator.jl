@@ -10,7 +10,6 @@ struct SpinPolIter{I,O}
     indexing_lut::Tuple{NTuple{I,Int},NTuple{O,Int}}
 end
 
-
 # FIXME: the example should be jldoctests, but they are currently broken
 """
     all_spin_pols(process::AbstractProcessDefinition)
