@@ -22,7 +22,7 @@ pages = [
     "Four Momenta" => "four_momenta.md",
     "Library" => [
         "Contents" => "library/outline.md",
-        "API" => "library/api.md",
+        "Lorentz vectors" => "library/lorentz_vector.md",
         "Function index" => "library/function_index.md",
     ],
     "refs.md",

@@ -10,6 +10,8 @@ struct SpinPolIter{I,O}
     indexing_lut::Tuple{NTuple{I,Int},NTuple{O,Int}}
 end
 
+
+# FIXME: the example should be jldoctests, but they are currently broken
 """
     all_spin_pols(process::AbstractProcessDefinition)
 
@@ -20,7 +22,7 @@ in the order of the process' own spins and polarizations.
 This works together with the definite spins and polarizations, [`AllSpin`](@ref), [`AllPolarization`](@ref), and the synced versions
 [`SyncedPolarization`](@ref) and [`SyncedSpin`](@ref).
 
-```jldoctest
+```Julia
 julia> using QEDbase; using QEDcore; using QEDprocesses;
 
 julia> proc = ScatteringProcess((Photon(), Photon(), Photon(), Electron()), (Photon(), Electron()), (SyncedPolarization(1), SyncedPolarization(2), SyncedPolarization(1), SpinUp()), (SyncedPolarization(2), AllSpin()))

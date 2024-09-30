@@ -30,8 +30,10 @@ struct CustomType
 end
 ```
 
-> **Note**: there is no subtyping necessary, so you can implement the `LorentzVector` interface
-> for any type in **your** type hierarchy. However, be aware to own the type to avoid of [type piracy](https://docs.julialang.org/en/v1/manual/style-guide/#Avoid-type-piracy).
+!!! note
+
+    There is no subtyping necessary, so you can implement the `LorentzVector` interface
+    for any type in **your** type hierarchy. However, be aware to own the type to avoid of [type piracy](https://docs.julialang.org/en/v1/manual/style-guide/#Avoid-type-piracy).
 
 ### Step 2: Implement the Lorentz Vector API
 
@@ -46,7 +48,9 @@ QEDbase.getY(lv::CustomType) = lv.y
 QEDbase.getZ(lv::CustomType) = lv.z
 ```
 
-> **Note:** Ensure you dispatch on the `QEDbase` functions (`QEDbase.getT`, `QEDbase.getX`, etc.) to correctly integrate with the library.
+!!! note
+
+    Ensure you dispatch on the `QEDbase` functions (`QEDbase.getT`, `QEDbase.getX`, etc.) to correctly integrate with the library.
 
 ### Step 3: Register Your Custom Type as a `LorentzVectorLike`
 
@@ -58,8 +62,10 @@ register_LorentzVectorLike(CustomType)
 
 If any required functions are missing or incorrectly implemented, this will raise a `RegistryError` that provides details on what needs to be fixed.
 
-> **Note:** Technically, the registration will add your `CustomType` to the trait `LorentzVectorLike`, which implements the list of accessor functions
-> for your type.
+!!! note
+
+    Technically, the registration will add your `CustomType` to the trait `LorentzVectorLike`, which implements the list of accessor functions
+    for your type.
 
 ### Step 4: Using the Custom Lorentz Vector
 
@@ -100,4 +106,10 @@ update the rapidity and other kinematic properties of the vector in place:
 L = CustomType(2.0, 1.0, 0.0, -1.0)
 
 setRapidity!(L, 0.5)  # Updates the components accordingly
+```
+
+## List of accessor functions
+
+```@index
+Pages   = ["library/api.md",]
 ```

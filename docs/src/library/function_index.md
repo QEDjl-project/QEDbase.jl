@@ -1,5 +1,5 @@
 ### [Index](@id main-index)
 
 ```@index
-Pages = ["api.md", "function_index.md"]
+Pages = ["lorentz_index.md", "function_index.md"]
 ```
