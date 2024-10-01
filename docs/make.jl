@@ -25,10 +25,7 @@ open(readme_path, "r") do readme_in
     readme_string = read(readme_in, String)
 
     # replace relative links in the README.md 
-    readme_string = replace(
-        readme_string,
-        "[MIT](LICENSE)" => "[MIT]($(license_path))",
-    )
+    readme_string = replace(readme_string, "[MIT](LICENSE)" => "[MIT]($(license_path))")
 
     open(index_path, "w") do readme_out
         write(readme_out, readme_string)
@@ -56,22 +53,22 @@ pages = [
 
 try
     makedocs(;
-             modules=[QEDbase],
-             checkdocs=:exports,
-             authors="Uwe Hernandez Acosta",
-             repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
-             sitename="QEDbase.jl",
-             format=Documenter.HTML(;
-                                    prettyurls=get(ENV, "CI", "false") == "true",
-                                    canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
-                                    assets=String[],
-                                    # TODO: workaround
-                                    # should be fixed: https://github.com/QEDjl-project/QEDbase.jl/issues/4
-                                    size_threshold_ignore=["index.md"],
-                                    ),
-             pages=pages,
-             plugins=[bib],
-             )
+        modules=[QEDbase],
+        checkdocs=:exports,
+        authors="Uwe Hernandez Acosta",
+        repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
+        sitename="QEDbase.jl",
+        format=Documenter.HTML(;
+            prettyurls=get(ENV, "CI", "false") == "true",
+            canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
+            assets=String[],
+            # TODO: workaround
+            # should be fixed: https://github.com/QEDjl-project/QEDbase.jl/issues/4
+            size_threshold_ignore=["index.md"],
+        ),
+        pages=pages,
+        plugins=[bib],
+    )
 finally
     @info "Garbage collection: remove landing page"
     rm(index_path)
