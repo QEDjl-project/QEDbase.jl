@@ -7,31 +7,33 @@
 [![Coverage](https://codecov.io/gh/qedjl/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/qedjl/QEDbase.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 
-This package is part of the `QuantumElectrodynamics.jl` library. For the description of the interoperability with other packages of `QuantumElectrodynamics.jl` see [docs](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
+`QEDbase.jl` is a foundational package within the [`QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/)
+library. It provides essential interfaces and building blocks for the computation of
+quantum electrodynamics (QED) processes, facilitating interoperability with other packages in the suite.
 
-## Interfaces
+For a detailed explanation of the integration with other `QuantumElectrodynamics.jl` packages,
+please refer to the [documentation](https://qedjl-project.github.io/QuantumElectrodynamics.jl/main/).
 
-- **Lorentz vectors:** enabling types to be used as Lorentz vector
-- **Particles:** particles with a mass, a charge, and all that.
-- **Computation models:** physical model, e.g. perturbative QED, to be used in
-  calculations
-- **Scattering processes:** generic description of a scattering process to be used in
-  calculations.
-- **Probabilities and cross-sections:** common building blocks for the calculation of differential probabilities and
-  cross-sections.
-- **Phase spaces:** common functions to define phase spaces and work with phase space points.
+## Main interfaces
+
+- **Dirac Tensors**: Types that facilitate operations involving Dirac matrices and spinors.
+- **Lorentz Vectors**: Types that facilitate operations involving Lorentz vectors.
+- **Particle Representation**: Define particles with mass, charge, and other physical properties.
+- **Computation Models**: Interfaces for implementing various physical models (e.g., perturbative or strong-field QED) for calculations.
+- **Scattering Processes**: Generic descriptions of scattering processes for use in QED calculations.
+- **Probabilities and Cross Sections**: Core components for calculating differential probabilities and cross-sections.
+- **Phase Space Descriptions**: Utility functions to define and manage phase spaces and related points.
 
 ## Installation
 
-To install the current stable version of `QEDbase.jl` you may use the standard Julia package manager within the Julia REPL
+To install the latest stable version of `QEDbase.jl`, use the Julia package manager within the REPL:
 
 ```julia
 julia> using Pkg
-
 julia> Pkg.add("QEDbase")
 ```
 
-or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
+Alternatively, you can enter the Pkg prompt by pressing `]` in the Julia REPL and then run:
 
 ```julia
 pkg> add QEDbase
@@ -39,9 +41,11 @@ pkg> add QEDbase
 
 ## Contributing
 
-If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send us a pull request.
-In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the
-general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/stable/dev_guide/#Development-Guide).
+Contributions are welcome! If you'd like to report a bug, suggest an enhancement, or contribute
+code, please feel free to open an issue or submit a pull request.
+
+To ensure consistency across the `QuantumElectrodynamics.jl` ecosystem, we encourage all contributors
+to review the [QuantumElectrodynamics.jl contribution guide](https://qedjl-project.github.io/QuantumElectrodynamics.jl/stable/dev_guide/#Development-Guide).
 
 ## Credits and contributors
 
@@ -53,14 +57,18 @@ approved by the Saxon State Parliament.
 The core code of the package `QEDbase.jl` is developed by a small team at the Center for
 Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
 
-- Uwe Hernandez Acosta (CASU/HZDR, u.hernandez@hzdr.de)
-- Anton Reinhard (CASUS/HZDR)
-- Simeon Ehrig (CASUS/HZDR)
-- Klaus Steiniger (CASUS/HZDR)
+### Core Contributors
 
-We also thank our former contributers
+- **Uwe Hernandez Acosta** (CASUS/HZDR, [u.hernandez@hzdr.de](mailto:u.hernandez@hzdr.de))
+- **Anton Reinhard** (CASUS/HZDR)
+- **Simeon Ehrig** (CASUS/HZDR)
+- **Klaus Steiniger** (CASUS/HZDR)
 
-- Tom Jungnickel
+### Former Contributors
+
+- **Tom Jungnickel**
+
+We extend our sincere thanks to all contributors who have supported this project.
 
 ## License
 

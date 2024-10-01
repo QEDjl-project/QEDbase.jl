@@ -1,4 +1,4 @@
-# Dirac vectors and matrices
+# Dirac tensors
 
 ```@docs
 AbstractDiracVector
