@@ -114,7 +114,6 @@ Return the propagator of a particle for a given four-momentum. If `mass` is pass
 """
 function propagator end
 
-# FIXME: jldoctests seems to be broken
 """
 ```julia
     base_state(
@@ -174,8 +173,9 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 electron_state = base_state(QEDcore.Electron(), Incoming(), mom, SpinUp())
 ```
 
-```Julia
-julia> using QEDbase; using QEDcore
+```jldoctest
+julia> using QEDbase; using QEDcore;
+
 julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)
 4-element SFourMomentum with indices SOneTo(4):
  1.0677078252031311
