@@ -24,7 +24,7 @@ license_path = "https://github.com/QEDjl-project/QEDbase.jl/blob/main/LICENSE"
 open(readme_path, "r") do readme_in
     readme_string = read(readme_in, String)
 
-    # replace relative links in the README.md 
+    # replace relative links in the README.md
     readme_string = replace(readme_string, "[MIT](LICENSE)" => "[MIT]($(license_path))")
 
     open(index_path, "w") do readme_out

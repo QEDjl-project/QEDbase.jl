@@ -2,11 +2,11 @@
 # The particle interface
 #
 # In this file, we define the interface for working with particles in a general
-# sense. 
+# sense.
 ###############
 
 """
-Abstract base type for every type which might be considered a *particle* in the context of `QuantumElectrodynamics.jl`. For every (concrete) subtype of `AbstractParticle`, there are two kinds of interface functions implemented: static functions and property functions. 
+Abstract base type for every type which might be considered a *particle* in the context of `QuantumElectrodynamics.jl`. For every (concrete) subtype of `AbstractParticle`, there are two kinds of interface functions implemented: static functions and property functions.
 The static functions provide information on what kind of particle it is (defaults are written in square brackets)
 
 ```julia
@@ -14,7 +14,7 @@ The static functions provide information on what kind of particle it is (default
     is_boson(::AbstractParticle)::Bool [= false]
     is_particle(::AbstractParticle)::Bool [= true]
     is_anti_particle(::AbstractParticle)::Bool [= false]
-``` 
+```
 If the output of those functions differ from the defaults for a subtype of `AbstractParticle`, these functions need to be overwritten.
 The second type of functions define a hard interface for `AbstractParticle`:
 
@@ -30,7 +30,7 @@ Base.broadcastable(part::AbstractParticle) = Ref(part)
 """
     AbstractParticleType <: AbstractParticle
 
-This is the abstract base type for every species of particles. All functionalities defined on subtypes of `AbstractParticleType` should be static, i.e. known at compile time. 
+This is the abstract base type for every species of particles. All functionalities defined on subtypes of `AbstractParticleType` should be static, i.e. known at compile time.
 For adding runtime information, e.g. four-momenta or particle states, to a particle, consider implementing a concrete subtype of [`AbstractParticle`](@ref) instead, which may have a type parameter `P<:AbstractParticleType`.
 
 Concrete built-in subtypes of `AbstractParticleType` are available in `QEDcore.jl` and should always be singletons..
@@ -55,7 +55,7 @@ is_boson(::AbstractParticle) = false
 
 """
     $(TYPEDSIGNATURES)
-    
+
 Interface function for particles. Return `true` if the passed subtype of [`AbstractParticle`](@ref) can be considered a *particle* as distinct from anti-particles, and `false` otherwise.
 The default implementation of `is_particle` for every subtype of [`AbstractParticle`](@ref) will always return `true`.
 """
@@ -93,9 +93,9 @@ function charge end
 Return the propagator of a particle for a given four-momentum. If `mass` is passed, the respective propagator for massive particles is used, if not, it is assumed the particle passed in is massless.
 
 !!! note "Convention"
-    
-    There are two types of implementations for propagators given in `QEDProcesses`: 
-    For a `BosonLike` particle with four-momentum ``k`` and mass ``m``, the propagator is given as 
+
+    There are two types of implementations for propagators given in `QEDProcesses`:
+    For a `BosonLike` particle with four-momentum ``k`` and mass ``m``, the propagator is given as
 
     ```math
     D(k) = \\frac{1}{k^2 - m^2}.
@@ -108,7 +108,7 @@ Return the propagator of a particle for a given four-momentum. If `mass` is pass
     ```
 
 !!! warning
-    
+
     This function does not throw when the given particle is off-shell. If an off-shell particle is passed, the function `propagator` returns `Inf`.
 
 """
@@ -244,7 +244,7 @@ julia> electron_states = base_state(Electron(), Incoming(), mom, AllSpin())
     where ``v_\\sigma`` is the base state of the respective outgoing anti-fermion.
 
     For a photon with four-momentum ``k^\\mu = \\omega (1, \\cos\\phi \\sin\\theta, \\sin\\phi \\sin\\theta, \\cos\\theta)``, the two polarization vectors are given as
-    
+
     ```math
     \\begin{align*}
     \\epsilon^\\mu_1 &= (0, \\cos\\theta \\cos\\phi, \\cos\\theta \\sin\\phi, -\\sin\\theta),\\\\

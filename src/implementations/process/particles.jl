@@ -1,7 +1,7 @@
 """
     number_incoming_particles(proc_def::AbstractProcessDefinition)
 
-Return the number of incoming particles of a given process. 
+Return the number of incoming particles of a given process.
 """
 @inline function number_incoming_particles(proc_def::AbstractProcessDefinition)
     return length(incoming_particles(proc_def))
@@ -10,7 +10,7 @@ end
 """
     number_outgoing_particles(proc_def::AbstractProcessDefinition)
 
-Return the number of outgoing particles of a given process. 
+Return the number of outgoing particles of a given process.
 """
 @inline function number_outgoing_particles(proc_def::AbstractProcessDefinition)
     return length(outgoing_particles(proc_def))
