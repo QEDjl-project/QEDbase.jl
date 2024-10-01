@@ -17,7 +17,7 @@ This package is part of the `QuantumElectrodynamics.jl` library. For the descrip
   calculations
 - **Scattering processes:** generic description of a scattering process to be used in
   calculations.
-- **Differential probability:** common building blocks for the calculation of differential probabilities and
+- **Probabilities and cross-sections:** common building blocks for the calculation of differential probabilities and
   cross-sections.
 - **Phase spaces:** common functions to define phase spaces and work with phase space points.
 
@@ -41,7 +41,7 @@ pkg> add QEDbase
 
 If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send us a pull request.
 In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the
-general [contribution guide of `QuantumElectrodynamics.jl`](www.contribution-of-qed.jl).
+general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/stable/dev_guide/#Development-Guide).
 
 ## Credits and contributors
 
@@ -65,7 +65,3 @@ We also thank our former contributers
 ## License
 
 [MIT](LICENSE) © Uwe Hernandez Acosta
-
-```
-
-```
