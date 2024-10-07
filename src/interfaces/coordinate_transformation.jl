@@ -16,13 +16,15 @@ Every subtype of `trafo::AbstractCoordinateTransformation` should implement the 
 Implementing the interface by defining the interface functions:
 
 ```jldoctest trafo_interface
+julia> using QEDbase
+
 julia> using QEDcore
 
-julia> struct TestTrafo{T} <: QEDcore.AbstractCoordinateTransformation
+julia> struct TestTrafo{T} <: AbstractCoordinateTransformation
            a::T
        end
 
-julia> QEDcore._transform(trafo::TestTrafo,p) = trafo.a*p
+julia> QEDbase._transform(trafo::TestTrafo,p) = trafo.a*p
 
 julia> Base.inv(trafo::TestTrafo) = TestTrafo(inv(trafo.a))
 
@@ -62,8 +64,8 @@ Base.broadcastable(trafo::AbstractCoordinateTransformation) = Ref(trafo)
 """
     _transform(trafo::AbstractCoordinateTransformation,p::AbstractFourMomentum)
 
-Interface function for the application of the transformation to the four-momentum `p`. Must return a four-momentum
-of the same type as `p`.
+Interface function for the application of the transformation to the four-momentum `p`.
+Must return a four-momentum of the same type as `p`.
 """
 function _transform end
 
@@ -110,13 +112,6 @@ These transformations preserve the Minkowski product of two four-vectors and are
 the description of relativistic physics, ensuring the laws of physics are the same in all
 inertial frames.
 
-### Usage
-
-Subtypes of `AbstractLorentzTransformation` implement specific kinds of Lorentz transformations.
-For example:
-- [`Boost{T}`](@ref): A concrete implementation of Lorentz boosts with boost parameter `T` (see also [`AbstractBoostParameter`](@ref)).
-
-These subtypes perform transformations on four-vectors (such as [`SFourMomentum`](@ref)) between different inertial reference frames.
 """
 abstract type AbstractLorentzTransformation <: AbstractCoordinateTransformation end
 
@@ -129,11 +124,7 @@ associated with relative motion between inertial frames along one or more spatia
 
 `AbstractLorentzBoost` extends `AbstractLorentzTransformation` and serves as the foundation
 for all types of boost transformations in special relativity. Lorentz boosts describe how
-four-vectors (such as [`SFourMomentum`](@ref)) change when transitioning between two reference frames moving at constant velocities (in units of the speed of light) relative to each other.
-
-For example:
-- [`Boost{T}`](@ref): A concrete implementation of Lorentz boosts with boost parameter `T` (see also [`AbstractBoostParameter`](@ref)).
-
+four-vectors change when transitioning between two reference frames moving at constant velocities (in units of the speed of light) relative to each other.
 """
 abstract type AbstractLorentzBoost <: AbstractLorentzTransformation end
 
@@ -148,7 +139,7 @@ describe the relative motion between two inertial frames in special relativity.
 that control Lorentz boosts in different spatial directions. Boost parameters typically
 represent the velocity of one reference frame relative to another, expressed as a fraction
 of the speed of light (`\\beta`), and are essential for performing Lorentz transformations
-on four-vectors (such as [`SFourMomentum`](@ref)).
+on four-vectors.
 
 ## Overview
 
@@ -158,10 +149,5 @@ inertial reference frames. For example, the boost parameter ``\\beta`` is dimens
 this velocity as a fraction of the speed of light. Depending on the frame's relative velocity,
 different forms of boost parameters exist, such as those associated with a single axis or
 a vector describing boosts in multiple spatial dimensions.
-
-The `AbstractBoostParameter` type is the parent type for all specific kinds of boost parameters, including:
-- **Axis-specific Boost Parameters**: Such as [`BetaX`](@ref), which describes a boost along the x-axis.
-- **Vector-like Boost Parameters**: Such as [`BetaVector`](@ref), which describes boosts with components in multiple spatial directions.
-
 """
 abstract type AbstractBoostParameter end
