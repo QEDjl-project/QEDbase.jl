@@ -1,6 +1,6 @@
-# Scattering process interface
+# Scattering Process Interface
 
-## Process interface
+## Process Interface
 
 ```@docs
 AbstractProcessDefinition
@@ -10,7 +10,7 @@ incoming_spin_pols
 outgoing_spin_pols
 ```
 
-## Particle directions
+## Particle Directions
 
 ```@docs
 ParticleDirection
@@ -21,7 +21,7 @@ is_incoming
 is_outgoing
 ```
 
-## Spins and polarizations
+## Spins and Polarizations
 
 ```@docs
 AbstractSpinOrPolarization
@@ -55,7 +55,7 @@ AllPol
 SyncedPolarization
 ```
 
-## Utility functions
+## Utility Functions
 
 ```@docs
 number_incoming_particles

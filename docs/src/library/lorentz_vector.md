@@ -1,4 +1,4 @@
-# Lorentz Vector API
+# Lorentz Vector
 
 ## Interface registry
 

@@ -1,4 +1,4 @@
-# Probability and cross section
+# Probability and Cross Section
 
 ## Interface
 

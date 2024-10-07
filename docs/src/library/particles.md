@@ -1,6 +1,6 @@
-# Particle interface
+# Particle Interface
 
-## Mandatory interface
+## Mandatory Interface
 
 ```@docs
 AbstractParticle
@@ -11,7 +11,7 @@ base_state
 propagator
 ```
 
-## Optional interface
+## Optional Interface
 
 ```@docs
 is_fermion

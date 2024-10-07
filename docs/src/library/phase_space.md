@@ -1,6 +1,6 @@
-# Phase space description
+# Phase Space Description
 
-## Frames and coordinate systems
+## Frames and Coordinate Systems
 
 ```@docs
 AbstractCoordinateSystem
@@ -8,14 +8,14 @@ AbstractFrameOfReference
 AbstractPhasespaceDefinition
 ```
 
-## Stateful particles
+## Stateful Particles
 
 ```@docs
 AbstractParticleStateful
 momentum
 ```
 
-## Phase-space points
+## Phasespace Points
 
 ### Types
 
@@ -33,7 +33,7 @@ model
 phase_space_definition
 ```
 
-### Convenience functions
+### Convenience Functions
 
 ```@docs
 particle_direction

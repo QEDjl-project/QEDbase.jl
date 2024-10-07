@@ -1,4 +1,4 @@
-# Computational Model interface
+# Computational Model Interface
 
 ```@docs
 AbstractModelDefinition
