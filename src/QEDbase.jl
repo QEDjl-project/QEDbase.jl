@@ -75,6 +75,9 @@ export particle_direction, particle_species, momentum
 export process, model, phase_space_definition, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
+# Abstrct coordinate transformation interface
+export AbstractCoordinateTransformation
+
 # errors
 export InvalidInputError, RegistryError, OnshellError, SpinorConstructionError
 
@@ -111,6 +114,8 @@ include("interfaces/phase_space.jl")
 include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
+
+include("interfaces/coordinate_transformation.jl")
 
 include("implementations/process/momenta.jl")
 include("implementations/process/particles.jl")
