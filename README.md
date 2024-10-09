@@ -2,9 +2,6 @@
 
 [![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
-[![Build Status](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/pipelines)
-[![Coverage](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/coverage.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/commits/main)
-[![Coverage](https://codecov.io/gh/qedjl/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/qedjl/QEDbase.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 
 `QEDbase.jl` is a foundational package within the [`QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/)
@@ -12,7 +9,7 @@ library. It provides essential interfaces and building blocks for the computatio
 quantum electrodynamics (QED) processes, facilitating interoperability with other packages in the suite.
 
 For a detailed explanation of the integration with other `QuantumElectrodynamics.jl` packages,
-please refer to the [documentation](https://qedjl-project.github.io/QuantumElectrodynamics.jl/main/).
+please refer to the [documentation of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
 
 ## Main interfaces
 
@@ -23,6 +20,9 @@ please refer to the [documentation](https://qedjl-project.github.io/QuantumElect
 - **Scattering Processes**: Generic descriptions of scattering processes for use in QED calculations.
 - **Probabilities and Cross Sections**: Core components for calculating differential probabilities and cross-sections.
 - **Phase Space Descriptions**: Utility functions to define and manage phase spaces and related points.
+
+To lern how to implement these interfaces, please refer to the tutorials in the
+[documentation](https://qedjl-project.github.io/QEDbase.jl/dev).
 
 ## Installation
 
