@@ -88,28 +88,32 @@ This needs to be implemented for each concrete subtype of [`AbstractParticle`](@
 function charge end
 
 """
-    propagator(particle::AbstractParticleType, mom::QEDbase.AbstractFourMomentum, [mass::Real])
+    propagator(particle::AbstractParticleType, mom::QEDbase.AbstractFourMomentum)
 
-Return the propagator of a particle for a given four-momentum. If `mass` is passed, the respective propagator for massive particles is used, if not, it is assumed the particle passed in is massless.
+Compute the propagator of a particle for a given four-momentum `mom`.
 
-!!! note "Convention"
+# Notes on Convention
+The `QEDProcesses.jl` package includes two types of propagators:
 
-    There are two types of implementations for propagators given in `QEDProcesses`:
-    For a `BosonLike` particle with four-momentum ``k`` and mass ``m``, the propagator is given as
+**Boson-like particles**: For a `BosonLike` particle with four-momentum `k` and mass `m = QEDbase.mass(particle)`, the propagator is given by:
 
-    ```math
-    D(k) = \\frac{1}{k^2 - m^2}.
-    ```
+```math
+D(k) = \\frac{1}{k^2 - m^2}
+```
 
-    For a `FermionLike` particle with four-momentum ``p`` and mass ``m``, the propagator is given as
+**Fermion-like particles**: For a `FermionLike` particle with four-momentum `p` and mass `m = QEDbase.mass(particle)`, the propagator is defined as:
 
-    ```math
-    S(p) = \\frac{\\gamma^\\mu p_\\mu + mass}{p^2 - m^2}.
-    ```
+```math
+S(p) = \\frac{\\gamma^\\mu p_\\mu + m}{p^2 - m^2}
+```
+
+Here, ``\\gamma^\\mu`` are the gamma matrices, and ``p_\\mu`` represents the four-momentum components.
 
 !!! warning
 
-    This function does not throw when the given particle is off-shell. If an off-shell particle is passed, the function `propagator` returns `Inf`.
+    This function does **not** throw an error if the particle is off-shell (i.e., if it
+    does not satisfy the mass-shell condition). In such cases, the function will return `Inf`,
+    which indicates that the propagator is undefined for an off-shell particle.
 
 """
 function propagator end
