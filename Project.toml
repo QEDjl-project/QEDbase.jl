@@ -27,7 +27,7 @@ DocStringExtensions = "0.8.5, 0.9"
 PhysicalConstants = "0.2.1"
 SimpleTraits = "0.9.4"
 StaticArrays = "1.2.13"
-julia = "1.6"
+julia = "1.10"
 
 [extras]
 QEDcore = "35dc0263-cb5f-4c33-a114-1d7f54ab753e"
