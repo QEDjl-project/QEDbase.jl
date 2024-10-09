@@ -62,6 +62,8 @@ try
             prettyurls=get(ENV, "CI", "false") == "true",
             canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
             assets=String[],
+            mathengine=Documenter.MathJax2(),
+            collapselevel=1,
             # TODO: workaround
             # should be fixed: https://github.com/QEDjl-project/QEDbase.jl/issues/4
             size_threshold_ignore=["index.md"],
