@@ -22,14 +22,12 @@ jobs:
       - name: clone integration test tools
         run: |
           git clone -b setDevDevCompat https://github.com/SimeonEhrig/QED.jl.git /tmp/integration_test_tools
-      - name: get project name and version
+      - name: set dev dependencies
         run: |
           $(julia --project=. /tmp/integration_test_tools/.ci/integTestGen/src/get_project_name_version_path.jl)
           echo "CI_DEPENDENCY_NAME -> $CI_DEPENDENCY_NAME"
           echo "CI_DEPENDENCY_VERSION -> $CI_DEPENDENCY_VERSION"
           echo "CI_DEPENDENCY_PATH -> $CI_DEPENDENCY_PATH"
-      - name: set dev dependencies
-        run: |  
           julia --project=docs/ /tmp/integration_test_tools/.ci/set_dev_dependencies.jl
           julia --project=. -e 'import Pkg; Pkg.instantiate()'
       - name: Build and deploy
