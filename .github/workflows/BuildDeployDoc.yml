@@ -19,8 +19,6 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1.10'
-      - name: Install dependencies
-        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: clone integration test tools
         if: (github.event_name == 'push' && github.ref_name != 'main') || (github.event_name == 'pull_request' && github.base_ref != 'main')
         run: |
