@@ -8,7 +8,7 @@
 Abstract base type for coordinate transformations supposed to be acting on four-momenta.
 Every subtype of `trafo::AbstractCoordinateTransformation` should implement the following interface functions:
 
-* `QEDcore._transform(trafo,p)`: transforms `p`
+* `QEDbase._transform(trafo,p)`: transforms `p`
 * `Base.inv(trafo)`: returns the inverted transform
 
 ## Example
