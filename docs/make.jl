@@ -45,17 +45,13 @@ literate_paths = [
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/lorentz_vectors.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/particle.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/particle_stateful.jl"),
-    Base.Filesystem.joinpath(project_path, "docs/src/tutorial/model.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/process.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/phase_space_point.jl"),
 ]
 
-tutorial_output_dir = mktempdir(joinpath(project_path, "docs/src/"); cleanup=true)
-# generate markdown files with Literate.jl
-for file in literate_paths
-    Literate.markdown(file, tutorial_output_dir; documenter=true)
-end
-
+tutorial_output_dir = joinpath(project_path, "docs/src/generated/")
+!ispath(tutorial_output_dir) && mkdir(tutorial_output_dir)
+@info "Literate: create temp dir at $tutorial_output_dir"
 tutorial_output_dir_name = splitpath(tutorial_output_dir)[end]
 
 pages = [
@@ -66,7 +62,6 @@ pages = [
         "Particles" => joinpath(tutorial_output_dir_name, "particle.md"),
         "Stateful Particles" =>
             joinpath(tutorial_output_dir_name, "particle_stateful.md"),
-        "Computational Model" => joinpath(tutorial_output_dir_name, "model.md"),
         "Scattering Process" => joinpath(tutorial_output_dir_name, "process.md"),
         "Phase Space Points" =>
             joinpath(tutorial_output_dir_name, "phase_space_point.md"),
@@ -77,7 +72,6 @@ pages = [
         "Dirac tensors" => "library/dirac_objects.md",
         "Particles" => "library/particles.md",
         "Scattering process" => "library/process.md",
-        "Computational model" => "library/model.md",
         "Phase space description" => "library/phase_space.md",
         "Probability and cross section" => "library/cross_section.md",
         "Function index" => "library/function_index.md",
@@ -86,6 +80,12 @@ pages = [
 ]
 
 try
+    # generate markdown files with Literate.jl
+    for file in literate_paths
+        Literate.markdown(file, tutorial_output_dir; documenter=true)
+    end
+
+    # geneate docs with Documenter.jl
     makedocs(;
         modules=[QEDbase],
         checkdocs=:exports,
@@ -107,8 +107,10 @@ try
     )
 finally
     # doing some garbage collection
-    @info "Garbage collection: remove landing page"
+    @info "GarbageCollection: remove generated landing page"
     rm(index_path)
+    @info "GarbageCollection: remove generated tutorial files"
+    rm(tutorial_output_dir; recursive=true)
 end
 
 deploydocs(; repo="github.com/QEDjl-project/QEDbase.jl.git", push_preview=false)
