@@ -7,9 +7,11 @@ project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path
 Pkg.develop(; path=project_path)
 
 using Documenter
-using QEDbase
-
 using DocumenterCitations
+
+using QEDbase
+using QEDcore
+using QEDprocesses
 
 bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
 

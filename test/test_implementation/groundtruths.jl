@@ -8,7 +8,7 @@ Test implementation of the incident flux. Return the Minkowski square of the sum
 I = \\left(\\sum p_i\\right)^2,
 \\end{align}
 ```
-where \$p_i\\in\\mathrm{ps_in}\$. 
+where \$p_i\\in\\mathrm{ps_in}\$.
 """
 function _groundtruth_incident_flux(in_ps)
     s = sum(in_ps)
@@ -18,7 +18,7 @@ end
 """
     _groundtruth_matrix_element(in_ps, out_ps)
 
-Test implementation for a matrix elements. Returns a list of three complex numbers without any physical meaning. 
+Test implementation for a matrix elements. Returns a list of three complex numbers without any physical meaning.
 """
 function _groundtruth_matrix_element(in_ps, out_ps)
     s_in = sum(in_ps)
@@ -156,7 +156,7 @@ end
 """
     _groundtruth_unsafe_diffCS(proc, in_ps, out_ps)
 
-Test implementation of the unsafe differential cross section. Uses the test implementations of `_groundtruth_incident_flux` and `_groundtruth_unsafe_probability`. 
+Test implementation of the unsafe differential cross section. Uses the test implementations of `_groundtruth_incident_flux` and `_groundtruth_unsafe_probability`.
 """
 function _groundtruth_unsafe_diffCS(proc, in_ps, out_ps)
     init_flux = _groundtruth_incident_flux(in_ps)
@@ -194,7 +194,7 @@ end
 """
     _groundtruth_safe_diffCS(proc, in_ps, out_ps)
 
-Test implementation of the safe differential cross section. Uses the test implementations of `_groundtruth_is_in_phasespace` and `_groundtruth_unsafe_diffCS`. 
+Test implementation of the safe differential cross section. Uses the test implementations of `_groundtruth_is_in_phasespace` and `_groundtruth_unsafe_diffCS`.
 """
 function _groundtruth_safe_diffCS(proc, in_ps, out_ps)
     if !_groundtruth_is_in_phasespace(in_ps, out_ps)
@@ -260,4 +260,20 @@ function _groundtruth_total_cross_section(
     in_pss::Vector{NTuple{N,T}}
 ) where {N,T<:AbstractFourMomentum}
     return _groundtruth_total_cross_section.(in_psps)
+end
+
+### Coordinate trafos
+
+_groundtruth_coord_trafo(p::AbstractFourMomentum) = 2 * p
+
+# coord trafo applied to every momentum in psp
+function _groundtruth_coord_trafo(psp::PhaseSpacePoint)
+    in_moms = momenta(psp, Incoming())
+    out_moms = momenta(psp, Outgoing())
+    in_moms_prime = _groundtruth_coord_trafo.(in_moms)
+    out_moms_prime = _groundtruth_coord_trafo.(out_moms)
+
+    return PhaseSpacePoint(
+        process(psp), model(psp), phase_space_definition(psp), in_moms_prime, out_moms_prime
+    )
 end
