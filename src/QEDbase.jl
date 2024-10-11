@@ -75,7 +75,7 @@ export particle_direction, particle_species, momentum
 export process, model, phase_space_definition, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
-# Abstrct coordinate transformation interface
+# Abstract coordinate transformation interface
 export AbstractCoordinateTransformation
 
 # errors
