@@ -90,4 +90,5 @@ setRapidity!
 ```@docs
 isonshell
 assert_onshell
+AbstractCoordinateTransformation
 ```
