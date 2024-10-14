@@ -73,7 +73,7 @@ function TestProcess_FAIL_ALL(rng::AbstractRNG, N_in::Int, N_out::Int)
 end
 
 """
-Test process with no implemented interface except the incoming and outgoing particles. 
+Test process with no implemented interface except the incoming and outgoing particles.
 Should fail every usage except construction of itself and the respective phase space point for given four-momenta.
 """
 struct TestProcess_FAIL_DIFFCS{IP<:Tuple,OP<:Tuple} <: AbstractProcessDefinition

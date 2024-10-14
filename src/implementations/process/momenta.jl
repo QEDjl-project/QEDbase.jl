@@ -7,7 +7,7 @@
         out_phase_space::NTuple{M,T},
     ) where {N,M,T<:Real}
 
-Return four-momenta for incoming and outgoing particles for given coordinate based phase-space points. 
+Return four-momenta for incoming and outgoing particles for given coordinate based phase-space points.
 """
 function _generate_momenta(
     proc::AbstractProcessDefinition,

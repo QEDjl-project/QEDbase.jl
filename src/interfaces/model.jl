@@ -6,7 +6,7 @@
 ###############
 # root type for models
 """
-Abstract base type for all compute model definitions in the context of scattering processes. Every subtype of `AbstractModelDefinition` is associated with a fundamental interaction. 
+Abstract base type for all compute model definitions in the context of scattering processes. Every subtype of `AbstractModelDefinition` is associated with a fundamental interaction.
 Therefore, one needs to implement the following soft interface function
 
 ```Julia

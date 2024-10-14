@@ -3,7 +3,7 @@
 
 Return the 0-component of a given `LorentzVectorLike`.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t`.
 
@@ -15,7 +15,7 @@ function getT end
 
 Return the 1-component of a given `LorentzVectorLike`.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `x`.
 
@@ -27,7 +27,7 @@ function getX end
 
 Return the 2-component of a given `LorentzVectorLike`.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `y`.
 
@@ -39,7 +39,7 @@ function getY end
 
 Return the 3-component of a given `LorentzVectorLike`.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `z`.
 

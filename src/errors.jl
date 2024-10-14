@@ -33,8 +33,8 @@ function Base.showerror(io::IO, err::RegistryError)
 end
 
 """
-Abstract base type for exceptions indicating invalid input. See [`InvalidInputError`](@ref) for a simple concrete implementation. 
-Concrete implementations should at least implement 
+Abstract base type for exceptions indicating invalid input. See [`InvalidInputError`](@ref) for a simple concrete implementation.
+Concrete implementations should at least implement
 
 ```Julia
 

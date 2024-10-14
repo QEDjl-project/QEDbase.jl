@@ -6,9 +6,9 @@
 ###############
 
 """
-Abstract base type for definitions of scattering processes. It is the root type for the 
+Abstract base type for definitions of scattering processes. It is the root type for the
 process interface, which assumes that every subtype of `AbstractProcessDefinition`
-implements at least 
+implements at least
 
 ```Julia
 incoming_particles(proc_def::AbstractProcessDefinition)
@@ -41,8 +41,8 @@ outgoing_multiplicity(proc_def::AbstractProcessDefinition)
 
 Which return the number of spin and polarization combinations that should be considered for the process. For more detail, refer to the functions' documentations.
 
-Furthermore, to calculate scattering probabilities and differential cross sections, the following 
-interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`, 
+Furthermore, to calculate scattering probabilities and differential cross sections, the following
+interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`,
 `CustomModel<:AbstractModelDefinition`, and `CustomPhasespaceDefinition<:AbstractPhasespaceDefinition`.
 
 ```Julia
@@ -57,7 +57,7 @@ interface functions need to be implemented for every combination of `CustomProce
     _phase_space_factor(psp::PhaseSpacePoint{CustomProcess,CustomModel,CustomPhasespaceDefinition})
 ```
 
-Optional is the implementation of 
+Optional is the implementation of
 
 ```Julia
 
@@ -139,14 +139,14 @@ function _incident_flux end
         MODEL <: AbstractModelDefinition,
     }
 
-Interface function which returns a tuple of scattering matrix elements for each spin and polarization combination of `proc`. 
+Interface function which returns a tuple of scattering matrix elements for each spin and polarization combination of `proc`.
 """
 function _matrix_element end
 
 """
     _averaging_norm(proc::AbstractProcessDefinition)
 
-Interface function, which returns a normalization for the averaging of the squared matrix elements over spins and polarizations. 
+Interface function, which returns a normalization for the averaging of the squared matrix elements over spins and polarizations.
 """
 function _averaging_norm end
 
@@ -168,16 +168,16 @@ function _is_in_phasespace end
         PSDEF <: AbstractPhasespaceDefinition,
     }
 
-Interface function, which returns the pre-differential factor of the invariant phase space intergral measure. 
+Interface function, which returns the pre-differential factor of the invariant phase space intergral measure.
 
 !!! note "Convention"
 
-    It is assumed, that this function returns the value of 
+    It is assumed, that this function returns the value of
 
     ```math
     \\mathrm{d}\\Pi_n:= \\prod_{i=1}^N \\frac{\\mathrm{d}^3p_i}{(2\\pi)^3 2 p_i^0} H(P_t, p_1, \\dots, p_N),
     ```
-where ``H(\\dots)`` is a characteristic function (or distribution) which constrains the phase space, e.g. ``\\delta^{(4)}(P_t - \\sum_i p_i)``.  
+where ``H(\\dots)`` is a characteristic function (or distribution) which constrains the phase space, e.g. ``\\delta^{(4)}(P_t - \\sum_i p_i)``.
 """
 function _phase_space_factor end
 
@@ -205,11 +205,11 @@ function out_phase_space_dimension end
         MODEL <: AbstractModelDefinition,
     }
 
-Interface function for the combination of a scattering process and a physical model. Return the total of a 
+Interface function for the combination of a scattering process and a physical model. Return the total of a
 given process and model for a passed `InPhaseSpacePoint`.
 
 !!! note "total cross section"
-    
+
     Given an implementation of this method and [`_incident_flux`](@ref), the respective function for the total cross section [`total_cross_section`](@ref) is also available.
 
 """

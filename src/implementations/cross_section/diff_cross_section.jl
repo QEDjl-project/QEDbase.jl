@@ -1,7 +1,7 @@
 ########################
 # differential and total cross sections.
 #
-# This file contains default implementations for differential 
+# This file contains default implementations for differential
 # cross sections based on the scattering process interface
 ########################
 
@@ -23,8 +23,8 @@ If the given phase spaces are physical, return differential cross section evalua
 """
 function differential_cross_section(phase_space_point::AbstractPhaseSpacePoint)
     if !_is_in_phasespace(phase_space_point)
-        # TODO: use the correct type here, i.e. implement a function `eltype` for psp or 
-        # make `momentum_type` an interface function. 
+        # TODO: use the correct type here, i.e. implement a function `eltype` for psp or
+        # make `momentum_type` an interface function.
         return zero(Float64)
     end
 
