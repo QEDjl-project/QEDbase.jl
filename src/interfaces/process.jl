@@ -17,6 +17,30 @@ outgoing_particles(proc_def::AbstractProcessDefinition)
 
 which return a tuple of the incoming and outgoing particles, respectively.
 
+An `AbstractProcessDefinition` is also expected to contain spin and polarization information of its particles.
+For this, the functions
+
+```Julia
+incoming_spin_pols(proc_def::AbstractProcessDefinition)
+outgoing_spin_pols(proc_def::AbstractProcessDefinition)
+```
+
+can be overloaded. They must return a tuple of [`AbstractSpinOrPolarization`], where the order must match the order of the process' particles.
+A default implementation is provided which assumes [`AllSpin`](@ref) for every [`is_fermion`](@ref) particle and [`AllPolarization`](@ref) for every [`is_boson`](@ref) particle.
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if these functions return compile-time-known values.
+
+On top of these spin and polarization functions, the following functions are automatically defined:
+
+```Julia
+multiplicity(proc_def::AbstractProcessDefinition)
+incoming_multiplicity(proc_def::AbstractProcessDefinition)
+outgoing_multiplicity(proc_def::AbstractProcessDefinition)
+```
+
+Which return the number of spin and polarization combinations that should be considered for the process. For more detail, refer to the functions' documentations.
+
 Furthermore, to calculate scattering probabilities and differential cross sections, the following 
 interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`, 
 `CustomModel<:AbstractModelDefinition`, and `CustomPhasespaceDefinition<:AbstractPhasespaceDefinition`.
@@ -41,7 +65,6 @@ Optional is the implementation of
 
 ```
 to enable the calculation of total probabilities and cross sections.
-
 """
 abstract type AbstractProcessDefinition end
 
@@ -53,6 +76,11 @@ Broadcast.broadcastable(proc::AbstractProcessDefinition) = Ref(proc)
 
 Interface function for scattering processes. Return a tuple of the incoming particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
+See also: [`AbstractParticleType`](@ref)
 """
 function incoming_particles end
 
@@ -61,8 +89,39 @@ function incoming_particles end
 
 Interface function for scattering processes. Return the tuple of outgoing particles for the given process definition.
 This function needs to be given to implement the scattering process interface.
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
+See also: [`AbstractParticleType`](@ref)
 """
 function outgoing_particles end
+
+"""
+    incoming_spin_pols(proc_def::AbstractProcessDefinition)
+
+Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`incoming_particles`](@ref).
+A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
+See also: [`AbstractSpinOrPolarization`](@ref)
+"""
+function incoming_spin_pols end
+
+"""
+    outgoing_spin_pols(proc_def::AbstractProcessDefinition)
+
+Interface function for scattering processes. Return the tuple of spins or polarizations for the given process definition. The order must be the same as the particles returned from [`outgoing_particles`](@ref).
+A default implementation is provided, returning [`AllSpin`](@ref) for every [`is_fermion`](@ref) and [`AllPolarization`](@ref) for every [`is_boson`](@ref).
+
+!!! note Performance
+    It is very beneficial for the performance of derived functions if this function returns compile-time-known values.
+
+See also: [`AbstractSpinOrPolarization`](@ref)
+"""
+function outgoing_spin_pols end
 
 """
     _incident_flux(in_psp::InPhaseSpacePoint{PROC,MODEL}) where {
@@ -156,72 +215,6 @@ given process and model for a passed `InPhaseSpacePoint`.
 """
 function _total_probability end
 
-#######################
-#
-# utility functions
-#
-#######################
-
-"""
-    number_incoming_particles(proc_def::AbstractProcessDefinition)
-
-Return the number of incoming particles of a given process. 
-"""
-@inline function number_incoming_particles(proc_def::AbstractProcessDefinition)
-    return length(incoming_particles(proc_def))
-end
-
-"""
-    number_outgoing_particles(proc_def::AbstractProcessDefinition)
-
-Return the number of outgoing particles of a given process. 
-"""
-@inline function number_outgoing_particles(proc_def::AbstractProcessDefinition)
-    return length(outgoing_particles(proc_def))
-end
-
-"""
-    particles(proc_def::AbstractProcessDefinition, ::ParticleDirection)
-
-Convenience function dispatching to [`incoming_particles`](@ref) or [`outgoing_particles`](@ref) depending on the given direction.
-"""
-@inline particles(proc_def::AbstractProcessDefinition, ::Incoming) =
-    incoming_particles(proc_def)
-@inline particles(proc_def::AbstractProcessDefinition, ::Outgoing) =
-    outgoing_particles(proc_def)
-
-"""
-    number_particles(proc_def::AbstractProcessDefinition, dir::ParticleDirection)
-
-Convenience function dispatching to [`number_incoming_particles`](@ref) or [`number_outgoing_particles`](@ref) depending on the given direction, returning the number of incoming or outgoing particles, respectively.
-"""
-@inline number_particles(proc_def::AbstractProcessDefinition, ::Incoming) =
-    number_incoming_particles(proc_def)
-@inline number_particles(proc_def::AbstractProcessDefinition, ::Outgoing) =
-    number_outgoing_particles(proc_def)
-
-"""
-    number_particles(proc_def::AbstractProcessDefinition, dir::ParticleDirection, species::AbstractParticleType)
-
-Return the number of particles of the given direction and species in the given process definition.
-"""
-@inline function number_particles(
-    proc_def::AbstractProcessDefinition, dir::DIR, species::PT
-) where {DIR<:ParticleDirection,PT<:AbstractParticleType}
-    return count(x -> x isa PT, particles(proc_def, dir))
-end
-
-"""
-    number_particles(proc_def::AbstractProcessDefinition, particle::AbstractParticleStateful)
-
-Return the number of particles of the given particle's direction and species in the given process definition.
-"""
-@inline function number_particles(
-    proc_def::AbstractProcessDefinition, ps::AbstractParticleStateful
-)
-    return number_particles(proc_def, particle_direction(ps), particle_species(ps))
-end
-
 #####
 # Generation of four-momenta from coordinates
 #
@@ -253,29 +246,3 @@ function _generate_incoming_momenta end
 Interface function to generate the four-momenta of the outgoing particles from coordinates for a given phase-space definition.
 """
 function _generate_outgoing_momenta end
-
-"""
-    _generate_momenta(
-        proc::AbstractProcessDefinition,
-        model::AbstractModelDefinition,
-        phase_space_def::AbstractPhasespaceDefinition,
-        in_phase_space::NTuple{N,T},
-        out_phase_space::NTuple{M,T},
-    ) where {N,M,T<:Real}
-
-Return four-momenta for incoming and outgoing particles for given coordinate based phase-space points. 
-"""
-function _generate_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    phase_space_def::AbstractPhasespaceDefinition,
-    in_phase_space::NTuple{N,T},
-    out_phase_space::NTuple{M,T},
-) where {N,M,T<:Real}
-    in_momenta = _generate_incoming_momenta(proc, model, phase_space_def, in_phase_space)
-    out_momenta = _generate_outgoing_momenta(
-        proc, model, phase_space_def, in_phase_space, out_phase_space
-    )
-
-    return in_momenta, out_momenta
-end
