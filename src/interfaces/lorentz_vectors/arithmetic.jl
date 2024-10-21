@@ -12,11 +12,11 @@ end
 """
     minkowski_dot(v1,v2)
 
-Return the Minkowski dot product of two `LorentzVectorLike`. 
+Return the Minkowski dot product of two `LorentzVectorLike`.
 
 !!! example
 
-    If `(t1,x1,y1,z1)` and `(t2,x2,y2,z2)` are two `LorentzVectorLike`, this is equivalent to 
+    If `(t1,x1,y1,z1)` and `(t2,x2,y2,z2)` are two `LorentzVectorLike`, this is equivalent to
     ```julia
     t1*t2 - (x1*x2 + y1*y2 + z1*z2)
     ```
@@ -41,9 +41,9 @@ const mdot = minkowski_dot
 """
     getMagnitude2(lv)
 
-Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum of the squared spatial components. 
+Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum of the squared spatial components.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `x^2+ y^2 + z^2`.
 
@@ -65,9 +65,9 @@ const getMag2 = getMagnitude2
 """
     getMagnitude(lv)
 
-Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spatial components. 
+Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spatial components.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(x^2 + y^2 + z^2)`.
 
@@ -89,11 +89,11 @@ const getMag = getMagnitude
 """
     getInvariantMass2(lv)
 
-Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minkowski dot with itself. 
+Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minkowski dot with itself.
 
-!!! example 
+!!! example
 
-    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t^2 - (x^2 + y^2 + z^2)`. 
+    If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `t^2 - (x^2 + y^2 + z^2)`.
 
 
 """
@@ -107,16 +107,16 @@ const getMass2 = getInvariantMass2
 """
     getInvariantMass(lv)
 
-Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square root of the minkowski dot with itself. 
+Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square root of the minkowski dot with itself.
 
-!!! example 
+!!! example
 
     If `(t,x,y,z)` is a `LorentzVectorLike`, this is equivalent to `sqrt(t^2 - (x^2 + y^2 + z^2))`.
 
 
 !!! note
-    
-    If the squared invariant mass `m2` is negative, `-sqrt(-m2)` is returned. 
+
+    If the squared invariant mass `m2` is negative, `-sqrt(-m2)` is returned.
 
 """
 @traitfn function getInvariantMass(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -140,9 +140,9 @@ const getMass = getInvariantMass
 """
     getE(lv)
 
-Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component. 
+Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component.
 
-!!! example 
+!!! example
 
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `E`.
 
@@ -155,9 +155,9 @@ const getEnergy = getE
 """
     getPx(lv)
 
-Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-component. 
+Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-component.
 
-!!! example 
+!!! example
 
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `px`.
 
@@ -167,9 +167,9 @@ Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-componen
 """
     getPy(lv)
 
-Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-component. 
+Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-component.
 
-!!! example 
+!!! example
 
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `py`.
 
@@ -179,9 +179,9 @@ Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-componen
 """
     getPz(lv)
 
-Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-component. 
+Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-component.
 
-!!! example 
+!!! example
 
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `pz`.
 
@@ -240,7 +240,7 @@ Return the squared transverse momentum for a given `LorentzVectorLike`, i.e. the
 
 !!! note
 
-    The transverse components are defined w.r.t. to the 3-axis. 
+    The transverse components are defined w.r.t. to the 3-axis.
 
 """
 @inline @traitfn function getTransverseMomentum2(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -264,7 +264,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitu
 
 !!! note
 
-    The transverse components are defined w.r.t. to the 3-axis. 
+    The transverse components are defined w.r.t. to the 3-axis.
 
 
 """
@@ -288,7 +288,7 @@ Return the squared transverse mass for a given `LorentzVectorLike`, i.e. the dif
 
 !!! note
 
-    The transverse components are defined w.r.t. to the 3-axis. 
+    The transverse components are defined w.r.t. to the 3-axis.
 
 """
 @inline @traitfn function getTransverseMass2(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -309,7 +309,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square 
 
 !!! note
 
-    The transverse components are defined w.r.t. to the 3-axis. 
+    The transverse components are defined w.r.t. to the 3-axis.
 
 !!! note
 
@@ -340,7 +340,7 @@ Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `Loren
 
 !!! note
 
-    The transverse components are defined w.r.t. to the 3-axis. 
+    The transverse components are defined w.r.t. to the 3-axis.
 
 """
 @inline @traitfn function getRapidity(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -367,7 +367,7 @@ Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of 
 
 !!! note
 
-    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis. 
+    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis.
 
 """
 @inline @traitfn function getTheta(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -385,7 +385,7 @@ end
 
 Return the cosine of the theta angle for a given `LorentzVectorLike`.
 
-!!! note 
+!!! note
 
     This is an equivalent but faster version of `cos(getTheta(lv))`; see [`getTheta`](@ref).
 
@@ -406,7 +406,7 @@ Return the phi angle for a given `LorentzVectorLike`, i.e. the azimuthal angle o
 
 !!! note
 
-    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis. 
+    The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis.
 
 """
 @traitfn function getPhi(lv::T) where {T; IsLorentzVectorLike{T}}
@@ -419,7 +419,7 @@ end
 
 Return the cosine of the phi angle for a given `LorentzVectorLike`.
 
-!!! note 
+!!! note
 
     This is an equivalent but faster version of `cos(getPhi(lv))`; see [`getPhi`](@ref).
 
@@ -434,7 +434,7 @@ end
 
 Return the sine of the phi angle for a given `LorentzVectorLike`.
 
-!!! note 
+!!! note
 
     This is an equivalent but faster version of `sin(getPhi(lv))`; see [`getPhi`](@ref).
 
@@ -459,7 +459,7 @@ Return the plus component for a given `LorentzVectorLike` in [light-cone coordin
 !!! note
 
     The [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) are defined w.r.t. to the 3-axis.
-    
+
 !!! warning
 
     The definition ``p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
@@ -481,7 +481,7 @@ Return the minus component for a given `LorentzVectorLike` in [light-cone coordi
 !!! note
 
     The [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) are defined w.r.t. to the 3-axis.
-    
+
 !!! warning
 
     The definition ``p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.

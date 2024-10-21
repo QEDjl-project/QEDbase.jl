@@ -1,115 +1,74 @@
 # QEDbase
 
-
 [![Doc Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/stable)
 [![Doc Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://qedjl-project.github.io/QEDbase.jl/dev)
-[![Build Status](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/pipeline.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/pipelines)
-[![Coverage](https://gitlab.hzdr.de/qedjl/QEDbase.jl/badges/main/coverage.svg)](https://gitlab.hzdr.de/qedjl/QEDbase.jl/commits/main)
-[![Coverage](https://codecov.io/gh/qedjl/QEDbase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/qedjl/QEDbase.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 
-This is `QEDbase.jl`, a julia package which provides the general data structures for calculations in relativistic particle physics.
+`QEDbase.jl` is a foundational package within the [`QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/)
+library. It provides essential interfaces and building blocks for the computation of
+quantum electrodynamics (QED) processes, facilitating interoperability with other packages in the suite.
 
-This package is part of the `QuantumElectrodynamics.jl` library. For the description of the interoperability with other packages of `QuantumElectrodynamics.jl` see [docs](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
+For a detailed explanation of the integration with other `QuantumElectrodynamics.jl` packages,
+please refer to the [documentation of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/).
 
-## Current features
+## Main interfaces
 
-- Generic interface for Lorentz vectors
-- concrete implementations of static and mutable Lorentz-vector/four-momentum types
-- general Dirac bi-spinors, its adjoint counterpart as well as Dirac matrices
-- particle spinors, i.e. solutions of Dirac's equation in momentum space
-- Dirac's gamma matrices
+- **Dirac Tensors**: Types that facilitate operations involving Dirac matrices and spinors.
+- **Lorentz Vectors**: Types that facilitate operations involving Lorentz vectors.
+- **Particle Representation**: Define particles with mass, charge, and other physical properties.
+- **Computation Models**: Interfaces for implementing various physical models (e.g., perturbative or strong-field QED) for calculations.
+- **Scattering Processes**: Generic descriptions of scattering processes for use in QED calculations.
+- **Probabilities and Cross Sections**: Core components for calculating differential probabilities and cross-sections.
+- **Phase Space Descriptions**: Utility functions to define and manage phase spaces and related points.
+
+To lern how to implement these interfaces, please refer to the tutorials in the
+[documentation](https://qedjl-project.github.io/QEDbase.jl/dev).
 
 ## Installation
 
-To install the current stable version of `QEDbase.jl` you may use the standard julia package manager within the julia REPL
+To install the latest stable version of `QEDbase.jl`, use the Julia package manager within the REPL:
 
 ```julia
 julia> using Pkg
-
 julia> Pkg.add("QEDbase")
 ```
 
-or you use the Pkg prompt by hitting `]` within the Julia REPL and then type
+Alternatively, you can enter the Pkg prompt by pressing `]` in the Julia REPL and then run:
 
 ```julia
-(@v1.10) pkg> add QEDbase
+pkg> add QEDbase
 ```
-
-To install the locally downloaded package on Windows, change to the parent directory and type within the Pkg prompt
-
-```julia
-(@v1.10) pkg> add ./QEDbase.jl
-```
-
-## Quickstart
-#### Four momentum
-One can define a static four momentum component wise:
-
-```julia
-julia> using QEDbase; using QEDcore
-
-juila> mass = rand()*10
-
-julia> px,py,pz = rand(3)
-
-julia> E = sqrt(px^2 + py^2 + pz^2 + mass^2) # on-shell condition
-
-julia> P = SFourMomentum(E,px,py,pz)
-```
-
-Such `SFourMomentum` behaves like a four element static array (with all the standard arithmetics), but with the `dot` product exchanged with the Minkowski product
-
-```julia
-julia> @assert dot(P,P) == P*P == getMass2(P) == P[1]^2 - sum(P[1:].^2)
-```
-
-Furthermore, the Lorentz-vector interface provides a lot of properties for such a `SFourMomentum`, e.g.
-
-```julia
-
-julia> @assert isapprox(getRapidity(mom), 0.5*log((E+pz)/(E-pz)))
-julia> @assert isapprox(getPlus(mom), 0.5*(E+pz))
-julia> @assert isapprox(getPerp(mom), px^2 + py^2)
-```
-
-and a lot more (see [here](www.docs-to-the-lorentz-interface-getter.jl) for a complete list). There is also a mutable version of a four vector in `QEDcore.jl`, where the Lorentz-vector interface provides setters to different properties as well (see [here](www.docs-to-the-lorentz-interface-setter.jl) for details).
-
-## Testing
-
-After installation it might be necessary to check if everything works properly. For that you can run the unittests by typing within the julia REPL
-
-```julia
-julia> using Pkg
-julia> using QEDbase
-julia> Pkg.test("QEDbase")
-
-...
-
-Testing Running tests...
-Test Summary: | Pass  Total
-QEDbase.jl    |  468    468
-     Testing QEDbase tests passed
-```
-
-If you see the last line, you can assume that `QEDbase.jl` works properly for you.
 
 ## Contributing
 
-If you want to contribute to `QEDbase.jl` feel free to do so by opening an issue or send me a pull request. In order to keep the packages within `QuantumElectrodynamics.jl` coherent, consider visiting the general [contribution guide of `QuantumElectrodynamics.jl`](https://qedjl-project.github.io/QuantumElectrodynamics.jl/dev/dev_guide/).
+Contributions are welcome! If you'd like to report a bug, suggest an enhancement, or contribute
+code, please feel free to open an issue or submit a pull request.
 
-## Credits and contributers
+To ensure consistency across the `QuantumElectrodynamics.jl` ecosystem, we encourage all contributors
+to review the [QuantumElectrodynamics.jl contribution guide](https://qedjl-project.github.io/QuantumElectrodynamics.jl/stable/dev_guide/#Development-Guide).
 
-This work was partly funded by the Center for Advanced Systems Understanding (CASUS) that is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget approved by the Saxon State Parliament.
+## Credits and contributors
 
-The core code of the package `QEDbase.jl` is developed by a small team at the Center for Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
+This work was partly funded by the Center for Advanced Systems Understanding (CASUS) that
+is financed by Germany’s Federal Ministry of Education and Research (BMBF) and by the Saxon
+Ministry for Science, Culture and Tourism (SMWK) with tax funds on the basis of the budget
+approved by the Saxon State Parliament.
 
-- Uwe Hernandez Acosta (u.hernandez@hzdr.de)
+The core code of the package `QEDbase.jl` is developed by a small team at the Center for
+Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
 
-This package would not be possible without many contributions done from the community as well. For that we want send big thanks to:
+### Core Contributors
 
-- my Mate supplier
-- the guy who will show me how to include the most recent contributers on github
+- **Uwe Hernandez Acosta** (CASUS/HZDR, [u.hernandez@hzdr.de](mailto:u.hernandez@hzdr.de))
+- **Anton Reinhard** (CASUS/HZDR)
+- **Simeon Ehrig** (CASUS/HZDR)
+- **Klaus Steiniger** (CASUS/HZDR)
+
+### Former Contributors
+
+- **Tom Jungnickel**
+
+We extend our sincere thanks to all contributors who have supported this project.
 
 ## License
 

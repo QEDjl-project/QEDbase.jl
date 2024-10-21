@@ -3,7 +3,7 @@
     AbstractParticleStateful <: QEDbase.AbstractParticle
 
 Abstract base type for the representation of a particle with a state. It requires the following interface functions to be provided:
-    
+
 - [`particle_direction`](@ref): Returning the particle's direction.
 - [`particle_species`](@ref): Returning the particle's species.
 - [`momentum`](@ref): Returning the particle's momentum.
