@@ -91,4 +91,4 @@ println("Outgoing positron momentum: ", momentum(outgoing_positron))
 # !!! note "Reference implementation"
 #
 #     A reference implementation of a stateful particle type is given by
-#     [`QEDcore.ParticleStateful`](@extref)
+#     [`ParticleStateful`](@extref :jl:type:`QEDcore.ParticleStateful`)
