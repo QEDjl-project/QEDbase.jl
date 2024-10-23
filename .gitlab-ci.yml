@@ -8,13 +8,17 @@ stages:
   stage: unit-test
   script:
     - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
+    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /tmp/integration_test_tools/
+    - $(julia --project=. /tmp/integration_test_tools/.ci/integTestGen/src/get_project_name_version_path.jl)
+    - echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
+    - echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
+    - echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
     - >
       if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
         # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
-        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml NO_MESSAGE
+        julia --project=. /tmp/integration_test_tools/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml NO_MESSAGE
       else
-        julia --project=. /QEDjl/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml
+        julia --project=. /tmp/integration_test_tools/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml
       fi
     - julia --project=. -e 'import Pkg; Pkg.instantiate()'
     - julia --project=. -e 'import Pkg; Pkg.test(; coverage = true)'
@@ -67,10 +71,12 @@ generate_integration_tests:
   stage: generate_integration_test
   script:
     # extract package name
-    - export CI_DEPENDENCY_NAME=$(cat $CI_PROJECT_DIR/Project.toml | grep name | awk '{ print $3 }' | tr -d '"')
-    - echo "CI_DEPENDENCY_NAME -> $CI_DEPENDENCY_NAME"
     - apt update && apt install -y git
     - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
+    - $(julia --project /QEDjl/.ci/integTestGen/src/get_project_name_version_path.jl)
+    - echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
+    - echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
+    - echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
     - cd /QEDjl/.ci/integTestGen/
     - julia --project=. -e 'import Pkg; Pkg.instantiate()'
     # paths of artifacts are relative to CI_PROJECT_DIR
