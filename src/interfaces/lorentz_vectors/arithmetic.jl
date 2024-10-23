@@ -78,6 +78,8 @@ Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spa
 
 """
 @inline @traitfn function getMagnitude(lv::T) where {T; IsLorentzVectorLike{T}}
+    # assume nothrow since getMagnitude2 always returns a positive result
+    Base.@assume_effects :nothrow
     return sqrt(getMagnitude2(lv))
 end
 
@@ -120,9 +122,11 @@ Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square ro
 
 """
 @traitfn function getInvariantMass(lv::T) where {T; IsLorentzVectorLike{T}}
+    # assume nothrow since we make sure that sqrt is only called on positive values
+    Base.@assume_effects :nothrow
     m2 = getInvariantMass2(lv)
     if m2 < zero(m2)
-        # Think about including this waring, maybe optional with a global PRINT_WARINGS switch.
+        # Think about including this warning, maybe optional with a global PRINT_WARNINGS switch.
         #@warn("The square of the invariant mass (m2=P*P) is negative. The value -sqrt(-m2) is returned.")
         return -sqrt(-m2)
     else
@@ -269,6 +273,8 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitu
 
 """
 @inline @traitfn function getTransverseMomentum(lv::T) where {T; IsLorentzVectorLike{T}}
+    # getTransverseMomentum2 always returns a positive value, therefore we can assume :nothrow
+    Base.@assume_effects :nothrow
     return sqrt(getTransverseMomentum2(lv))
 end
 """Function alias for [`getTransverseMomentum`](@ref)."""
@@ -317,9 +323,11 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square 
 
 """
 @traitfn function getTransverseMass(lv::T) where {T; IsLorentzVectorLike{T}}
+    # sqrt is only called on positive numbers, therefore we can assume nothrow
+    Base.@assume_effects :nothrow
     mT2 = getTransverseMass2(lv)
     if mT2 < zero(mT2)
-        # add optional waring: negative transverse mass -> -sqrt(-mT2) is returned.
+        # add optional warning: negative transverse mass -> -sqrt(-mT2) is returned.
         -sqrt(-mT2)
     else
         sqrt(mT2)
