@@ -3,7 +3,7 @@ name: Build and Deploy Documentation
 on:
   push:
     branches:
-      - master
+      - main
       - dev
     tags: '*'
   pull_request:
@@ -19,13 +19,18 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1.10'
-      - name: Add custom registry 
+      - name: clone integration test tools
         run: |
-          julia --project=docs/ -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/QEDjl-project/registry.git"));'
-          julia --project=docs/ -e 'import Pkg; Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/JuliaRegistries/General"));'
-      - name: Install dependencies
-        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
+          git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /tmp/integration_test_tools/
+      - name: set dev dependencies
+        run: |
+          $(julia --project=. /tmp/integration_test_tools/.ci/integTestGen/src/get_project_name_version_path.jl)
+          echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
+          echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
+          echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
+          julia --project=docs/ /tmp/integration_test_tools/.ci/SetupDevEnv/src/SetupDevEnv.jl
+          julia --project=docs/ -e 'import Pkg; Pkg.instantiate()'
       - name: Build and deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: julia --project=docs/ docs/make.jl

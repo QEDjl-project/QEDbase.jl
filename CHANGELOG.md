@@ -1,8 +1,44 @@
 # Changelog
 
+## Version 0.3.0
+
+[diff since 0.2.2](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.2.2...v0.3.0)
+
+This release contains the renaming of `QuantumElectrodynamics.jl` (previously `QED.jl`) and improvements of the interface and functionality of `AbstractPhaseSpacePoint` for spins and polarizations of particles. This includes the addition of new types `SyncedSpin` and `SyncedPol`.
+
+Since Julia 1.10 is now the LTS version, this release also drops versions below 1.10 from support.
+
+### Breaking Changes
+
+The `multiplicity` function was changed in [#112](https://github.com/QEDjl-project/QEDbase.jl/pull/112) to accept `AbstractProcessDefinition`s instead of raw spins or polarizations, breaking compatibility if this function was used. The function was used in [`QEDprocesses.jl`](https://github.com/QEDjl-project/QEDprocesses.jl), with the incompatibility fixed in the respective new version `QEDprocesses.jl-v0.3.0`.
+
+### New features
+
+- [#106](https://github.com/QEDjl-project/QEDbase.jl/pull/106): Add spin and polarization interface for `AbstractProcessDefinition`, namely functions `spin_pol`, `incoming_spin_pol` and `outgoing_spin_pol`
+- [#112](https://github.com/QEDjl-project/QEDbase.jl/pull/112): Add `SyncedSpin` and `SyncedPol` types, representing a synchronization of the spins or polarizations across multiple particles in the same scattering process
+- [#118](https://github.com/QEDjl-project/QEDbase.jl/pull/118): Add `spin_pols_iter`, returning an iterator for a given `AbstractProcessDefinition`, yielding all possible spin and polarization combinations for the process, including support for the `SyncedSpin` and `SyncedPol` types
+- [#129](https://github.com/QEDjl-project/QEDbase.jl/pull/129): Add coordinate transformation interface
+
+### Fixes
+
+- [#110](https://github.com/QEDjl-project/QEDbase.jl/pull/110): Remove `mul` from exported functions and rename, fixing a naming collision and unnecessary export
+- [#111](https://github.com/QEDjl-project/QEDbase.jl/pull/111): Fix GPU incompatibility of the `momenta` implementation
+- [#115](https://github.com/QEDjl-project/QEDbase.jl/pull/115): Set QEDjl-project dependencies to dev versions for documentation build and deploy job
+- [#116](https://github.com/QEDjl-project/QEDbase.jl/pull/116): Fix docs build and deployment CI job
+
+### Maintenance
+
+- [#108](https://github.com/QEDjl-project/QEDbase.jl/pull/108): Separate implementations from interfaces in the repository file structure
+- [#120](https://github.com/QEDjl-project/QEDbase.jl/pull/120): Apply renaming of `QuantumElectrodynamics.jl` (previously `QED.jl`)
+- [#123](https://github.com/QEDjl-project/QEDbase.jl/pull/123): Remove custom QEDjl-project registry
+- [#124](https://github.com/QEDjl-project/QEDbase.jl/pull/124): Add Julia TagBot
+- [#130](https://github.com/QEDjl-project/QEDbase.jl/pull/130): Drop Julia 1.9 and below from support and CI
+- [#125](https://github.com/QEDjl-project/QEDbase.jl/pull/125): Update integration test suite
+- [#127](https://github.com/QEDjl-project/QEDbase.jl/pull/127): Add lots of docs and tutorials
+
 ## Version 0.2.2
 
-[diff since 0.2.0](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.2.0...release-0.2.2)
+[diff since 0.2.0](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.2.0...v0.2.2)
 
 This release adds some convenience overloads to existing functions, some code maintenance and small fixes.
 
@@ -35,9 +71,9 @@ No further breaking or non-breaking changes.
 
 ## Version 0.2.0
 
-[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/release-0.1.6...release-0.2.0)
+[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.1.6...v0.2.0)
 
-This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QED.jl/issues/35 for details).
+This release is part of the restructuring processes of QED.jl (see https://github.com/QEDjl-project/QuantumElectrodynamics.jl/issues/35 for details).
 It is a breaking release, indicated by the bumped minor version because we don't have a major version for this
 yet.
 
@@ -75,6 +111,8 @@ fixes
 
 ## Version 0.1.6
 
+[diff since 0.1.6](https://github.com/QEDjl-project/QEDbase.jl/compare/1f8b2d2340e5a92c700bff458bfc385b8904448f...v0.1.6)
+
 This is a maintenance release, which resolves, among others, some issues with the git history.
 
 ### Breaking changes
@@ -94,7 +132,7 @@ No new features.
 
 ## Version 0.1.5
 
-[diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/0c70f66...release-0.1.5)
+[diff since 0.1.4](https://github.com/QEDjl-project/QEDbase.jl/compare/v0.1.4...v0.1.5)
 
 ### Breaking changes
 

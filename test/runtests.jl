@@ -1,9 +1,12 @@
-using QEDbase
 using Test
 using SafeTestsets
 
 begin
     # Interfaces
+    @time @safetestset "coordinate transforms" begin
+        include("interfaces/coordinate_transforms.jl")
+    end
+
     @time @safetestset "model interface" begin
         include("interfaces/model.jl")
     end

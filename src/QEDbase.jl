@@ -26,7 +26,6 @@ export AbstractFourMomentum
 export isonshell, assert_onshell
 
 export AbstractDiracVector, AbstractDiracMatrix
-export mul
 
 export AbstractGammaRepresentation
 
@@ -46,7 +45,8 @@ export AbstractDefinitePolarization, AbstractIndefinitePolarization
 export PolarizationX, PolX, PolarizationY, PolY, AllPolarization, AllPol
 export AbstractDefiniteSpin, AbstractIndefiniteSpin
 export SpinUp, SpinDown, AllSpin
-export multiplicity
+export SyncedSpin, SyncedPolarization, SyncedPol
+export spin_pols_iter
 
 # probabilities
 export differential_probability, unsafe_differential_probability
@@ -63,6 +63,8 @@ export AbstractModelDefinition, fundamental_interaction_type
 export AbstractProcessDefinition, incoming_particles, outgoing_particles
 export number_incoming_particles, number_outgoing_particles
 export particles, number_particles
+export incoming_spin_pols, outgoing_spin_pols, spin_pols
+export multiplicity, incoming_multiplicity, outgoing_multiplicity
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
@@ -72,6 +74,9 @@ export AbstractParticleStateful, AbstractPhaseSpacePoint
 export particle_direction, particle_species, momentum
 export process, model, phase_space_definition, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
+
+# Abstract coordinate transformation interface
+export AbstractCoordinateTransformation
 
 # errors
 export InvalidInputError, RegistryError, OnshellError, SpinorConstructionError
@@ -102,17 +107,24 @@ include("interfaces/model.jl")
 
 include("interfaces/particle.jl")
 
-include("particles/direction.jl")
-include("particles/spin_pol.jl")
+include("interfaces/particles/direction.jl")
+include("interfaces/particles/spin_pol.jl")
 
 include("interfaces/phase_space.jl")
 include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
-include("cross_section/diff_probability.jl")
-include("cross_section/diff_cross_section.jl")
-include("cross_section/total_probability.jl")
-include("cross_section/total_cross_section.jl")
+include("interfaces/coordinate_transformation.jl")
+
+include("implementations/process/momenta.jl")
+include("implementations/process/particles.jl")
+include("implementations/process/spin_pols.jl")
+include("implementations/process/spin_pol_iterator.jl")
+
+include("implementations/cross_section/diff_probability.jl")
+include("implementations/cross_section/diff_cross_section.jl")
+include("implementations/cross_section/total_probability.jl")
+include("implementations/cross_section/total_cross_section.jl")
 
 end #QEDbase

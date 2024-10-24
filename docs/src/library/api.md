@@ -1,3 +1,0 @@
-# QEDbase
-
-:warning: Under construction
