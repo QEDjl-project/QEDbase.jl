@@ -34,6 +34,7 @@ using StaticArrays
 include("groundtruths.jl")
 include("test_model.jl")
 include("test_process.jl")
+include("test_phase_space_layout.jl")
 include("test_coord_trafo.jl")
 include("random_momenta.jl")
 include("utils.jl")
