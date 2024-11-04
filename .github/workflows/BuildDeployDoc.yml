@@ -21,7 +21,7 @@ jobs:
           version: '1.10'
       - name: clone integration test tools
         run: |
-          git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /tmp/integration_test_tools/
+          git clone --depth 1 -b ciSetupDevNoSelfInstall https://github.com/SimeonEhrig/QED.jl.git /tmp/integration_test_tools/
       - name: set dev dependencies
         run: |
           $(julia --project=. /tmp/integration_test_tools/.ci/integTestGen/src/get_project_name_version_path.jl)
