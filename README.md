@@ -70,6 +70,13 @@ Advanced Systems Understanding ([CASUS](https://www.casus.science)), namely
 
 We extend our sincere thanks to all contributors who have supported this project.
 
+### Acknowledgements
+
+We extend our gratitude for the support received through direct and indirect funding for this project, especially
+
+- **Michael Bussmann**
+- **Tobias Dornheim**
+
 ## License
 
 [MIT](LICENSE) © Uwe Hernandez Acosta
