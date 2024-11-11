@@ -1,122 +1,31 @@
 stages:
-  - unit-test
-  - generate_integration_test
-  - run_integration_test
-  - verify-unit-test-deps
+- generate
+- run
 
-.unit_test_template:
-  stage: unit-test
-  script:
-    - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /tmp/integration_test_tools/
-    - $(julia --project=. /tmp/integration_test_tools/.ci/integTestGen/src/get_project_name_version_path.jl)
-    - echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
-    - echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
-    - echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
-    - >
-      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
-        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
-        julia --project=. /tmp/integration_test_tools/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml NO_MESSAGE
-      else
-        julia --project=. /tmp/integration_test_tools/.ci/SetupDevEnv/src/SetupDevEnv.jl ${CI_PROJECT_DIR}/Project.toml
-      fi
-    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
-    - julia --project=. -e 'import Pkg; Pkg.test(; coverage = true)'
-  interruptible: true
-  tags:
-    - cpuonly
-
-unit_tests_releases:
-  extends: .unit_test_template
-  parallel:
-    matrix:
-      - JULIA_VERSION: ["1.10", "1.11", "rc"]
-  image: julia:$JULIA_VERSION
-
-unit_tests_nightly:
-  extends: .unit_test_template
-  # use the same baseimage like the official julia images
-  image: debian:bookworm-slim
-  variables:
-    # path where julia tar bal should be downloaded
-    JULIA_DOWNLOAD: /julia/download
-    # path where julia should be extracted
-    JULIA_EXTRACT: /julia/extract
-  before_script:
-    - apt update && apt install -y wget
-    - mkdir -p $JULIA_DOWNLOAD
-    - mkdir -p $JULIA_EXTRACT
-    - >
-      if [[ $CI_RUNNER_EXECUTABLE_ARCH == "linux/arm64" ]]; then
-        wget https://julialangnightlies-s3.julialang.org/bin/linux/aarch64/julia-latest-linux-aarch64.tar.gz -O $JULIA_DOWNLOAD/julia-nightly.tar.gz
-      elif [[ $CI_RUNNER_EXECUTABLE_ARCH == "linux/amd64" ]]; then
-        wget https://julialangnightlies-s3.julialang.org/bin/linux/x86_64/julia-latest-linux-x86_64.tar.gz -O $JULIA_DOWNLOAD/julia-nightly.tar.gz
-      else
-        echo "unknown runner architecture -> $CI_RUNNER_EXECUTABLE_ARCH"
-        exit 1
-      fi
-    - tar -xf $JULIA_DOWNLOAD/julia-nightly.tar.gz -C $JULIA_EXTRACT
-    # we need to search for the julia base folder name, because the second part of the name is the git commit hash
-    # e.g. julia-b0c6781676f
-    - JULIA_EXTRACT_FOLDER=${JULIA_EXTRACT}/$(ls $JULIA_EXTRACT | grep -m1 julia)
-    # copy everything to /usr to make julia public available
-    # mv is not possible, because it cannot merge folder
-    - cp -r $JULIA_EXTRACT_FOLDER/* /usr
-  allow_failure: true
-  tags:
-    - cpuonly
-
-generate_integration_tests:
+generate_pipeline:
   image: julia:1.10
-  stage: generate_integration_test
+  stage: generate
+  variables:
+    CI_GIT_CI_TOOLS_URL: https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git
+    CI_GIT_CI_TOOLS_BRANCH: dev
   script:
-    # extract package name
     - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
-    - $(julia --project /QEDjl/.ci/integTestGen/src/get_project_name_version_path.jl)
-    - echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
-    - echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
-    - echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
-    - cd /QEDjl/.ci/integTestGen/
-    - julia --project=. -e 'import Pkg; Pkg.instantiate()'
-    # paths of artifacts are relative to CI_PROJECT_DIR
-    - >
-      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
-        # set name of the commit message from CI_COMMIT_MESSAGE to NO_MESSAGE, that the script does not read accidentally custom packages from the commit message of a merge commit
-        julia --project=. src/integTestGen.jl NO_MESSAGE > $CI_PROJECT_DIR/integrationjobs.yaml
-      else
-        julia --project=. src/integTestGen.jl > $CI_PROJECT_DIR/integrationjobs.yaml
-      fi
-    - cat $CI_PROJECT_DIR/integrationjobs.yaml
+    - git clone --depth 1 -b $CI_GIT_CI_TOOLS_BRANCH $CI_GIT_CI_TOOLS_URL /generator
+    - julia --project=/generator/.ci/CI -e 'import Pkg; Pkg.instantiate()'
+    - julia --project=/generator/.ci/CI /generator/.ci/CI/src/Bootloader.jl > $CI_PROJECT_DIR/pipeline.yaml
+    - cat $CI_PROJECT_DIR/pipeline.yaml
   artifacts:
     paths:
-      - integrationjobs.yaml
+      - pipeline.yaml
     expire_in: 1 week
   interruptible: true
   tags:
     - cpuonly
 
-run_integration_tests:
-  stage: run_integration_test
+run_pipeline:
+  stage: run
   trigger:
     include:
-      - artifact: integrationjobs.yaml
-        job: generate_integration_tests
+      - artifact: pipeline.yaml
+        job: generate_pipeline
     strategy: depend
-
-verify-unit-test-deps_julia1.10:
-  image: julia:1.10
-  stage: verify-unit-test-deps
-  script:
-    - apt update && apt install -y git
-    - git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /QEDjl
-    - >
-      if [[ $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_REF_NAME == "dev" ]]; then
-        # does not check for custom package URLs on the main and dev branch
-        echo "no custom package URL check necessary"
-      else
-        julia /QEDjl/.ci/verify_env.jl
-      fi
-  interruptible: true
-  tags:
-    - cpuonly
