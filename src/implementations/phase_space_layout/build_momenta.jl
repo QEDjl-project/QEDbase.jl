@@ -38,14 +38,14 @@ This is the user-facing function that calls `_build_momenta` internally and vali
 number of coordinates against the phase space dimensionality.
 
 # Arguments
-- `proc`: The scattering process definition, subtype of `AbstractProcessDefinition`.
-- `model`: The physics model, subtype of `AbstractModelDefinition`.
-- `in_psl`: The incoming phase space layout, subtype of `AbstractInPhaseSpaceLayout`.
+- `proc`: The scattering process definition, subtype of [`AbstractProcessDefinition`](@ref).
+- `model`: The physics model, subtype of [`AbstractModelDefinition`](@ref).
+- `in_psl`: The incoming phase space layout, subtype of [`AbstractInPhaseSpaceLayout`](@ref).
 - `in_coords`: A tuple of phase space coordinates that parametrize the incoming particle momenta.
 
 # Returns
 - A collection of four-momenta representing the incoming particles. Because of performance
-    reasons, it is recommened to return a `Tuple` of four-momenta.
+    reasons, it is recommended to return a `Tuple` of four-momenta.
 """
 function build_momenta(
     proc::AbstractProcessDefinition,
@@ -64,9 +64,9 @@ end
 A scalar version of `build_momenta` for incoming phase space layouts (`in_psl`), where the phase space coordinates are provided as a single scalar instead of a tuple.
 
 ## Arguments:
-- `proc`: The scattering process definition, subtype of `AbstractProcessDefinition`.
-- `model`: The physics model, subtype of `AbstractModelDefinition`.
-- `in_psl`: The incoming phase space layout, subtype of `AbstractInPhaseSpaceLayout`.
+- `proc`: The scattering process definition, subtype of [`AbstractProcessDefinition`](@ref).
+- `model`: The physics model, subtype of [`AbstractModelDefinition`](@ref).
+- `in_psl`: The incoming phase space layout, subtype of [`AbstractInPhaseSpaceLayout`](@ref).
 - `in_coords::Real`: A single scalar representing the phase space coordinate for the
     incoming particles.
 
@@ -127,10 +127,10 @@ This function ensures that the outgoing momenta satisfy energy and momentum cons
 consistent with the physics model in use.
 
 # Arguments
-- `proc`: The scattering process definition, subtype of `AbstractProcessDefinition`.
-- `model`: The physics model, subtype of `AbstractModelDefinition`.
+- `proc`: The scattering process definition, subtype of [`AbstractProcessDefinition`](@ref).
+- `model`: The physics model, subtype of [`AbstractModelDefinition`](@ref).
 - `in_moms`: The incoming four-momenta, used to compute the outgoing momenta.
-- `out_psl`: The outgoing phase space layout, subtype of `AbstractOutPhaseSpaceLayout.
+- `out_psl`: The outgoing phase space layout, subtype of [`AbstractOutPhaseSpaceLayout](@ref).
 - `out_coords`: A tuple of phase space coordinates that parametrize the outgoing particle momenta.
 
 # Returns

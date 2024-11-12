@@ -31,7 +31,7 @@ include("../test_implementation/TestImplementation.jl")
     )
 
     @testset "build momenta" begin
-        @testset "in-plase-space layout" begin
+        @testset "in-phase-space layout" begin
             @test length(test_in_moms) == N_INCOMING
             @test all(isapprox.(test_in_moms, groundtruth_in_moms, atol=ATOL, rtol=RTOL))
         end

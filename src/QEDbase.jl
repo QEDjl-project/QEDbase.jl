@@ -66,7 +66,7 @@ export particles, number_particles
 export incoming_spin_pols, outgoing_spin_pols, spin_pols
 export multiplicity, incoming_multiplicity, outgoing_multiplicity
 
-# Abstrac phase space layout
+# Abstract phase space layout
 export AbstractPhaseSpaceLayout
 export AbstractInPhaseSpaceLayout
 export AbstractOutPhaseSpaceLayout
