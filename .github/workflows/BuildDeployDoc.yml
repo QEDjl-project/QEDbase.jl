@@ -1,4 +1,4 @@
-name: Build and Deploy Documentation
+name: Build and deploy documentation
 
 on:
   push:
@@ -15,22 +15,6 @@ jobs:
       statuses: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v1
+      - uses: QEDjl-project/gh-actions/build-docs@v1
         with:
-          version: '1.10'
-      - name: clone integration test tools
-        run: |
-          git clone --depth 1 -b dev https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git /tmp/integration_test_tools/
-      - name: set dev dependencies
-        run: |
-          $(julia --project=. /tmp/integration_test_tools/.ci/CI/src/GetProjectNameVersionPath.jl)
-          echo "CI_DEV_PKG_NAME -> $CI_DEV_PKG_NAME"
-          echo "CI_DEV_PKG_VERSION -> $CI_DEV_PKG_VERSION"
-          echo "CI_DEV_PKG_PATH -> $CI_DEV_PKG_PATH"
-          julia --project=docs/ /tmp/integration_test_tools/.ci/CI/src/SetupDevEnv.jl
-          julia --project=docs/ -e 'import Pkg; Pkg.instantiate()'
-      - name: Build and deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: julia --project=docs/ docs/make.jl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
