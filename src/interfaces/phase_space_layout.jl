@@ -1,5 +1,6 @@
 
 """
+
     AbstractPhaseSpaceLayout
 
 The `AbstractPhaseSpaceLayout` is an abstract type that represents the general concept of
@@ -12,6 +13,7 @@ a phase space layout in a scattering process.
 abstract type AbstractPhaseSpaceLayout end
 
 """
+
     AbstractInPhaseSpaceLayout <: AbstractPhaseSpaceLayout
 
 The `AbstractInPhaseSpaceLayout` represents the phase space layout for the incoming particles
@@ -27,6 +29,7 @@ constructed from phase space coordinates.
 abstract type AbstractInPhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 
 """
+
     AbstractOutPhaseSpaceLayout{InPSL<:AbstractInPhaseSpaceLayout} <: AbstractPhaseSpaceLayout
 
 The `AbstractOutPhaseSpaceLayout` represents the phase space layout for the outgoing particles
@@ -47,6 +50,7 @@ allowing consistency between the two configurations in the process.
 abstract type AbstractOutPhaseSpaceLayout{InPSL<:AbstractInPhaseSpaceLayout} <:
               AbstractPhaseSpaceLayout end
 """
+
     phase_space_dimension(proc, model, layout::AbstractPhaseSpaceLayout) -> Int
 
 This function needs to be implemented for the phase-space layout interface.
@@ -94,6 +98,7 @@ when calculating or sampling phase space points in scattering processes.
 function in_phase_space_layout end
 
 """
+
     _build_momenta(proc, model, in_psl::AbstractInPhaseSpaceLayout, in_coords::Tuple)
     _build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)
 
