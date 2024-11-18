@@ -42,3 +42,50 @@ end
 function _furl_moms(moms::NTuple{N,Float64}) where {N}
     return Tuple(_furl_moms(Vector{Float64}([moms...])))
 end
+
+function Base.isapprox(
+    mom1::SFourMomentum,
+    mom2::SFourMomentum;
+    atol::Real=0.0,
+    rtol::Real=Base.rtoldefault(Float64),
+    nans::Bool=false,
+    norm::Function=abs,
+)
+    return all(isapprox.(mom1.x, mom2.x; atol=atol, rtol=rtol, nans=nans, norm=norm)) &&
+           all(isapprox.(mom1.y, mom2.y; atol=atol, rtol=rtol, nans=nans, norm=norm)) &&
+           all(isapprox.(mom1.z, mom2.z; atol=atol, rtol=rtol, nans=nans, norm=norm)) &&
+           all(isapprox.(mom1.E, mom2.E; atol=atol, rtol=rtol, nans=nans, norm=norm))
+end
+
+function Base.isapprox(
+    psp1::PhaseSpacePoint,
+    psp2::PhaseSpacePoint;
+    atol::Real=0.0,
+    rtol::Real=Base.rtoldefault(Float64),
+    nans::Bool=false,
+    norm::Function=abs,
+)
+    return process(psp1) == process(psp2) &&
+           model(psp1) == model(psp2) &&
+           phase_space_definition(psp1) == phase_space_definition(psp2) &&
+           all(
+               isapprox.(
+                   momenta(psp1, Incoming()),
+                   momenta(psp2, Incoming());
+                   atol=atol,
+                   rtol=rtol,
+                   nans=nans,
+                   norm=norm,
+               ),
+           ) &&
+           all(
+               isapprox.(
+                   momenta(psp1, Outgoing()),
+                   momenta(psp2, Outgoing());
+                   atol=atol,
+                   rtol=rtol,
+                   nans=nans,
+                   norm=norm,
+               ),
+           )
+end

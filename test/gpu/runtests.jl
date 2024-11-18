@@ -4,7 +4,7 @@ functional, and execute the unit tests then. Additionally, if an environment var
 ("TEST_<GPU> = 1"), the tests will fail if the library is not functional.
 """
 
-GPU_VECTOR_TYPES = Vector{Type}()
+GPUS = Vector{Tuple{Module,Type}}()
 
 # check if we test with AMDGPU
 amdgpu_tests = tryparse(Bool, get(ENV, "TEST_AMDGPU", "0"))
@@ -17,7 +17,7 @@ if amdgpu_tests
         AMDGPU.functional() || throw(
             "trying to test with AMDGPU.jl but it is not functional (AMDGPU.functional() == false)",
         )
-        push!(GPU_VECTOR_TYPES, ROCVector)
+        push!(GPUS, (AMDGPU, ROCVector))
         @info "Testing with AMDGPU.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -36,7 +36,7 @@ if cuda_tests
         CUDA.functional() || throw(
             "trying to test with CUDA.jl but it is not functional (CUDA.functional() == false)",
         )
-        push!(GPU_VECTOR_TYPES, CuVector)
+        push!(GPUS, (CUDA, CuVector))
         @info "Testing with CUDA.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -55,7 +55,7 @@ if oneapi_tests
         oneAPI.functional() || throw(
             "trying to test with oneAPI.jl but it is not functional (oneAPI.functional() == false)",
         )
-        push!(GPU_VECTOR_TYPES, oneVector)
+        push!(GPUS, (oneAPI, oneVector))
         @info "Testing with oneAPI.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -74,7 +74,7 @@ if metal_tests
         Metal.functional() || throw(
             "trying to test with Metal.jl but it is not functional (Metal.functional() == false)",
         )
-        push!(GPU_VECTOR_TYPES, MtlVector)
+        push!(GPUS, (Metal, MtlVector))
         @info "Testing with Metal.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -82,4 +82,7 @@ if metal_tests
     end
 end
 
-include("unit_tests.jl")
+include("../test_implementation/TestImplementation.jl")
+
+# from here on, we cannot use safe test sets or we would unload the GPU libraries again
+include("momentum_map.jl")
