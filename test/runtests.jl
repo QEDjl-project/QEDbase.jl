@@ -1,7 +1,10 @@
 using Test
 using SafeTestsets
 
-begin
+# check if we run CPU tests (yes by default)
+cpu_tests = tryparse(Bool, get(ENV, "TEST_CPU", "1"))
+
+if cpu_tests
     # Interfaces
     @time @safetestset "coordinate transforms" begin
         include("interfaces/coordinate_transforms.jl")
