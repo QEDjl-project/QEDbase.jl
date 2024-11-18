@@ -24,6 +24,7 @@ end
 
     @test isapprox(test_mom_prime, TestImplementation._groundtruth_coord_trafo(test_mom))
 end
+
 @testset "set of momenta" begin
     test_moms = rand(RNG, SFourMomentum, 3)
     test_moms_prime = TESTTRAFO.(test_moms)

@@ -45,10 +45,12 @@ if cpu_tests
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
     end
+else
+    @info "Skipping CPU tests"
 end
 
 begin
     @time @safetestset "GPU testing" begin
-        include("gpu_tests/gpu.jl")
+        include("gpu/runtests.jl")
     end
 end
