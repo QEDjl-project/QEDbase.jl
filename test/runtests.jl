@@ -43,3 +43,9 @@ begin
         include("cross_sections.jl")
     end
 end
+
+begin
+    @time @safetestset "GPU testing" begin
+        include("gpu_tests/gpu.jl")
+    end
+end
