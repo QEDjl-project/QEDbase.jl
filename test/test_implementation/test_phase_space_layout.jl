@@ -2,7 +2,7 @@
 ### Trivial phase-space layouts
 
 # maps all components onto four momenta
-struct TrivialInPSL <: AbstractInPhaseSpaceLayout end
+struct TrivialInPSL <: QEDbase.AbstractInPhaseSpaceLayout end
 
 @inline QEDbase.phase_space_dimension(
     proc::AbstractProcessDefinition, ::AbstractModelDefinition, ::TrivialInPSL
@@ -15,7 +15,7 @@ struct TrivialInPSL <: AbstractInPhaseSpaceLayout end
 end
 
 # maps componets of N-1 particles onto four-momenta and uses energy-momentum conservation
-struct TrivialOutPSL <: AbstractOutPhaseSpaceLayout{TrivialInPSL}
+struct TrivialOutPSL <: QEDbase.AbstractOutPhaseSpaceLayout{TrivialInPSL}
     in_psl::TrivialInPSL
 end
 
