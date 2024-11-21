@@ -72,6 +72,7 @@ pages = [
         "Dirac tensors" => "library/dirac_objects.md",
         "Particles" => "library/particles.md",
         "Scattering process" => "library/process.md",
+        "Phase space layout" => "library/phase_space_layout.md",
         "Phase space description" => "library/phase_space.md",
         "Probability and cross section" => "library/cross_section.md",
         "Function index" => "library/function_index.md",

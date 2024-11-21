@@ -7,6 +7,10 @@ begin
         include("interfaces/coordinate_transforms.jl")
     end
 
+    @time @safetestset "phase space layout" begin
+        include("interfaces/phase_space_layout.jl")
+    end
+
     @time @safetestset "model interface" begin
         include("interfaces/model.jl")
     end

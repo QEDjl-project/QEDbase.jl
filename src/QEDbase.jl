@@ -66,6 +66,12 @@ export particles, number_particles
 export incoming_spin_pols, outgoing_spin_pols, spin_pols
 export multiplicity, incoming_multiplicity, outgoing_multiplicity
 
+# Abstract phase space layout
+#export AbstractPhaseSpaceLayout
+#export AbstractInPhaseSpaceLayout
+#export AbstractOutPhaseSpaceLayout
+#export build_momenta, phase_space_dimension, in_phase_space_layout
+
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
 
@@ -106,7 +112,6 @@ include("interfaces/four_momentum.jl")
 include("interfaces/model.jl")
 
 include("interfaces/particle.jl")
-
 include("interfaces/particles/direction.jl")
 include("interfaces/particles/spin_pol.jl")
 
@@ -115,7 +120,11 @@ include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
 
+include("interfaces/phase_space_layout.jl")
+
 include("interfaces/coordinate_transformation.jl")
+
+include("implementations/phase_space_layout/build_momenta.jl")
 
 include("implementations/process/momenta.jl")
 include("implementations/process/particles.jl")
