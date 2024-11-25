@@ -8,6 +8,8 @@ generate_pipeline:
   variables:
     CI_GIT_CI_TOOLS_URL: https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git
     CI_GIT_CI_TOOLS_BRANCH: dev
+    CI_ENABLE_CUDA_TESTS: "ON"
+    CI_ENABLE_AMDGPU_TESTS: "ON"
   script:
     - apt update && apt install -y git
     - git clone --depth 1 -b $CI_GIT_CI_TOOLS_BRANCH $CI_GIT_CI_TOOLS_URL /generator
