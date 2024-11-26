@@ -1,7 +1,10 @@
 using Test
 using SafeTestsets
 
-begin
+# check if we run CPU tests (yes by default)
+cpu_tests = tryparse(Bool, get(ENV, "TEST_CPU", "1"))
+
+if cpu_tests
     # Interfaces
     @time @safetestset "coordinate transforms" begin
         include("interfaces/coordinate_transforms.jl")
@@ -41,5 +44,13 @@ begin
 
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
+    end
+else
+    @info "Skipping CPU tests"
+end
+
+begin
+    @time @safetestset "GPU testing" begin
+        include("gpu/runtests.jl")
     end
 end
