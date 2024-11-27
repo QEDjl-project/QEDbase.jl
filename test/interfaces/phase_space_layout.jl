@@ -18,14 +18,12 @@ include("../test_implementation/TestImplementation.jl")
 
     TESTINPSL = TestImplementation.TrivialInPSL()
     TESTINCOORDS = Tuple(rand(RNG, 4 * N_INCOMING))
-    test_in_moms = @inferred QEDbase.build_momenta(
-        TESTPROC, TESTMODEL, TESTINPSL, TESTINCOORDS
-    )
+    test_in_moms = @inferred build_momenta(TESTPROC, TESTMODEL, TESTINPSL, TESTINCOORDS)
     groundtruth_in_moms = TestImplementation._groundtruth_in_moms(TESTINCOORDS)
 
     TESTOUTPSL = TestImplementation.TrivialOutPSL(TESTINPSL)
     TESTOUTCOORDS = Tuple(rand(RNG, 4 * N_OUTGOING - 4))
-    test_out_moms = @inferred QEDbase.build_momenta(
+    test_out_moms = @inferred build_momenta(
         TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS
     )
     groundtruth_out_moms = TestImplementation._groundtruth_out_moms(
@@ -47,25 +45,25 @@ include("../test_implementation/TestImplementation.jl")
         @testset "Error handling" begin
 
             # not enough coordinates
-            @test_throws InvalidInputError QEDbase.build_momenta(
+            @test_throws InvalidInputError build_momenta(
                 TESTPROC, TESTMODEL, TESTINPSL, TESTINCOORDS[2:end]
             )
 
             # too much coordinates
-            @test_throws InvalidInputError QEDbase.build_momenta(
+            @test_throws InvalidInputError build_momenta(
                 TESTPROC, TESTMODEL, TESTINPSL, (TESTINCOORDS..., rand(RNG))
             )
 
             # "no coordinates" is already the lowest amount
             if N_OUTGOING != 1
                 # not enough coordinates
-                @test_throws InvalidInputError QEDbase.build_momenta(
+                @test_throws InvalidInputError build_momenta(
                     TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS[2:end]
                 )
             end
 
             # too many coordinates
-            @test_throws InvalidInputError QEDbase.build_momenta(
+            @test_throws InvalidInputError build_momenta(
                 TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, (TESTOUTCOORDS..., rand(RNG))
             )
         end
