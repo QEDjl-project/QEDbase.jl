@@ -67,10 +67,10 @@ export incoming_spin_pols, outgoing_spin_pols, spin_pols
 export multiplicity, incoming_multiplicity, outgoing_multiplicity
 
 # Abstract phase space layout
-#export AbstractPhaseSpaceLayout
-#export AbstractInPhaseSpaceLayout
-#export AbstractOutPhaseSpaceLayout
-#export build_momenta, phase_space_dimension, in_phase_space_layout
+export AbstractPhaseSpaceLayout
+export AbstractInPhaseSpaceLayout
+export AbstractOutPhaseSpaceLayout
+export build_momenta, phase_space_dimension, in_phase_space_layout
 
 # Abstract phase space definition interface
 export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
