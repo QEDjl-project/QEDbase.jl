@@ -51,8 +51,8 @@ TESTTRAFO = TestImplementation.TestCoordinateTrafo()
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,
-                    TestImplementation._rand_momenta(RNG, N_INCOMING),
-                    TestImplementation._rand_momenta(RNG, N_OUTGOING),
+                    TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
+                    TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
                 ) for _ in 1:100
             ]
             gpu_test_psps = VECTOR_TYPE(test_psps)
