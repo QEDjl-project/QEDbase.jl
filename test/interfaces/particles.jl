@@ -9,6 +9,9 @@ RTOL = sqrt(eps())
 include("../test_implementation/TestImplementation.jl")
 using .TestImplementation
 
+MOM_TYPE = TestMomentum{Float64}
+TEST_MOM = MOM_TYPE(rand(RNG, 4))
+
 @testset "particle properties" begin
     @testset "particle" begin
         @test is_particle(TestFermion()) == true
@@ -50,5 +53,16 @@ using .TestImplementation
         @test charge(TestMasslessFermion()) == TestImplementation._CHARGE_TEST_FERMION
         @test charge(TestBoson()) == TestImplementation._CHARGE_TEST_BOSON
         @test charge(TestMasslessBoson()) == TestImplementation._CHARGE_TEST_BOSON
+    end
+
+    @testset "propagator" begin
+        @test propagator(TestFermion(), TEST_MOM) ==
+            TestImplementation._groundtruth_fermion_propagator(TEST_MOM)
+        @test propagator(TestMasslessFermion(), TEST_MOM) ==
+            TestImplementation._groundtruth_fermion_propagator(TEST_MOM)
+        @test propagator(TestBoson(), TEST_MOM) ==
+            TestImplementation._groundtruth_boson_propagator(TEST_MOM)
+        @test propagator(TestMasslessBoson(), TEST_MOM) ==
+            TestImplementation._groundtruth_boson_propagator(TEST_MOM)
     end
 end
