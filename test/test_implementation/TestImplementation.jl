@@ -2,6 +2,7 @@ module TestImplementation
 
 export TestMomentum, TestMomentumMutable
 export TestFermion, TestBoson
+export TestMasslessFermion, TestMasslessBoson
 
 export TestModel, TestModel_FAIL
 export TestProcess, TestProcess_FAIL

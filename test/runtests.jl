@@ -16,6 +16,10 @@ if cpu_tests
     end
 
     @time @safetestset "particles" begin
+        include("interfaces/particles.jl")
+    end
+
+    @time @safetestset "particles properties" begin
         include("particle_properties.jl")
     end
 

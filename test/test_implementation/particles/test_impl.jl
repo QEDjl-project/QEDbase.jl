@@ -18,16 +18,16 @@ QEDbase.mass(::TestMasslessFermion) = 0.0
 QEDbase.charge(::TestMasslessFermion) = _CHARGE_TEST_FERMION
 
 struct TestBoson <: AbstractParticleType end
-QEDbase.is_fermion(::TestBoson) = true
-QEDbase.is_boson(::TestBoson) = false
+QEDbase.is_fermion(::TestBoson) = false
+QEDbase.is_boson(::TestBoson) = true
 QEDbase.is_particle(::TestBoson) = true
 QEDbase.is_anti_particle(::TestBoson) = false
 QEDbase.mass(::TestBoson) = _MASS_TEST_BOSON
 QEDbase.charge(::TestBoson) = _CHARGE_TEST_BOSON
 
 struct TestMasslessBoson <: AbstractParticleType end
-QEDbase.is_fermion(::TestMasslessBoson) = true
-QEDbase.is_boson(::TestMasslessBoson) = false
+QEDbase.is_fermion(::TestMasslessBoson) = false
+QEDbase.is_boson(::TestMasslessBoson) = true
 QEDbase.is_particle(::TestMasslessBoson) = true
 QEDbase.is_anti_particle(::TestMasslessBoson) = false
 QEDbase.mass(::TestMasslessBoson) = 0.0
