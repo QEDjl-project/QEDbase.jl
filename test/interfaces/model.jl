@@ -4,8 +4,8 @@ include("../test_implementation/TestImplementation.jl")
 using .TestImplementation: TestModel, TestModel_FAIL
 
 @testset "hard interface" begin
-    TESTMODEL = TestModel()
-    @test fundamental_interaction_type(TESTMODEL) ==
+    TESTMODEL = @inferred TestModel()
+    @test @inferred fundamental_interaction_type(TESTMODEL) ==
         TestImplementation._groundtruth_interaction_type()
 end
 

@@ -1,5 +1,4 @@
 
-# TODO: implement using TestPSP, not PhaseSpacePoint
 function QEDbase._incident_flux(
     in_psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
 )

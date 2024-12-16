@@ -73,14 +73,14 @@ using .TestImplementation
     end
 
     @testset "incoming/outgoing particles" begin
-        @test incoming_particles(TESTPROC) == INCOMING_PARTICLES
-        @test outgoing_particles(TESTPROC) == OUTGOING_PARTICLES
-        @test particles(TESTPROC, Incoming()) == INCOMING_PARTICLES
-        @test particles(TESTPROC, Outgoing()) == OUTGOING_PARTICLES
-        @test number_incoming_particles(TESTPROC) == N_INCOMING
-        @test number_outgoing_particles(TESTPROC) == N_OUTGOING
-        @test number_particles(TESTPROC, Incoming()) == N_INCOMING
-        @test number_particles(TESTPROC, Outgoing()) == N_OUTGOING
+        @test @inferred incoming_particles(TESTPROC) == INCOMING_PARTICLES
+        @test @inferred outgoing_particles(TESTPROC) == OUTGOING_PARTICLES
+        @test @inferred particles(TESTPROC, Incoming()) == INCOMING_PARTICLES
+        @test @inferred particles(TESTPROC, Outgoing()) == OUTGOING_PARTICLES
+        @test @inferred number_incoming_particles(TESTPROC) == N_INCOMING
+        @test @inferred number_outgoing_particles(TESTPROC) == N_OUTGOING
+        @test @inferred number_particles(TESTPROC, Incoming()) == N_INCOMING
+        @test @inferred number_particles(TESTPROC, Outgoing()) == N_OUTGOING
 
         @testset "$dir $species" for (dir, species) in Iterators.product(
             (Incoming(), Outgoing()), TestImplementation.PARTICLE_SET
@@ -88,8 +88,10 @@ using .TestImplementation
             groundtruth_particle_count = count(x -> x == species, particles(TESTPROC, dir))
             test_ps = TestParticleStateful(dir, species, zero(TestMomentum{Float64}))
 
-            @test number_particles(TESTPROC, dir, species) == groundtruth_particle_count
-            @test number_particles(TESTPROC, test_ps) == groundtruth_particle_count
+            @test @inferred number_particles(TESTPROC, dir, species) ==
+                groundtruth_particle_count
+            @test @inferred number_particles(TESTPROC, test_ps) ==
+                groundtruth_particle_count
         end
     end
 
@@ -103,10 +105,10 @@ using .TestImplementation
             N_OUTGOING,
         )
 
-        @test incoming_spin_pols(TESTPROC) == groundtruth_incoming_spin_pols
-        @test outgoing_spin_pols(TESTPROC) == groundtruth_outgoing_spin_pols
-        @test spin_pols(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
-        @test spin_pols(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
+        @test @inferred incoming_spin_pols(TESTPROC) == groundtruth_incoming_spin_pols
+        @test @inferred outgoing_spin_pols(TESTPROC) == groundtruth_outgoing_spin_pols
+        @test @inferred spin_pols(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
+        @test @inferred spin_pols(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
 
         for (pt, sp) in Iterators.flatten((
             Iterators.zip(incoming_particles(TESTPROC), incoming_spin_pols(TESTPROC)),
@@ -155,7 +157,7 @@ using .TestImplementation
 
     #TODO: move to cross section
     @testset "is in phasespace" begin
-        @test QEDbase._is_in_phasespace(PSP)
+        @test @inferred QEDbase._is_in_phasespace(PSP)
 
         IN_PS_unphysical = (zero(TestMomentum{Float64}), IN_PS[2:end]...)
         OUT_PS_unphysical = (OUT_PS[1:(end - 1)]..., ones(TestMomentum{Float64}))
@@ -236,9 +238,9 @@ end
             proc = TestImplementation.TestProcessSP(
                 (boson, fermion), (boson, fermion), (p1, s1), (p2, s2)
             )
-            @test multiplicity(proc) == prod(_mult.((p1, s1, p2, s2)))
-            @test incoming_multiplicity(proc) == prod(_mult.((p1, s1)))
-            @test outgoing_multiplicity(proc) == prod(_mult.((p2, s2)))
+            @test @inferred multiplicity(proc) == prod(_mult.((p1, s1, p2, s2)))
+            @test @inferred incoming_multiplicity(proc) == prod(_mult.((p1, s1)))
+            @test @inferred outgoing_multiplicity(proc) == prod(_mult.((p2, s2)))
         end
     end
 
@@ -251,9 +253,9 @@ end
             (ntuple(_ -> SyncedPolarization(1), i)..., AllSpin()),
             (AllPol(), AllSpin()),
         )
-        @test multiplicity(proc) == 16
-        @test incoming_multiplicity(proc) == 4
-        @test outgoing_multiplicity(proc) == 4
+        @test @inferred multiplicity(proc) == 16
+        @test @inferred incoming_multiplicity(proc) == 4
+        @test @inferred outgoing_multiplicity(proc) == 4
 
         proc = TestImplementation.TestProcessSP(
             (boson, fermion),
@@ -261,9 +263,9 @@ end
             (AllPol(), SpinDown()),
             (ntuple(_ -> SyncedPolarization(1), i)..., AllSpin()),
         )
-        @test multiplicity(proc) == 8
-        @test incoming_multiplicity(proc) == 2
-        @test outgoing_multiplicity(proc) == 4
+        @test @inferred multiplicity(proc) == 8
+        @test @inferred incoming_multiplicity(proc) == 2
+        @test @inferred outgoing_multiplicity(proc) == 4
 
         for j in 1:4
             # ... with j synced fermions
@@ -273,9 +275,9 @@ end
                 (ntuple(_ -> SyncedPolarization(1), i)..., SpinDown()),
                 (PolX(), ntuple(_ -> SyncedSpin(1), j)...),
             )
-            @test multiplicity(proc) == 4
-            @test incoming_multiplicity(proc) == 2
-            @test outgoing_multiplicity(proc) == 2
+            @test @inferred multiplicity(proc) == 4
+            @test @inferred incoming_multiplicity(proc) == 2
+            @test @inferred outgoing_multiplicity(proc) == 2
         end
     end
 
@@ -286,9 +288,9 @@ end
             (ntuple(_ -> SyncedPolarization(1), 2)..., SpinUp()),
             (ntuple(_ -> SyncedPolarization(2), 2)..., AllSpin()),
         )
-        @test multiplicity(proc) == 8
-        @test incoming_multiplicity(proc) == 2
-        @test outgoing_multiplicity(proc) == 4
+        @test @inferred multiplicity(proc) == 8
+        @test @inferred incoming_multiplicity(proc) == 2
+        @test @inferred outgoing_multiplicity(proc) == 4
     end
 
     @testset "synced polarization across in and out particles" begin
@@ -298,8 +300,8 @@ end
             (ntuple(i -> SyncedPolarization(i), 2)..., SpinUp()),
             (ntuple(i -> SyncedPolarization(i), 2)..., SpinDown()),
         )
-        @test multiplicity(proc) == 4
-        @test incoming_multiplicity(proc) == 4
-        @test outgoing_multiplicity(proc) == 4
+        @test @inferred multiplicity(proc) == 4
+        @test @inferred incoming_multiplicity(proc) == 4
+        @test @inferred outgoing_multiplicity(proc) == 4
     end
 end

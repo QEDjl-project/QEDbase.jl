@@ -24,23 +24,23 @@ using .TestImplementation
     PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
 
     @testset "momentum implementations" begin
-        @test momentum(PSP, Incoming(), TestBoson(), 1) == IN_PS[1]
-        @test momentum(PSP, Incoming(), TestFermion(), 1) == IN_PS[2]
-        @test momentum(PSP, Incoming(), TestFermion()) == IN_PS[2]
-        @test momentum(PSP, Incoming(), TestBoson(), 2) == IN_PS[3]
+        @test @inferred momentum(PSP, Incoming(), TestBoson(), 1) == IN_PS[1]
+        @test @inferred momentum(PSP, Incoming(), TestFermion(), 1) == IN_PS[2]
+        @test @inferred momentum(PSP, Incoming(), TestFermion()) == IN_PS[2]
+        @test @inferred momentum(PSP, Incoming(), TestBoson(), 2) == IN_PS[3]
 
-        @test momentum(PSP, Outgoing(), TestFermion(), 1) == OUT_PS[1]
-        @test momentum(PSP, Outgoing(), TestBoson(), 1) == OUT_PS[2]
-        @test momentum(PSP, Outgoing(), TestBoson()) == OUT_PS[2]
-        @test momentum(PSP, Outgoing(), TestFermion(), 2) == OUT_PS[3]
+        @test @inferred momentum(PSP, Outgoing(), TestFermion(), 1) == OUT_PS[1]
+        @test @inferred momentum(PSP, Outgoing(), TestBoson(), 1) == OUT_PS[2]
+        @test @inferred momentum(PSP, Outgoing(), TestBoson()) == OUT_PS[2]
+        @test @inferred momentum(PSP, Outgoing(), TestFermion(), 2) == OUT_PS[3]
 
-        @test momentum(PSP, Incoming(), TestBoson(), Val(1)) == IN_PS[1]
-        @test momentum(PSP, Incoming(), TestFermion(), Val(1)) == IN_PS[2]
-        @test momentum(PSP, Incoming(), TestBoson(), Val(2)) == IN_PS[3]
+        @test @inferred momentum(PSP, Incoming(), TestBoson(), Val(1)) == IN_PS[1]
+        @test @inferred momentum(PSP, Incoming(), TestFermion(), Val(1)) == IN_PS[2]
+        @test @inferred momentum(PSP, Incoming(), TestBoson(), Val(2)) == IN_PS[3]
 
-        @test momentum(PSP, Outgoing(), TestFermion(), Val(1)) == OUT_PS[1]
-        @test momentum(PSP, Outgoing(), TestBoson(), Val(1)) == OUT_PS[2]
-        @test momentum(PSP, Outgoing(), TestFermion(), Val(2)) == OUT_PS[3]
+        @test @inferred momentum(PSP, Outgoing(), TestFermion(), Val(1)) == OUT_PS[1]
+        @test @inferred momentum(PSP, Outgoing(), TestBoson(), Val(1)) == OUT_PS[2]
+        @test @inferred momentum(PSP, Outgoing(), TestFermion(), Val(2)) == OUT_PS[3]
     end
 
     @testset "momentum fails" begin
@@ -69,7 +69,7 @@ using .TestImplementation
     end
 
     @testset "momenta implementation" begin
-        @test IN_PS == momenta(PSP, Incoming())
-        @test OUT_PS == momenta(PSP, Outgoing())
+        @test IN_PS == @inferred momenta(PSP, Incoming())
+        @test OUT_PS == @inferred momenta(PSP, Outgoing())
     end
 end
