@@ -6,8 +6,8 @@ generate_pipeline:
   image: julia:1.10
   stage: generate
   variables:
-    CI_GIT_CI_TOOLS_URL: https://github.com/QEDjl-project/QuantumElectrodynamics.jl.git
-    CI_GIT_CI_TOOLS_BRANCH: dev
+    CI_GIT_CI_TOOLS_URL: https://github.com/SimeonEhrig/QED.jl.git
+    CI_GIT_CI_TOOLS_BRANCH: ciBootloaderOutputOption
     CI_ENABLE_CUDA_TESTS: "ON"
     CI_ENABLE_AMDGPU_TESTS: "ON"
   script:
