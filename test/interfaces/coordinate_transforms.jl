@@ -1,16 +1,17 @@
 using Random
 using QEDbase
-using QEDcore
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-include("../test_implementation/TestImplementation.jl")
-TESTMODEL = TestImplementation.TestModel()
-TESTPSDEF = TestImplementation.TestPhasespaceDef()
+#include("../test_implementation/TestImplementation.jl")
+using Main.TestImplementation
 
-TESTTRAFO = TestImplementation.TestCoordTrafo()
+TESTMODEL = TestModel()
+TESTPSDEF = TestPhasespaceDef{TestMomentum}()
+
+TESTTRAFO = TestCoordinateTrafo()
 
 @testset "broadcast" begin
     test_func(trafo) = trafo
@@ -18,7 +19,7 @@ TESTTRAFO = TestImplementation.TestCoordTrafo()
 end
 
 @testset "single momenta" begin
-    test_mom = rand(RNG, SFourMomentum)
+    test_mom = TestMomentum(rand(RNG, 4))
 
     test_mom_prime = @inferred TESTTRAFO(test_mom)
 
@@ -26,7 +27,7 @@ end
 end
 
 @testset "set of momenta" begin
-    test_moms = rand(RNG, SFourMomentum, 3)
+    test_moms = [TestMomentum(rand(RNG, 4)) for _ in 1:3]
     test_moms_prime = TESTTRAFO.(test_moms)
 
     @test isapprox(test_moms_prime, TestImplementation._groundtruth_coord_trafo.(test_moms))
@@ -39,14 +40,16 @@ end
         INCOMING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING))
         OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
 
-        TESTPROC = TestImplementation.TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+        TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
 
-        p_in_phys = TestImplementation._rand_momenta(RNG, N_INCOMING)
-        p_out_phys = TestImplementation._rand_momenta(RNG, N_OUTGOING)
+        p_in_phys = TestImplementation._rand_momenta(RNG, N_INCOMING, TestMomentum)
+        p_out_phys = TestImplementation._rand_momenta(RNG, N_OUTGOING, TestMomentum)
 
-        PS_POINT = PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys)
+        PS_POINT = TestPhaseSpacePoint(
+            TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
+        )
 
-        test_psp_prime = @inferred TESTTRAFO(PS_POINT)
+        test_psp_prime = TESTTRAFO(PS_POINT)
 
         @test test_psp_prime == TestImplementation._groundtruth_coord_trafo(PS_POINT)
     end

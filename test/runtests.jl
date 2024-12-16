@@ -1,17 +1,22 @@
 using Test
 using SafeTestsets
 
+include("test_implementation/TestImplementation.jl")
 # check if we run CPU tests (yes by default)
 cpu_tests = tryparse(Bool, get(ENV, "TEST_CPU", "1"))
 
 if cpu_tests
     # Interfaces
+    @time @safetestset "momentum interface" begin
+        include("interfaces/momentum.jl")
+    end
+
     @time @safetestset "coordinate transforms" begin
         include("interfaces/coordinate_transforms.jl")
     end
 
-    @time @safetestset "phase space layout" begin
-        include("interfaces/phase_space_layout.jl")
+    @time @safetestset "particles" begin
+        include("particle_properties.jl")
     end
 
     @time @safetestset "model interface" begin
@@ -22,18 +27,19 @@ if cpu_tests
         include("interfaces/process.jl")
     end
 
+    @time @safetestset "phase space layout" begin
+        include("interfaces/phase_space_layout.jl")
+    end
+
     @time @safetestset "phase space point interface" begin
         include("interfaces/phase_space_point.jl")
     end
-
-    @time @safetestset "Lorentz interface" begin
-        include("interfaces/lorentz.jl")
+    @time @safetestset "cross sections" begin
+        include("cross_sections.jl")
     end
 
-    @time @safetestset "particles" begin
-        include("particle_properties.jl")
-    end
-
+    # TODO: move to QEDcore!
+    #=
     @time @safetestset "QEDcore: Lorentz vector" begin
         include("core_compat/lorentz_vector.jl")
     end
@@ -41,10 +47,8 @@ if cpu_tests
     @time @safetestset "QEDcore: FourMomentum" begin
         include("core_compat/four_momentum.jl")
     end
+    =#
 
-    @time @safetestset "cross sections" begin
-        include("cross_sections.jl")
-    end
 else
     @info "Skipping CPU tests"
 end

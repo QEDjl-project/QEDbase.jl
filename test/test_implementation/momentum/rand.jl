@@ -1,7 +1,3 @@
-# TODO:
-# - introduce MOMTYPE <: AbstractTestMomentum to generalize SFourMomentum
-# - pass MOMTYPE to all _rand functions via keyword argument
-#
 """
 Return a tuple of random four momenta, i.e. a random phase space point.
 """

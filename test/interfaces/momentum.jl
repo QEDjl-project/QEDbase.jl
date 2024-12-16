@@ -1,5 +1,8 @@
 using QEDbase
 
+include("../test_implementation/TestImplementation.jl")
+using .TestImplementation: TestMomentum, TestMomentumMutable
+
 lorentz_getter = [
     getT,
     getX,
@@ -64,6 +67,7 @@ lorentz_setter = [
 
 @testset "LorentzVectorInterface" begin
     @testset "CustomType" begin
+        #=
         struct CustomType{T} end
 
         function QEDbase.getT(lv::CustomType) end
@@ -72,15 +76,17 @@ lorentz_setter = [
         function QEDbase.getZ(lv::CustomType) end
 
         QEDbase.register_LorentzVectorLike(CustomType)
-
-        @test hasmethod(minkowski_dot, Tuple{CustomType,CustomType})
+        =#
+        @test hasmethod(minkowski_dot, Tuple{TestMomentum,TestMomentum})
 
         for fun in lorentz_getter
-            @test hasmethod(fun, Tuple{CustomType})
+            @test hasmethod(fun, Tuple{TestMomentum})
         end
     end
 
     @testset "MutableCustomType" begin
+
+        #=
         mutable struct MutableCustomType{T} end
 
         function QEDbase.getT(lv::MutableCustomType) end
@@ -94,9 +100,9 @@ lorentz_setter = [
         function QEDbase.setZ!(lv::MutableCustomType, value::T) where {T} end
 
         QEDbase.register_LorentzVectorLike(MutableCustomType)
-
+        =#
         for fun in lorentz_setter
-            @test hasmethod(fun, Tuple{MutableCustomType,<:Union{}})
+            @test hasmethod(fun, Tuple{TestMomentumMutable,<:Union{}})
         end
     end
 end # LorentzVectorInterface

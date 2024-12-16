@@ -1,15 +1,12 @@
 using Random
 using QEDbase
-using QEDcore
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
 include("../test_implementation/TestImplementation.jl")
-
-const TestBoson = TestImplementation.TestParticleBoson
-const TestFermion = TestImplementation.TestParticleFermion
+using .TestImplementation
 
 @testset "PhaseSpacePoint" begin
     N_INCOMING = 3
@@ -17,13 +14,14 @@ const TestFermion = TestImplementation.TestParticleFermion
     INCOMING_PARTICLES = (TestBoson(), TestFermion(), TestBoson())
     OUTGOING_PARTICLES = (TestFermion(), TestBoson(), TestFermion())
 
-    TESTPROC = TestImplementation.TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
-    TESTMODEL = TestImplementation.TestModel()
-    TESTPSDEF = TestImplementation.TestPhasespaceDef()
-    IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING)
-    OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING)
+    MOM_TYPE = TestMomentum{Float64}
+    TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+    TESTMODEL = TestModel()
+    TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
+    IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
+    OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
-    PSP = PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
+    PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
 
     @testset "momentum implementations" begin
         @test momentum(PSP, Incoming(), TestBoson(), 1) == IN_PS[1]

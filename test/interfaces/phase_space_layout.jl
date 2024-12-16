@@ -6,6 +6,9 @@ ATOL = 0.0
 RTOL = sqrt(eps())
 
 include("../test_implementation/TestImplementation.jl")
+using .TestImplementation
+
+MOM_TYPE = TestMomentum{Float64}
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
@@ -13,21 +16,21 @@ include("../test_implementation/TestImplementation.jl")
     INCOMING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING))
     OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
 
-    TESTPROC = TestImplementation.TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
-    TESTMODEL = TestImplementation.TestModel()
+    TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+    TESTMODEL = TestModel()
 
-    TESTINPSL = TestImplementation.TrivialInPSL()
+    TESTINPSL = TestInPhaseSpaceLayout{MOM_TYPE}()
     TESTINCOORDS = Tuple(rand(RNG, 4 * N_INCOMING))
     test_in_moms = @inferred build_momenta(TESTPROC, TESTMODEL, TESTINPSL, TESTINCOORDS)
-    groundtruth_in_moms = TestImplementation._groundtruth_in_moms(TESTINCOORDS)
+    groundtruth_in_moms = TestImplementation._groundtruth_in_moms(TESTINCOORDS, MOM_TYPE)
 
-    TESTOUTPSL = TestImplementation.TrivialOutPSL(TESTINPSL)
+    TESTOUTPSL = TestOutPhaseSpaceLayout(TESTINPSL)
     TESTOUTCOORDS = Tuple(rand(RNG, 4 * N_OUTGOING - 4))
     test_out_moms = @inferred build_momenta(
         TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS
     )
     groundtruth_out_moms = TestImplementation._groundtruth_out_moms(
-        test_in_moms, TESTOUTCOORDS
+        test_in_moms, TESTOUTCOORDS, MOM_TYPE
     )
 
     @testset "build momenta" begin

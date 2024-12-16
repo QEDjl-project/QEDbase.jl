@@ -1,24 +1,26 @@
 if isempty(GPUS)
     @info """No GPU tests are enabled, skipping tests...
     To test GPU functionality, please use 'TEST_<GPU> = 1 julia ...' for one of GPU=[CUDA, AMDGPU, METAL, ONEAPI]"""
-    return nothing
+    #return nothing
 end
 
 using Random
-using QEDbase, QEDcore
+using QEDbase
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
+MOM_TYPE = TestImplementation.TestMomentum{Float64}
+
 TESTMODEL = TestImplementation.TestModel()
-TESTPSDEF = TestImplementation.TestPhasespaceDef()
-TESTTRAFO = TestImplementation.TestCoordTrafo()
+TESTPSDEF = TestImplementation.TestPhasespaceDef{MOM_TYPE}()
+TESTTRAFO = TestImplementation.TestCoordinateTrafo()
 
 @testset "Testing with $GPU_MODULE" for (GPU_MODULE, VECTOR_TYPE) in GPUS
     @testset "momentum map" begin
         @testset "momenta" begin
-            test_moms = rand(RNG, SFourMomentum, 100)
+            test_moms = [TestMomentum{Float64}(rand(RNG, 4)) for _ in 1:100]
             gpu_moms = VECTOR_TYPE(test_moms)
 
             test_moms_prime = TESTTRAFO.(test_moms)
@@ -45,7 +47,7 @@ TESTTRAFO = TestImplementation.TestCoordTrafo()
             )
 
             test_psps = [
-                PhaseSpacePoint(
+                TestPhaseSpacePoint(
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,

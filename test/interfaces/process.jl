@@ -1,12 +1,12 @@
 using Random
 using QEDbase
-using QEDcore
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
 include("../test_implementation/TestImplementation.jl")
+using .TestImplementation
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
@@ -14,20 +14,24 @@ include("../test_implementation/TestImplementation.jl")
     INCOMING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING))
     OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
 
-    TESTPROC = TestImplementation.TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
-    TESTMODEL = TestImplementation.TestModel()
-    TESTPSDEF = TestImplementation.TestPhasespaceDef()
-    IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING)
-    OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING)
-    PSP = PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
+    TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+    TESTMODEL = TestModel()
+    TESTPSDEF = TestPhasespaceDef{TestMomentum{Float64}}()
+    IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING, TestMomentum{Float64})
+    OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING, TestMomentum{Float64})
+    PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
 
     @testset "failed interface" begin
         TESTPROC_FAIL_ALL = TestImplementation.TestProcess_FAIL_ALL(
             INCOMING_PARTICLES, OUTGOING_PARTICLES
         )
+
+        #TODO: move to cross section
         TESTPROC_FAIL_DIFFCS = TestImplementation.TestProcess_FAIL_DIFFCS(
             INCOMING_PARTICLES, OUTGOING_PARTICLES
         )
+
+        #TODO: move to cross section
         TESTMODEL_FAIL = TestImplementation.TestModel_FAIL()
         TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
@@ -41,16 +45,18 @@ include("../test_implementation/TestImplementation.jl")
         @testset "$PROC $MODEL" for (PROC, MODEL) in Iterators.product(
             (TESTPROC, TESTPROC_FAIL_DIFFCS), (TESTMODEL, TESTMODEL_FAIL)
         )
+            #TODO: move to cross section
             if TestImplementation._any_fail(PROC, MODEL)
-                psp = PhaseSpacePoint(PROC, MODEL, TESTPSDEF, IN_PS, OUT_PS)
+                psp = TestPhaseSpacePoint(PROC, MODEL, TESTPSDEF, IN_PS, OUT_PS)
                 @test_throws MethodError QEDbase._incident_flux(psp)
                 @test_throws MethodError QEDbase._averaging_norm(psp)
                 @test_throws MethodError QEDbase._matrix_element(psp)
             end
 
+            #TODO: move to cross section
             for PS_DEF in (TESTPSDEF, TESTPSDEF_FAIL)
                 if TestImplementation._any_fail(PROC, MODEL, PS_DEF)
-                    psp = PhaseSpacePoint(PROC, MODEL, PS_DEF, IN_PS, OUT_PS)
+                    psp = TestPhaseSpacePoint(PROC, MODEL, PS_DEF, IN_PS, OUT_PS)
                     @test_throws MethodError QEDbase._phase_space_factor(psp)
                 end
             end
@@ -61,6 +67,7 @@ include("../test_implementation/TestImplementation.jl")
         test_func(proc::AbstractProcessDefinition) = proc
         @test test_func.(TESTPROC) == TESTPROC
 
+        #TODO: move to model
         test_func(model::AbstractModelDefinition) = model
         @test test_func.(TESTMODEL) == TESTMODEL
     end
@@ -79,7 +86,7 @@ include("../test_implementation/TestImplementation.jl")
             (Incoming(), Outgoing()), TestImplementation.PARTICLE_SET
         )
             groundtruth_particle_count = count(x -> x == species, particles(TESTPROC, dir))
-            test_ps = ParticleStateful(dir, species, zero(SFourMomentum))
+            test_ps = TestParticleStateful(dir, species, zero(TestMomentum{Float64}))
 
             @test number_particles(TESTPROC, dir, species) == groundtruth_particle_count
             @test number_particles(TESTPROC, test_ps) == groundtruth_particle_count
@@ -111,29 +118,32 @@ include("../test_implementation/TestImplementation.jl")
         end
     end
 
+    #TODO: move to cross section
     @testset "incident flux" begin
         test_incident_flux = QEDbase._incident_flux(
-            InPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS)
+            TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, ())
         )
         groundtruth = TestImplementation._groundtruth_incident_flux(IN_PS)
         @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
 
         test_incident_flux = QEDbase._incident_flux(
-            PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
+            TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
         )
         @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
 
-        @test_throws MethodError QEDbase._incident_flux(
-            OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, OUT_PS)
-        )
+        #@test_throws MethodError QEDbase._incident_flux(
+        #    OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, OUT_PS)
+        #)
     end
 
+    #TODO: move to cross section
     @testset "averaging norm" begin
         test_avg_norm = QEDbase._averaging_norm(TESTPROC)
         groundtruth = TestImplementation._groundtruth_averaging_norm(TESTPROC)
         @test isapprox(test_avg_norm, groundtruth, atol=ATOL, rtol=RTOL)
     end
 
+    #TODO: move to cross section
     @testset "matrix element" begin
         test_matrix_element = QEDbase._matrix_element(PSP)
         groundtruth = TestImplementation._groundtruth_matrix_element(IN_PS, OUT_PS)
@@ -143,18 +153,19 @@ include("../test_implementation/TestImplementation.jl")
         end
     end
 
+    #TODO: move to cross section
     @testset "is in phasespace" begin
         @test QEDbase._is_in_phasespace(PSP)
 
-        IN_PS_unphysical = (zero(SFourMomentum), IN_PS[2:end]...)
-        OUT_PS_unphysical = (OUT_PS[1:(end - 1)]..., ones(SFourMomentum))
-        PSP_unphysical_in_ps = PhaseSpacePoint(
+        IN_PS_unphysical = (zero(TestMomentum{Float64}), IN_PS[2:end]...)
+        OUT_PS_unphysical = (OUT_PS[1:(end - 1)]..., ones(TestMomentum{Float64}))
+        PSP_unphysical_in_ps = TestPhaseSpacePoint(
             TESTPROC, TESTMODEL, TESTPSDEF, IN_PS_unphysical, OUT_PS
         )
-        PSP_unphysical_out_ps = PhaseSpacePoint(
+        PSP_unphysical_out_ps = TestPhaseSpacePoint(
             TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS_unphysical
         )
-        PSP_unphysical = PhaseSpacePoint(
+        PSP_unphysical = TestPhaseSpacePoint(
             TESTPROC, TESTMODEL, TESTPSDEF, IN_PS_unphysical, OUT_PS_unphysical
         )
 
@@ -163,21 +174,24 @@ include("../test_implementation/TestImplementation.jl")
         @test !QEDbase._is_in_phasespace(PSP_unphysical)
     end
 
+    #TODO: move to cross section
     @testset "phase space factor" begin
         test_phase_space_factor = QEDbase._phase_space_factor(PSP)
         groundtruth = TestImplementation._groundtruth_phase_space_factor(IN_PS, OUT_PS)
         @test isapprox(test_phase_space_factor, groundtruth, atol=ATOL, rtol=RTOL)
     end
 
+    #TODO: move to phase space layout?
+    #=
     @testset "generate momenta" begin
         ps_in_coords = Tuple(rand(RNG, 4 * N_INCOMING))
         ps_out_coords = Tuple(rand(RNG, 4 * N_OUTGOING))
 
         groundtruth_in_momenta = TestImplementation._groundtruth_generate_momenta(
-            ps_in_coords
+            ps_in_coords, TestMomentum{Float64}
         )
         groundtruth_out_momenta = TestImplementation._groundtruth_generate_momenta(
-            ps_out_coords
+            ps_out_coords, TestMomentum{Float64}
         )
 
         @test groundtruth_in_momenta == QEDbase._generate_incoming_momenta(
@@ -191,23 +205,24 @@ include("../test_implementation/TestImplementation.jl")
             TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords
         )
 
-        groundtruth_psp = PhaseSpacePoint(
+        groundtruth_psp = TestPhaseSpacePoint(
             TESTPROC, TESTMODEL, TESTPSDEF, groundtruth_in_momenta, groundtruth_out_momenta
         )
-        groundtruth_in_psp = InPhaseSpacePoint(
-            TESTPROC, TESTMODEL, TESTPSDEF, groundtruth_in_momenta
+        groundtruth_in_psp = TestPhaseSpacePoint(
+            TESTPROC, TESTMODEL, TESTPSDEF, groundtruth_in_momenta,()
         )
 
         @test groundtruth_psp ==
-            PhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords)
+            TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords, ps_out_coords)
         @test groundtruth_in_psp ==
-            InPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords)
+        TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, ps_in_coords,())
     end
+    =#
 end
 
 @testset "Process Multiplicity" begin
-    boson = TestImplementation.TestParticleBoson()
-    fermion = TestImplementation.TestParticleFermion()
+    boson = TestBoson()
+    fermion = TestFermion()
 
     _mult(::AbstractDefinitePolarization) = 1
     _mult(::AbstractDefiniteSpin) = 1
