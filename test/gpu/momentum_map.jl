@@ -47,7 +47,7 @@ TESTTRAFO = TestImplementation.TestCoordinateTrafo()
             )
 
             test_psps = [
-                TestProcess.TestPhaseSpacePoint(
+                TestImplementation.TestPhaseSpacePoint(
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,
