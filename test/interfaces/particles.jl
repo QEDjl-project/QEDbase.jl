@@ -20,7 +20,7 @@ TEST_MOM = MOM_TYPE(rand(RNG, 4))
         @test is_particle(TestMasslessBoson()) == true
     end
 
-    @testset "particle" begin
+    @testset "anti particle" begin
         @test is_anti_particle(TestFermion()) == false
         @test is_anti_particle(TestMasslessFermion()) == false
         @test is_anti_particle(TestBoson()) == false
@@ -64,5 +64,28 @@ TEST_MOM = MOM_TYPE(rand(RNG, 4))
             TestImplementation._groundtruth_boson_propagator(TEST_MOM)
         @test propagator(TestMasslessBoson(), TEST_MOM) ==
             TestImplementation._groundtruth_boson_propagator(TEST_MOM)
+    end
+
+    @testset "base state" begin
+        @testset "$DIR" for DIR in (Incoming(), Outgoing())
+            @testset "fermion $SPIN" for SPIN in (SpinUp(), SpinDown())
+                @test base_state(TestFermion(), DIR, TEST_MOM, SPIN) ==
+                    TestImplementation._groundtruth_fermion_base_state(
+                    DIR, TEST_MOM, SPIN
+                )
+                @test base_state(TestMasslessFermion(), DIR, TEST_MOM, SPIN) ==
+                    TestImplementation._groundtruth_massless_fermion_base_state(
+                    DIR, TEST_MOM, SPIN
+                )
+            end
+            @testset "boson $POL" for POL in (PolX(), PolY())
+                @test base_state(TestBoson(), DIR, TEST_MOM, POL) ==
+                    TestImplementation._groundtruth_boson_base_state(DIR, TEST_MOM, POL)
+                @test base_state(TestMasslessBoson(), DIR, TEST_MOM, POL) ==
+                    TestImplementation._groundtruth_massless_boson_base_state(
+                    DIR, TEST_MOM, POL
+                )
+            end
+        end
     end
 end
