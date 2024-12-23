@@ -12,6 +12,9 @@ MOM_TYPE = TestMomentum{Float64}
 TESTMODEL = TestModel()
 TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
 
+TESTMODEL_FAIL = TestImplementation.TestModel_FAIL()
+TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
+
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
 )
@@ -19,6 +22,10 @@ TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
     OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
 
     TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+
+    TESTPROC_FAIL_DIFFCS = TestImplementation.TestProcess_FAIL_DIFFCS(
+        INCOMING_PARTICLES, OUTGOING_PARTICLES
+    )
 
     # single ps points
     p_in_phys = TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
@@ -34,6 +41,74 @@ TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
 
     # all combinations
     p_combs = Iterators.product(p_in_all, p_out_all)
+
+    @testset "interface" begin
+        @testset "incident flux" begin
+            test_incident_flux = QEDbase._incident_flux(
+                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
+            )
+            groundtruth = TestImplementation._groundtruth_incident_flux(p_in_phys)
+            @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
+
+            test_incident_flux = QEDbase._incident_flux(
+                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys)
+            )
+            @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
+
+            #@test_throws MethodError QEDbase._incident_flux(
+            #    OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, OUT_PS)
+            #)
+        end
+
+        @testset "averaging norm" begin
+            test_avg_norm = QEDbase._averaging_norm(TESTPROC)
+            groundtruth = TestImplementation._groundtruth_averaging_norm(TESTPROC)
+            @test isapprox(test_avg_norm, groundtruth, atol=ATOL, rtol=RTOL)
+        end
+
+        @testset "matrix element" begin
+            test_matrix_element = QEDbase._matrix_element(
+                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys)
+            )
+            groundtruth = TestImplementation._groundtruth_matrix_element(
+                p_in_phys, p_out_phys
+            )
+            @test length(test_matrix_element) == length(groundtruth)
+            for i in eachindex(test_matrix_element)
+                @test isapprox(test_matrix_element[i], groundtruth[i], atol=ATOL, rtol=RTOL)
+            end
+        end
+
+        @testset "is in phasespace" begin
+            @test @inferred QEDbase._is_in_phasespace(
+                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys)
+            )
+
+            PSP_unphysical_in_ps = TestPhaseSpacePoint(
+                TESTPROC, TESTMODEL, TESTPSDEF, p_in_unphys, p_out_phys
+            )
+            PSP_unphysical_out_ps = TestPhaseSpacePoint(
+                TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_unphys
+            )
+            PSP_unphysical = TestPhaseSpacePoint(
+                TESTPROC, TESTMODEL, TESTPSDEF, p_in_unphys, p_out_unphys
+            )
+
+            @test !QEDbase._is_in_phasespace(PSP_unphysical_in_ps)
+            @test !QEDbase._is_in_phasespace(PSP_unphysical_out_ps)
+            @test !QEDbase._is_in_phasespace(PSP_unphysical)
+        end
+
+        @testset "phase space factor" begin
+            test_phase_space_factor = QEDbase._phase_space_factor(
+                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys)
+            )
+            groundtruth = TestImplementation._groundtruth_phase_space_factor(
+                p_in_phys, p_out_phys
+            )
+            @test isapprox(test_phase_space_factor, groundtruth, atol=ATOL, rtol=RTOL)
+        end
+    end
 
     @testset "differential cross section" begin
         @testset "unsafe compute" begin
@@ -61,23 +136,40 @@ TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
                 @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
             end
         end
+
+        @testset "failed" begin
+            @testset "$PROC $MODEL" for (PROC, MODEL) in Iterators.product(
+                (TESTPROC, TESTPROC_FAIL_DIFFCS), (TESTMODEL, TESTMODEL_FAIL)
+            )
+                if TestImplementation._any_fail(PROC, MODEL)
+                    for (P_IN, P_OUT) in p_combs
+                        psp = TestPhaseSpacePoint(PROC, MODEL, TESTPSDEF, P_IN, P_OUT)
+                        @test_throws MethodError QEDbase._incident_flux(psp)
+                        @test_throws MethodError QEDbase._averaging_norm(psp)
+                        @test_throws MethodError QEDbase._matrix_element(psp)
+                    end
+                end
+
+                for PS_DEF in (TESTPSDEF, TESTPSDEF_FAIL)
+                    if TestImplementation._any_fail(PROC, MODEL, PS_DEF)
+                        for (P_IN, P_OUT) in p_combs
+                            psp = TestPhaseSpacePoint(PROC, MODEL, PS_DEF, P_IN, P_OUT)
+                            @test_throws MethodError QEDbase._phase_space_factor(psp)
+                        end
+                    end
+                end
+            end
+        end
     end
 
     @testset "total cross section" begin
         @testset "compute" begin
-            #COORDS_IN = TestImplementation.flat_components(p_in_phys)
-
             IN_PS_POINT = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
-            #IN_PS_POINT_COORDS = TestPhaseSpacePoint(
-            #    TESTPROC, TESTMODEL, TESTPSDEF, COORDS_IN, ()
-            #)
 
             groundtruth = TestImplementation._groundtruth_total_cross_section(p_in_phys)
             totCS_on_moms = total_cross_section(IN_PS_POINT)
-            #totCS_on_coords = total_cross_section(IN_PS_POINT_COORDS)
 
             @test isapprox(totCS_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
-            #@test isapprox(totCS_on_coords, groundtruth, atol=ATOL, rtol=RTOL)
         end
     end
 
@@ -107,19 +199,12 @@ TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
 
     @testset "total probability" begin
         @testset "compute" begin
-            #COORDS_IN = TestImplementation.flat_components(p_in_phys)
-
             IN_PS_POINT = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
-            #IN_PS_POINT_COORDS = TestPhaseSpacePoint(
-            #   TESTPROC, TESTMODEL, TESTPSDEF, COORDS_IN, ()
-            #)
 
             groundtruth = TestImplementation._groundtruth_total_probability(p_in_phys)
             totCS_on_moms = TestImplementation.total_probability(IN_PS_POINT)
-            #totCS_on_coords = TestImplementation.total_probability(IN_PS_POINT_COORDS)
 
             @test isapprox(totCS_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
-            #@test isapprox(totCS_on_coords, groundtruth, atol=ATOL, rtol=RTOL)
         end
     end
 end
