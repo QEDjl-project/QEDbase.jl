@@ -11,7 +11,7 @@ RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-MOM_TYPE = TestImplementation.TestMomentum{Float32}
+MOM_TYPE = TestImplementation.TestMomentum{Float64}
 
 TESTMODEL = TestImplementation.TestModel()
 TESTPSDEF = TestImplementation.TestPhasespaceDef{MOM_TYPE}()
