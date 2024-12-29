@@ -38,6 +38,7 @@ if cpu_tests
     @time @safetestset "phase space point interface" begin
         include("interfaces/phase_space_point.jl")
     end
+
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
     end

@@ -26,6 +26,21 @@ function TestPhaseSpacePoint(
     return TestPhaseSpacePoint(proc, model, ps_def, in_parts, out_parts)
 end
 
+TestInPhaseSpacePoint{P,M,D,IN,OUT} = TestPhaseSpacePoint{
+    P,M,D,IN,OUT
+} where {IN<:Tuple{TestParticleStateful,Vararg},OUT<:Tuple{Vararg}}
+
+function TestInPhaseSpacePoint(
+    proc::AbstractProcessDefinition,
+    model::AbstractModelDefinition,
+    ps_def::AbstractPhasespaceDefinition,
+    in_momenta::NTuple{N,MOM_TYPE},
+) where {N,MOM_TYPE<:AbstractFourMomentum}
+    in_particles = _build_particle_statefuls(proc, in_momenta, Incoming())
+
+    return TestPhaseSpacePoint(proc, model, ps_def, in_particles, ())
+end
+
 Base.getindex(psp::TestPhaseSpacePoint, ::Incoming, n::Int) = psp.in_parts[n]
 Base.getindex(psp::TestPhaseSpacePoint, ::Outgoing, n::Int) = psp.out_parts[n]
 

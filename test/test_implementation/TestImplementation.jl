@@ -14,7 +14,7 @@ export TestInPhaseSpaceLayout, TestInPhaseSpaceLayout_FAIL
 export TestOutPhaseSpaceLayout, TestOutPhaseSpaceLayout_FAIL
 
 export TestParticleStateful
-export TestPhaseSpacePoint
+export TestPhaseSpacePoint, TestInPhaseSpacePoint
 
 export TestCoordinateTrafo
 
@@ -44,7 +44,8 @@ include("phase_space_layout/groundtruth.jl")
 include("phase_space_layout/test_impl.jl")
 
 include("particle_stateful.jl")
-include("phase_space_point.jl")
+include("phase_space_point/test_impl.jl")
+include("phase_space_point/utils.jl")
 
 include("cross_section/groundtruth.jl")
 include("cross_section/test_impl.jl")

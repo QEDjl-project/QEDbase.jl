@@ -20,7 +20,7 @@ TESTTRAFO = TestImplementation.TestCoordinateTrafo()
 @testset "Testing with $GPU_MODULE" for (GPU_MODULE, VECTOR_TYPE) in GPUS
     @testset "momentum map" begin
         @testset "momenta" begin
-            test_moms = [TestMomentum{Float64}(rand(RNG, 4)) for _ in 1:100]
+            test_moms = [MOM_TYPE(rand(RNG, 4)) for _ in 1:100]
             gpu_moms = VECTOR_TYPE(test_moms)
 
             test_moms_prime = TESTTRAFO.(test_moms)

@@ -45,7 +45,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
     @testset "interface" begin
         @testset "incident flux" begin
             test_incident_flux = QEDbase._incident_flux(
-                TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
+                TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys)
             )
             groundtruth = TestImplementation._groundtruth_incident_flux(p_in_phys)
             @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
@@ -164,7 +164,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
     @testset "total cross section" begin
         @testset "compute" begin
-            IN_PS_POINT = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
+            IN_PS_POINT = TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys)
 
             groundtruth = TestImplementation._groundtruth_total_cross_section(p_in_phys)
             totCS_on_moms = total_cross_section(IN_PS_POINT)
@@ -199,7 +199,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
     @testset "total probability" begin
         @testset "compute" begin
-            IN_PS_POINT = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, ())
+            IN_PS_POINT = TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys)
 
             groundtruth = TestImplementation._groundtruth_total_probability(p_in_phys)
             totCS_on_moms = TestImplementation.total_probability(IN_PS_POINT)

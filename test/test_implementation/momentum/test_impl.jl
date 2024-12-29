@@ -1,5 +1,8 @@
 abstract type AbstractTestMomentum{T} <: AbstractFourMomentum end
 
+#StaticArrays.similar_type(::Type{A},::Type{T},::Size{S}) where {A<:AbstractTestMomentum,T,S} = A{T}
+#StaticArrays.similar_type(::Type{A},::Type{T}) where {A<:AbstractTestMomentum,T} = A{T}
+
 #=
 function (::Type{MOM})(
     coords::VECTYPE
@@ -15,6 +18,12 @@ struct TestMomentum{T} <: AbstractTestMomentum{T}
     pz::T
 end
 
+function StaticArrays.similar_type(
+    ::Type{A}, ::Type{T}, ::Size{S}
+) where {A<:TestMomentum,T,S}
+    return TestMomentum{T}
+end
+
 QEDbase.getT(lv::TestMomentum) = lv.E
 QEDbase.getX(lv::TestMomentum) = lv.px
 QEDbase.getY(lv::TestMomentum) = lv.py
@@ -27,6 +36,12 @@ mutable struct TestMomentumMutable{T} <: AbstractTestMomentum{T}
     px::T
     py::T
     pz::T
+end
+
+function StaticArrays.similar_type(
+    ::Type{A}, ::Type{T}, ::Size{S}
+) where {A<:TestMomentumMutable,T,S}
+    return TestMomentumMutable{T}
 end
 
 QEDbase.getT(lv::TestMomentumMutable) = lv.E
