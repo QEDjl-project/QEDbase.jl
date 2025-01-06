@@ -12,7 +12,7 @@ function _groundtruth_in_moms(
 end
 
 """
-    _groundtruth_out_moms(Ptot,out_coords)
+    _groundtruth_out_moms(Ptot,out_coords,mom_type)
 
 Test implementation for building outgoing momenta. Maps all components into four momenta and adds
 the last momentum via energy momentum conservation.
