@@ -17,9 +17,6 @@ using .TestImplementation
     TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
     TESTMODEL = TestModel()
     TESTPSDEF = TestPhasespaceDef{TestMomentum{Float64}}()
-    IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING, TestMomentum{Float64})
-    OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING, TestMomentum{Float64})
-    PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
 
     @testset "failed interface" begin
         TESTPROC_FAIL_ALL = TestImplementation.TestProcess_FAIL_ALL(
@@ -52,13 +49,18 @@ using .TestImplementation
         @testset "$dir $species" for (dir, species) in Iterators.product(
             (Incoming(), Outgoing()), TestImplementation.PARTICLE_SET
         )
-            groundtruth_particle_count = count(x -> x == species, particles(TESTPROC, dir))
-            test_ps = TestParticleStateful(dir, species, zero(TestMomentum{Float64}))
+            @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
+                MOM_TYPE = TestMomentum{MOM_EL_TYPE}
+                groundtruth_particle_count = count(
+                    x -> x == species, particles(TESTPROC, dir)
+                )
+                test_ps = TestParticleStateful(dir, species, zero(MOM_TYPE))
 
-            @test @inferred number_particles(TESTPROC, dir, species) ==
-                groundtruth_particle_count
-            @test @inferred number_particles(TESTPROC, test_ps) ==
-                groundtruth_particle_count
+                @test @inferred number_particles(TESTPROC, dir, species) ==
+                    groundtruth_particle_count
+                @test @inferred number_particles(TESTPROC, test_ps) ==
+                    groundtruth_particle_count
+            end
         end
     end
 
