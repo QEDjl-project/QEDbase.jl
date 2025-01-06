@@ -6,7 +6,7 @@ include("test_implementation/TestImplementation.jl")
 cpu_tests = tryparse(Bool, get(ENV, "TEST_CPU", "1"))
 
 if cpu_tests
-    # Interfaces
+    # Interface
     @time @safetestset "momentum interface" begin
         include("interfaces/momentum.jl")
     end
@@ -36,7 +36,6 @@ if cpu_tests
     @time @safetestset "phase space point interface" begin
         include("interfaces/phase_space_point.jl")
     end
-
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
     end

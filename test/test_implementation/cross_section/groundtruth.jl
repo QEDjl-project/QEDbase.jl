@@ -72,6 +72,7 @@ function _groundtruth_unsafe_probability(proc, in_ps, out_ps)
     mat_el_sq = abs2.(mat_el)
     normalization = _groundtruth_averaging_norm(proc)
     ps_fac = _groundtruth_phase_space_factor(in_ps, out_ps)
+
     return sum(mat_el_sq) * ps_fac * normalization
 end
 
