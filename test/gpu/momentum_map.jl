@@ -1,7 +1,7 @@
 if isempty(GPUS)
     @info """No GPU tests are enabled, skipping tests...
     To test GPU functionality, please use 'TEST_<GPU> = 1 julia ...' for one of GPU=[CUDA, AMDGPU, METAL, ONEAPI]"""
-    #return nothing
+    return nothing
 end
 
 using Random

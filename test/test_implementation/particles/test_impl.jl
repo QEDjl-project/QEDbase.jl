@@ -1,5 +1,3 @@
-#TODO: add massless versions
-
 # dummy particles
 struct TestFermion <: AbstractParticleType end
 QEDbase.is_fermion(::TestFermion) = true

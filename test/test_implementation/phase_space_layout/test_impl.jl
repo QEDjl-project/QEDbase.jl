@@ -1,6 +1,3 @@
-
-#TODO: Implement failing PSL
-
 ### Trivial phase-space layouts
 
 # maps all components onto four momenta

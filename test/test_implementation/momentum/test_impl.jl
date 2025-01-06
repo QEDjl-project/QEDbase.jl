@@ -1,16 +1,5 @@
 abstract type AbstractTestMomentum{T} <: AbstractFourMomentum end
 
-#StaticArrays.similar_type(::Type{A},::Type{T},::Size{S}) where {A<:AbstractTestMomentum,T,S} = A{T}
-#StaticArrays.similar_type(::Type{A},::Type{T}) where {A<:AbstractTestMomentum,T} = A{T}
-
-#=
-function (::Type{MOM})(
-    coords::VECTYPE
-) where {MOM<:AbstractTestMomentum,V<:AbstractVector,VECTYPE<:Union{Tuple,V}}
-    return MOM(coords...)
-end
-=#
-
 struct TestMomentum{T} <: AbstractTestMomentum{T}
     E::T
     px::T
