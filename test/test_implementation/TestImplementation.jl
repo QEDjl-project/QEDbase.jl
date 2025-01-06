@@ -7,7 +7,7 @@ export TestMasslessFermion, TestMasslessBoson
 export TestModel, TestModel_FAIL
 export TestProcess, TestProcess_FAIL
 
-# to be removed
+# TODO: to be removed (https://github.com/QEDjl-project/QEDbase.jl/issues/140)
 export TestPhasespaceDef, TestPhasespaceDef_FAIL
 
 export TestInPhaseSpaceLayout, TestInPhaseSpaceLayout_FAIL

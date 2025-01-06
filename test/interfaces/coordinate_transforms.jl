@@ -5,8 +5,8 @@ RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-#include("../test_implementation/TestImplementation.jl")
-using Main.TestImplementation
+include("../test_implementation/TestImplementation.jl")
+using .TestImplementation
 
 TESTMODEL = TestModel()
 TESTPSDEF = TestPhasespaceDef{TestMomentum}()

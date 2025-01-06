@@ -24,7 +24,7 @@ end
     return _groundtruth_in_moms(in_coords, eltype(in_psl))
 end
 
-# maps componets of N-1 particles onto four-momenta and uses energy-momentum conservation
+# maps components of N-1 particles onto four-momenta and uses energy-momentum conservation
 struct TestOutPhaseSpaceLayout{INPSL,MOM_TYPE} <: QEDbase.AbstractOutPhaseSpaceLayout{INPSL}
     in_psl::INPSL
 
