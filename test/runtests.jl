@@ -40,17 +40,6 @@ if cpu_tests
         include("cross_sections.jl")
     end
 
-    # TODO: move to QEDcore!
-    #=
-    @time @safetestset "QEDcore: Lorentz vector" begin
-        include("core_compat/lorentz_vector.jl")
-    end
-
-    @time @safetestset "QEDcore: FourMomentum" begin
-        include("core_compat/four_momentum.jl")
-    end
-    =#
-
 else
     @info "Skipping CPU tests"
 end
