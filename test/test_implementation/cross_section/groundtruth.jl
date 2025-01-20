@@ -1,31 +1,3 @@
-
-"""
-    _groundtruth_in_moms(in_coords)
-
-Test implementation for building incoming momenta. Maps all components into four momenta.
-"""
-function _groundtruth_in_moms(in_coords)
-    n = Int(length(in_coords) / 4)
-    return NTuple{n}(map(SFourMomentum, Iterators.partition(in_coords, 4)))
-end
-
-"""
-    _groundtruth_out_moms(Ptot,out_coords)
-
-Test implementation for building outgoing momenta. Maps all components into four momenta and adds
-the last momentum via energy momentum conservation.
-"""
-function _groundtruth_out_moms(in_moms, out_coords)
-    Ptot = sum(in_moms)
-    n = Int(length(out_coords) / 4)
-    if length(out_coords) == 0
-        return (Ptot,)
-    end
-    moms_except_last = NTuple{n}(map(SFourMomentum, Iterators.partition(out_coords, 4)))
-    last_mom = Ptot - sum(moms_except_last)
-    return (moms_except_last..., last_mom)
-end
-
 """
     _groundtruth_incident_flux(in_ps)
 
@@ -70,10 +42,10 @@ end
 Test implementation of the phase space check. Return `false` if either the momentum of the first incoming particle is exactly `zero(SFourMomentum)`, or if the momentum of the last outgoing momentum is exactly `ones(SFourMomentum)`. Otherwise, return true.
 """
 function _groundtruth_is_in_phasespace(in_ps, out_ps)
-    if in_ps[1] == SFourMomentum(zeros(4))
+    if iszero(in_ps[1])
         return false
     end
-    if out_ps[end] == ones(SFourMomentum)
+    if isone(out_ps[end])
         return false
     end
     return true
@@ -85,15 +57,11 @@ end
 Test implementation of the phase space factor. Return the inverse of the product of the energies of all external particles.
 """
 function _groundtruth_phase_space_factor(in_ps, out_ps)
-    en_in = QEDbase.getE.(in_ps)
-    en_out = QEDbase.getE.(out_ps)
+    en_in = getE.(in_ps)
+    en_out = getE.(out_ps)
     return 1 / (prod(en_in) * prod(en_out))
 end
 
-function _groundtruth_generate_momenta(ps_coords)
-    moms = _furl_moms(ps_coords)
-    return moms
-end
 """
     _groundtruth_unsafe_probability(proc, in_ps, out_ps)
 
@@ -104,6 +72,7 @@ function _groundtruth_unsafe_probability(proc, in_ps, out_ps)
     mat_el_sq = abs2.(mat_el)
     normalization = _groundtruth_averaging_norm(proc)
     ps_fac = _groundtruth_phase_space_factor(in_ps, out_ps)
+
     return sum(mat_el_sq) * ps_fac * normalization
 end
 
@@ -288,20 +257,4 @@ function _groundtruth_total_cross_section(
     in_pss::Vector{NTuple{N,T}}
 ) where {N,T<:AbstractFourMomentum}
     return _groundtruth_total_cross_section.(in_psps)
-end
-
-### Coordinate trafos
-
-_groundtruth_coord_trafo(p::AbstractFourMomentum) = 2 * p
-
-# coord trafo applied to every momentum in psp
-function _groundtruth_coord_trafo(psp::PhaseSpacePoint)
-    in_moms = momenta(psp, Incoming())
-    out_moms = momenta(psp, Outgoing())
-    in_moms_prime = _groundtruth_coord_trafo.(in_moms)
-    out_moms_prime = _groundtruth_coord_trafo.(out_moms)
-
-    return PhaseSpacePoint(
-        process(psp), model(psp), phase_space_definition(psp), in_moms_prime, out_moms_prime
-    )
 end

@@ -1,5 +1,8 @@
 using QEDbase
 
+include("../test_implementation/TestImplementation.jl")
+using .TestImplementation: TestMomentum, TestMomentumMutable
+
 lorentz_getter = [
     getT,
     getX,
@@ -64,39 +67,16 @@ lorentz_setter = [
 
 @testset "LorentzVectorInterface" begin
     @testset "CustomType" begin
-        struct CustomType{T} end
-
-        function QEDbase.getT(lv::CustomType) end
-        function QEDbase.getX(lv::CustomType) end
-        function QEDbase.getY(lv::CustomType) end
-        function QEDbase.getZ(lv::CustomType) end
-
-        QEDbase.register_LorentzVectorLike(CustomType)
-
-        @test hasmethod(minkowski_dot, Tuple{CustomType,CustomType})
+        @test hasmethod(minkowski_dot, Tuple{TestMomentum,TestMomentum})
 
         for fun in lorentz_getter
-            @test hasmethod(fun, Tuple{CustomType})
+            @test hasmethod(fun, Tuple{TestMomentum})
         end
     end
 
     @testset "MutableCustomType" begin
-        mutable struct MutableCustomType{T} end
-
-        function QEDbase.getT(lv::MutableCustomType) end
-        function QEDbase.getX(lv::MutableCustomType) end
-        function QEDbase.getY(lv::MutableCustomType) end
-        function QEDbase.getZ(lv::MutableCustomType) end
-
-        function QEDbase.setT!(lv::MutableCustomType, value::T) where {T} end
-        function QEDbase.setX!(lv::MutableCustomType, value::T) where {T} end
-        function QEDbase.setY!(lv::MutableCustomType, value::T) where {T} end
-        function QEDbase.setZ!(lv::MutableCustomType, value::T) where {T} end
-
-        QEDbase.register_LorentzVectorLike(MutableCustomType)
-
         for fun in lorentz_setter
-            @test hasmethod(fun, Tuple{MutableCustomType,<:Union{}})
+            @test hasmethod(fun, Tuple{TestMomentumMutable,<:Union{}})
         end
     end
 end # LorentzVectorInterface

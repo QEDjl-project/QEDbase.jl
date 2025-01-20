@@ -1,42 +1,58 @@
-"""
-This module provides a full implementation of the model and process interface. Its purpose is only for testing and it does not reflect any
-real-world physics.
-
-The module exports:
-
-```
-TestParticle1               # set of test particles without properties
-TestParticle2
-TestParticle3
-TestParticle4
-TestModel                   # dummy compute model
-TestModel_FAIL              # failing compute model
-TestProcess                 # dummy scattering process
-TestProcess_FAIL            # failing scattering process
-TestPhasespaceDef           # dummy phase space definition
-TestPhasespaceDef_FAIL      # failing phase space definition
-```
-The respective groundtruth implementations for the interface functions are stored in `groundtruths.jl`
-"""
 module TestImplementation
 
-export TestParticle1, TestParticle2, TestParticle3, TestParticle4, PARTICLE_SET
+export TestMomentum, TestMomentumMutable
+export TestFermion, TestBoson
+export TestMasslessFermion, TestMasslessBoson
+
 export TestModel, TestModel_FAIL
 export TestProcess, TestProcess_FAIL
+
+# TODO: to be removed (https://github.com/QEDjl-project/QEDbase.jl/issues/140)
 export TestPhasespaceDef, TestPhasespaceDef_FAIL
-export TestCoordTrafo
+
+export TestInPhaseSpaceLayout, TestInPhaseSpaceLayout_FAIL
+export TestOutPhaseSpaceLayout, TestOutPhaseSpaceLayout_FAIL
+
+export TestParticleStateful
+export TestPhaseSpacePoint, TestInPhaseSpacePoint
+
+export TestCoordinateTrafo
 
 using Random
 using QEDbase
-using QEDcore
 using StaticArrays
 
-include("groundtruths.jl")
-include("test_model.jl")
-include("test_process.jl")
-include("test_phase_space_layout.jl")
-include("test_coord_trafo.jl")
-include("random_momenta.jl")
+include("momentum/test_impl.jl")
+include("momentum/utils.jl")
+include("momentum/rand.jl")
+
+include("particles/groundtruth.jl")
+include("particles/test_impl.jl")
+
+include("model/groundtruth.jl")
+include("model/test_impl.jl")
+
+include("process/groundtruth.jl")
+include("process/test_impl.jl")
+
+# to be removed
+include("phase_space_def/groundtruth.jl")
+include("phase_space_def/test_impl.jl")
+include("phase_space_def/utils.jl")
+
+include("phase_space_layout/groundtruth.jl")
+include("phase_space_layout/test_impl.jl")
+
+include("particle_stateful.jl")
+include("phase_space_point/test_impl.jl")
+include("phase_space_point/utils.jl")
+
+include("cross_section/groundtruth.jl")
+include("cross_section/test_impl.jl")
+
+include("coordinate_trafo/groundtruth.jl")
+include("coordinate_trafo/test_impl.jl")
+
 include("utils.jl")
 
 end

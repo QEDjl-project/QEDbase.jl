@@ -1,13 +1,12 @@
 using QEDbase
 
-struct TestModel <: AbstractModelDefinition end
-QEDbase.fundamental_interaction_type(::TestModel) = :test_interaction
-
-struct TestModel_FAIL <: AbstractModelDefinition end
+include("../test_implementation/TestImplementation.jl")
+using .TestImplementation: TestModel, TestModel_FAIL
 
 @testset "hard interface" begin
-    TESTMODEL = TestModel()
-    @test fundamental_interaction_type(TESTMODEL) == :test_interaction
+    TESTMODEL = @inferred TestModel()
+    @test @inferred fundamental_interaction_type(TESTMODEL) ==
+        TestImplementation._groundtruth_interaction_type()
 end
 
 @testset "interface fail" begin

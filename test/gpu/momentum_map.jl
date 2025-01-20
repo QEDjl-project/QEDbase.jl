@@ -5,20 +5,22 @@ if isempty(GPUS)
 end
 
 using Random
-using QEDbase, QEDcore
+using QEDbase
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
+MOM_TYPE = TestImplementation.TestMomentum{Float64}
+
 TESTMODEL = TestImplementation.TestModel()
-TESTPSDEF = TestImplementation.TestPhasespaceDef()
-TESTTRAFO = TestImplementation.TestCoordTrafo()
+TESTPSDEF = TestImplementation.TestPhasespaceDef{MOM_TYPE}()
+TESTTRAFO = TestImplementation.TestCoordinateTrafo()
 
 @testset "Testing with $GPU_MODULE" for (GPU_MODULE, VECTOR_TYPE) in GPUS
     @testset "momentum map" begin
         @testset "momenta" begin
-            test_moms = rand(RNG, SFourMomentum, 100)
+            test_moms = [MOM_TYPE(rand(RNG, 4)) for _ in 1:100]
             gpu_moms = VECTOR_TYPE(test_moms)
 
             test_moms_prime = TESTTRAFO.(test_moms)
@@ -45,12 +47,12 @@ TESTTRAFO = TestImplementation.TestCoordTrafo()
             )
 
             test_psps = [
-                PhaseSpacePoint(
+                TestImplementation.TestPhaseSpacePoint(
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,
-                    TestImplementation._rand_momenta(RNG, N_INCOMING),
-                    TestImplementation._rand_momenta(RNG, N_OUTGOING),
+                    TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
+                    TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
                 ) for _ in 1:100
             ]
             gpu_test_psps = VECTOR_TYPE(test_psps)
