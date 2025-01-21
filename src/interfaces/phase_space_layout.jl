@@ -30,13 +30,13 @@ abstract type AbstractInPhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 
 """
 
-    AbstractOutPhaseSpaceLayout{InPSL<:AbstractInPhaseSpaceLayout} <: AbstractPhaseSpaceLayout
+    AbstractOutPhaseSpaceLayout{IN_PSL<:AbstractInPhaseSpaceLayout} <: AbstractPhaseSpaceLayout
 
 The `AbstractOutPhaseSpaceLayout` represents the phase space layout for the outgoing particles
-in a scattering process. It typically depends on the phase space layout of the incoming particles,
-and it specifies how the momenta of the outgoing particles are constructed from the respective coordinates.
+in a scattering process. It typically depends on the phase space layout of the incoming particles
+and specifies how the momenta of the outgoing particles are constructed from the respective coordinates.
 
-The generic parameter `InPSL` links the outgoing phase space layout to the incoming layout,
+The generic parameter `IN_PSL` links the outgoing phase space layout to the incoming layout,
 allowing consistency between the two configurations in the process.
 
 ## Interface Functions to Implement:
@@ -47,11 +47,11 @@ allowing consistency between the two configurations in the process.
 - `build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)`:
     Constructs the momenta for the outgoing particles, ensuring they comply with energy and momentum conservation based on the total incoming four-momentum.
 """
-abstract type AbstractOutPhaseSpaceLayout{InPSL<:AbstractInPhaseSpaceLayout} <:
+abstract type AbstractOutPhaseSpaceLayout{IN_PSL<:AbstractInPhaseSpaceLayout} <:
               AbstractPhaseSpaceLayout end
 """
 
-    phase_space_dimension(proc, model, layout::AbstractPhaseSpaceLayout) -> Int
+    phase_space_dimension(proc, model, layout::AbstractPhaseSpaceLayout)::Int
 
 This function needs to be implemented for the phase-space layout interface.
 Return the dimensionality of the phase space, i.e., the number of coordinates, for a given
@@ -79,7 +79,7 @@ the number of particles involved and the specific interaction model in use.
 function phase_space_dimension end
 
 """
-    in_phase_space_layout(out_psl::AbstractOutPhaseSpaceLayout) -> AbstractInPhaseSpaceLayout
+    in_phase_space_layout(out_psl::AbstractOutPhaseSpaceLayout)::AbstractInPhaseSpaceLayout
 
 This function needs to be implemented for the [`AbstractOutPhaseSpaceLayout`](@ref) interface.
 Given an outgoing phase space layout (`out_psl`), this function returns the associated incoming

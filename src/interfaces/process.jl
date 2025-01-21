@@ -43,7 +43,7 @@ Which return the number of spin and polarization combinations that should be con
 
 Furthermore, to calculate scattering probabilities and differential cross sections, the following
 interface functions need to be implemented for every combination of `CustomProcess<:AbstractProcessDefinition`,
-`CustomModel<:AbstractModelDefinition`, and `CustomPhasespaceDefinition<:AbstractPhasespaceDefinition`.
+`CustomModel<:AbstractModelDefinition`, and `CustomPhaseSpaceLayout<:AbstractPhaseSpaceLayout`.
 
 ```Julia
     _incident_flux(psp::InPhaseSpacePoint{CustomProcess,CustomModel})
@@ -54,14 +54,14 @@ interface functions need to be implemented for every combination of `CustomProce
 
     _is_in_phasespace(psp::PhaseSpacePoint{CustomProcess,CustomModel})
 
-    _phase_space_factor(psp::PhaseSpacePoint{CustomProcess,CustomModel,CustomPhasespaceDefinition})
+    _phase_space_factor(psp::PhaseSpacePoint{CustomProcess,CustomModel,CustomPhaseSpaceLayout})
 ```
 
 Optional is the implementation of
 
 ```Julia
 
-    _total_probability(psp::PhaseSpacePoint{CustomProcess,CustomModel,CustomPhasespaceDefinition})
+    _total_probability(psp::PhaseSpacePoint{CustomProcess,CustomModel,CustomPhaseSpaceLayout})
 
 ```
 to enable the calculation of total probabilities and cross sections.
@@ -162,13 +162,13 @@ is physical, i.e. all momenta are on-shell and some sort of energy-momentum cons
 function _is_in_phasespace end
 
 """
-    _phase_space_factor(PhaseSpacePoint{PROC,MODEL,PSDEF}) where {
+    _phase_space_factor(PhaseSpacePoint{PROC,MODEL,PSL}) where {
         PROC <: AbstractProcessDefinition,
         MODEL <: AbstractModelDefinition
-        PSDEF <: AbstractPhasespaceDefinition,
+        PSL <: AbstractPhaseSpaceLayout,
     }
 
-Interface function, which returns the pre-differential factor of the invariant phase space intergral measure.
+Interface function, which returns the pre-differential factor of the invariant phase space integral measure.
 
 !!! note "Convention"
 
@@ -226,11 +226,11 @@ function _total_probability end
     _generate_incoming_momenta(
         proc::AbstractProcessDefinition,
         model::AbstractModelDefinition,
-        phase_space_def::AbstractPhasespaceDefinition,
+        phase_space_layout::AbstractPhaseSpaceLayout,
         in_phase_space::NTuple{N,T},
     ) where {N,T<:Real}
 
-Interface function to generate the four-momenta of the incoming particles from coordinates for a given phase-space definition.
+Interface function to generate the four-momenta of the incoming particles from coordinates for a given phase-space layout.
 """
 function _generate_incoming_momenta end
 
@@ -238,11 +238,11 @@ function _generate_incoming_momenta end
     _generate_outgoing_momenta(
         proc::AbstractProcessDefinition,
         model::AbstractModelDefinition,
-        phase_space_def::AbstractPhasespaceDefinition,
+        phase_space_layout::AbstractPhaseSpaceLayout,
         in_phase_space::NTuple{N,T},
         out_phase_space::NTuple{M,T},
     ) where {N,M,T<:Real}
 
-Interface function to generate the four-momenta of the outgoing particles from coordinates for a given phase-space definition.
+Interface function to generate the four-momenta of the outgoing particles from coordinates for a given phase-space layout.
 """
 function _generate_outgoing_momenta end

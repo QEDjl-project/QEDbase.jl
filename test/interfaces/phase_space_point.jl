@@ -14,11 +14,11 @@ RNG = MersenneTwister(137137)
         MOM_TYPE = MockMomentum{MOM_EL_TYPE}
         TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
         TESTMODEL = MockModel()
-        TESTPSDEF = MockPhasespaceDef{MOM_TYPE}()
-        IN_PS = Mocks._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
-        OUT_PS = Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
+        TESTPSL = MockOutPhaseSpaceLayout(MOM_TYPE)
+        IN_PS = MockImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
+        OUT_PS = MockImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
-        PSP = MockPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
+        PSP = MockPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, IN_PS, OUT_PS)
 
         @testset "momentum implementations" begin
             @test @inferred momentum(PSP, Incoming(), MockBoson(), 1) == IN_PS[1]

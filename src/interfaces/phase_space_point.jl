@@ -1,10 +1,10 @@
 """
-    AbstractPhaseSpacePoint{PROC, MODEL, PSDEF, IN_PARTICLES, OUT_PARTICLES}
+    AbstractPhaseSpacePoint{PROC, MODEL, PSL, IN_PARTICLES, OUT_PARTICLES}
 
 Representation of a point in the phase space of a process. It has several template arguments:
 - `PROC <: `[`AbstractProcessDefinition`](@ref)
 - `MODEL <: `[`AbstractModelDefinition`](@ref)
-- `PSDEF <: `[`AbstractPhasespaceDefinition`](@ref)
+- `PSL <: `[`AbstractPhaseSpaceLayout`](@ref)
 - `IN_PARTICLES <: `Tuple{Vararg{AbstractParticleStateful}}`: The tuple type of all the incoming [`AbstractParticleStateful`](@ref)s.
 - `OUT_PARTICLES <: `Tuple{Vararg{AbstractParticleStateful}}`: The tuple type of all the outgoing [`AbstractParticleStateful`](@ref)s.
 
@@ -13,7 +13,7 @@ The following interface functions must be provided:
 - `particles(psp::AbstractPhaseSpacePoint, dir::ParticleDirection)`: Return the particle tuple (type `IN_PARTICLES` or `OUT_PARTICLES` depending on `dir`)
 - [`process`](@ref): Return the process.
 - [`model`](@ref): Return the model.
-- [`phase_space_definition`](@ref): Return the phase space definition.
+- [`phase_space_layout`](@ref): Return the phase space layout.
 
 From this, the following functions are automatically derived:
 - `momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)`: Return the momentum of the nth [`AbstractParticleStateful`](@ref) of the given direction.
@@ -29,7 +29,7 @@ If `IN_PARTICLES` is non-empty, `AbstractPhaseSpacePoint <: AbstractInPhaseSpace
 abstract type AbstractPhaseSpacePoint{
     PROC<:AbstractProcessDefinition,
     MODEL<:AbstractModelDefinition,
-    PSDEF<:AbstractPhasespaceDefinition,
+    PSL<:AbstractPhaseSpaceLayout,
     IN_PARTICLES<:Tuple{Vararg{AbstractParticleStateful}},
     OUT_PARTICLES<:Tuple{Vararg{AbstractParticleStateful}},
 } end
@@ -38,6 +38,8 @@ abstract type AbstractPhaseSpacePoint{
     process(psp::AbstractPhaseSpacePoint)
 
 Return the phase space point's set process.
+
+See also: [`AbstractProcessDefinition`](@ref)
 """
 function process end
 
@@ -45,15 +47,19 @@ function process end
     model(psp::AbstractPhaseSpacePoint)
 
 Return the phase space point's set model.
+
+See also: [`AbstractModelDefinition`](@ref)
 """
 function model end
 
 """
-    phase_space_definition(psp::AbstractPhaseSpacePoint)
+    phase_space_layout(psp::AbstractPhaseSpacePoint)
 
-Return the phase space point's set phase space definition.
+Return the phase space point's set phase space layout.
+
+See also: [`AbstractPhaseSpaceLayout`](@ref)
 """
-function phase_space_definition end
+function phase_space_layout end
 
 """
     momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)

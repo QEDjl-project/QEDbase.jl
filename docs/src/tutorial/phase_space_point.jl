@@ -50,25 +50,24 @@ struct ExampleModel <: AbstractModelDefinition end
 
 # This model can later be extended to incorporate complex QED interactions, but for now, we use it as a placeholder.
 
-# ## Step 3: Define Phase Space Definition
-# The last part we need to implement, is a phase space definition, which describes the
+# ## Step 3: Define Phase Space Layout
+# The last part we need to implement is a phase space layout which describes the
 # coordinate structure of the phase space:
 
-struct ExamplePhaseSpaceDefinition <: AbstractPhasespaceDefinition end
+struct ExamplePhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 
-# This phase space definition can be extended later to include coordinate systems and
-# frames of reference, but for now, this is also a placeholder.
+# This phase space layout can be extended later, but for now this is also a placeholder.
 
 # ## Step 4: Define an Example Phase Space Point
 # We now define the `ExamplePhaseSpacePoint` type, which will represent a specific point
 # in the phase space of the electron-positron annihilation process. This type holds the process,
 # the model, the phase space definition, and the incoming and outgoing particles.
 
-struct ExamplePhaseSpacePoint{PROC,MODEL,PSDEF,IN_PARTICLES,OUT_PARTICLES} <:
-       AbstractPhaseSpacePoint{PROC,MODEL,PSDEF,IN_PARTICLES,OUT_PARTICLES}
+struct ExamplePhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES} <:
+       AbstractPhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES}
     proc::PROC
     mdl::MODEL
-    psdef::PSDEF
+    psl::PSL
     in_particles::IN_PARTICLES
     out_particles::OUT_PARTICLES
 end
@@ -85,8 +84,8 @@ function QEDbase.model(psp::ExamplePhaseSpacePoint)
     return psp.mdl
 end
 
-function QEDbase.phase_space_definition(psp::ExamplePhaseSpacePoint)
-    return psp.psdef
+function QEDbase.phase_space_layout(psp::ExamplePhaseSpacePoint)
+    return psp.psl
 end
 
 function QEDbase.particles(psp::ExamplePhaseSpacePoint, dir::ParticleDirection)
@@ -126,13 +125,13 @@ end
 #
 # 1. Create an instance of the process (`ExampleProcess`).
 # 2. Create an instance of the model (`ExampleModel`).
-# 3. Define the phase space configuration (`ExamplePhaseSpaceDefinition`).
+# 3. Define the phase space layout (`ExamplePhaseSpaceLayout`).
 # 4. Define the incoming and outgoing particles, specifying their four-momenta.
 # 5. Create the phase space point and compute the momenta.
 
 proc = ExampleProcess()
 model = ExampleModel()
-psdef = ExamplePhaseSpaceDefinition()
+psl = ExamplePhaseSpaceLayout()
 
 in_particles = (
     ParticleStateful(Incoming(), Electron(), SFourMomentum(1.0, 0.0, 0.0, 1.0)),
@@ -144,7 +143,7 @@ out_particles = (
     ParticleStateful(Outgoing(), Photon(), SFourMomentum(1.0, -1.0, 0.0, 0.0)),
 )
 
-psp = ExamplePhaseSpacePoint(proc, model, psdef, in_particles, out_particles)
+psp = ExamplePhaseSpacePoint(proc, model, psl, in_particles, out_particles)
 
 incoming_momenta = momenta(psp, Incoming())
 outgoing_momenta = momenta(psp, Outgoing())

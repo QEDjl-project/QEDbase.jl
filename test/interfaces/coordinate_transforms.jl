@@ -10,7 +10,7 @@ TESTMODEL = MockModel()
 
 @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
     MOM_TYPE = MockMomentum{MOM_EL_TYPE}
-    TESTPSDEF = MockPhasespaceDef{MOM_TYPE}()
+    TESTPSL = MockOutPhaseSpaceLayout(MOM_TYPE)
 
     TESTTRAFO = MockCoordinateTrafo()
 
@@ -48,7 +48,7 @@ TESTMODEL = MockModel()
             p_out_phys = Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
             PS_POINT = MockPhaseSpacePoint(
-                TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
+                TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys
             )
 
             test_psp_prime = TESTTRAFO(PS_POINT)

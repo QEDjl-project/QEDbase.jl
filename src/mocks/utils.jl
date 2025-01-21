@@ -2,7 +2,8 @@
 # Check if any failed type is in the input
 _any_fail(x...) = true
 _any_fail(::MockProcess, ::MockModel) = false
-_any_fail(::MockProcess, ::MockModel, ::MockPhasespaceDef) = false
+_any_fail(::MockProcess, ::MockModel, ::MockInPhaseSpaceLayout) = false
+_any_fail(::MockProcess, ::MockModel, ::MockOutPhaseSpaceLayout) = false
 
 # unrolls all elements of a list of four-momenta into vector of coordinates
 function _unroll_moms(ps_moms::AbstractVector{T}) where {T<:QEDbase.AbstractFourMomentum}

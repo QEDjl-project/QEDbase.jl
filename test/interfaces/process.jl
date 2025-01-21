@@ -14,7 +14,6 @@ RTOL = sqrt(eps())
 
     TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
     TESTMODEL = MockModel()
-    TESTPSDEF = MockPhasespaceDef{MockMomentum{Float64}}()
 
     @testset "failed interface" begin
         TESTPROC_FAIL_ALL = Mocks.MockProcess_FAIL_ALL(

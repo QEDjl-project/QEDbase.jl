@@ -91,8 +91,8 @@ end
 
     proc = process(psp)
     mod = model(psp)
-    ps_def = phase_space_definition(psp)
-    return constructorof(PSP)(proc, mod, ps_def, in_moms_prime, out_moms_prime)
+    psl = phase_space_layout(psp)
+    return constructorof(PSP)(proc, mod, psl, in_moms_prime, out_moms_prime)
 end
 
 #########
