@@ -73,4 +73,8 @@ struct TestOutPhaseSpaceLayout_FAIL <:
        QEDbase.AbstractOutPhaseSpaceLayout{TestInPhaseSpaceLayout}
     in_psl::TestInPhaseSpaceLayout
 end
-TestOutPhaseSpaceLayout_FAIL() = TestOutPhaseSpaceLayout_FAIL(TestInPhaseSpaceLayout())
+function TestOutPhaseSpaceLayout_FAIL(
+    mom_type::Type{MOM_TYPE}
+) where {MOM_TYPE<:AbstractTestMomentum}
+    return TestOutPhaseSpaceLayout_FAIL(TestInPhaseSpaceLayout{MOM_TYPE}())
+end

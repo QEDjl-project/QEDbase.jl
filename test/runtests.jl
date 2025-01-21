@@ -14,9 +14,11 @@ if cpu_tests
     @time @safetestset "coordinate transforms" begin
         include("interfaces/coordinate_transforms.jl")
     end
+
     @time @safetestset "particles" begin
         include("interfaces/particles.jl")
     end
+
     @time @safetestset "particles properties" begin
         include("particle_properties.jl")
     end
@@ -36,6 +38,7 @@ if cpu_tests
     @time @safetestset "phase space point interface" begin
         include("interfaces/phase_space_point.jl")
     end
+
     @time @safetestset "cross sections" begin
         include("cross_sections.jl")
     end

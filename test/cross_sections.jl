@@ -8,7 +8,6 @@ using .TestImplementation
 
 TESTMODEL = TestModel()
 TESTMODEL_FAIL = TestImplementation.TestModel_FAIL()
-TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
@@ -28,7 +27,8 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
         ATOL = 0.0
         RTOL = sqrt(eps(MOM_EL_TYPE))
 
-        TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
+        TESTPSL = TestOutPhaseSpaceLayout(MOM_TYPE)
+        TESTPSL_FAIL = TestOutPhaseSpaceLayout_FAIL(MOM_TYPE)
         # single ps points
         p_in_phys = TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
         p_in_phys_invalid = TestImplementation._rand_momenta(RNG, N_INCOMING + 1, MOM_TYPE)
@@ -49,21 +49,19 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
         @testset "interface" begin
             @testset "incident flux" begin
                 test_incident_flux = QEDbase._incident_flux(
-                    TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys)
+                    TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys)
                 )
                 groundtruth = TestImplementation._groundtruth_incident_flux(p_in_phys)
                 @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
 
                 test_incident_flux = QEDbase._incident_flux(
-                    TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
-                    ),
+                    TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys)
                 )
                 @test test_incident_flux isa MOM_EL_TYPE
                 @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
 
                 #@test_throws MethodError QEDbase._incident_flux(
-                #    OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, OUT_PS)
+                #    OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, OUT_PS)
                 #)
             end
 
@@ -75,9 +73,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
             @testset "matrix element" begin
                 test_matrix_element = QEDbase._matrix_element(
-                    TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
-                    ),
+                    TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys)
                 )
                 groundtruth = TestImplementation._groundtruth_matrix_element(
                     p_in_phys, p_out_phys
@@ -93,19 +89,17 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
             @testset "is in phasespace" begin
                 @test @inferred QEDbase._is_in_phasespace(
-                    TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
-                    ),
+                    TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys)
                 )
 
                 PSP_unphysical_in_ps = TestPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_unphys, p_out_phys
+                    TESTPROC, TESTMODEL, TESTPSL, p_in_unphys, p_out_phys
                 )
                 PSP_unphysical_out_ps = TestPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_unphys
+                    TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_unphys
                 )
                 PSP_unphysical = TestPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_unphys, p_out_unphys
+                    TESTPROC, TESTMODEL, TESTPSL, p_in_unphys, p_out_unphys
                 )
 
                 @test !QEDbase._is_in_phasespace(PSP_unphysical_in_ps)
@@ -115,9 +109,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
             @testset "phase space factor" begin
                 test_phase_space_factor = QEDbase._phase_space_factor(
-                    TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
-                    ),
+                    TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys)
                 )
                 groundtruth = TestImplementation._groundtruth_phase_space_factor(
                     p_in_phys, p_out_phys
@@ -130,7 +122,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
         @testset "differential cross section" begin
             @testset "unsafe compute" begin
                 PS_POINT = TestPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
+                    TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys
                 )
 
                 diffCS_on_psp = unsafe_differential_cross_section(PS_POINT)
@@ -146,7 +138,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
             @testset "safe compute" begin
                 for (P_IN, P_OUT) in p_combs
                     PS_POINT = TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, P_IN, P_OUT
+                        TESTPROC, TESTMODEL, TESTPSL, P_IN, P_OUT
                     )
 
                     diffCS_on_psp = differential_cross_section(PS_POINT)
@@ -166,14 +158,14 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
                 )
                     if TestImplementation._any_fail(PROC, MODEL)
                         for (P_IN, P_OUT) in p_combs
-                            psp = TestPhaseSpacePoint(PROC, MODEL, TESTPSDEF, P_IN, P_OUT)
+                            psp = TestPhaseSpacePoint(PROC, MODEL, TESTPSL, P_IN, P_OUT)
                             @test_throws MethodError QEDbase._incident_flux(psp)
                             @test_throws MethodError QEDbase._averaging_norm(psp)
                             @test_throws MethodError QEDbase._matrix_element(psp)
                         end
                     end
 
-                    for PS_DEF in (TESTPSDEF, TESTPSDEF_FAIL)
+                    for PS_DEF in (TESTPSL, TESTPSL_FAIL)
                         if TestImplementation._any_fail(PROC, MODEL, PS_DEF)
                             for (P_IN, P_OUT) in p_combs
                                 psp = TestPhaseSpacePoint(PROC, MODEL, PS_DEF, P_IN, P_OUT)
@@ -187,9 +179,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
         @testset "total cross section" begin
             @testset "compute" begin
-                IN_PS_POINT = TestInPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys
-                )
+                IN_PS_POINT = TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys)
 
                 groundtruth = TestImplementation._groundtruth_total_cross_section(p_in_phys)
                 totCS_on_moms = total_cross_section(IN_PS_POINT)
@@ -202,7 +192,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
         @testset "differential probability" begin
             @testset "unsafe compute" begin
                 PS_POINT = TestPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
+                    TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys
                 )
                 prop_on_psp = unsafe_differential_probability(PS_POINT)
                 groundtruth = TestImplementation._groundtruth_unsafe_probability(
@@ -217,7 +207,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
             @testset "safe compute" begin
                 for (P_IN, P_OUT) in p_combs
                     PS_POINT = TestPhaseSpacePoint(
-                        TESTPROC, TESTMODEL, TESTPSDEF, P_IN, P_OUT
+                        TESTPROC, TESTMODEL, TESTPSL, P_IN, P_OUT
                     )
                     prop_on_psp = differential_probability(PS_POINT)
                     groundtruth = TestImplementation._groundtruth_safe_probability(
@@ -232,9 +222,7 @@ TESTPSDEF_FAIL = TestImplementation.TestPhasespaceDef_FAIL()
 
         @testset "total probability" begin
             @testset "compute" begin
-                IN_PS_POINT = TestInPhaseSpacePoint(
-                    TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys
-                )
+                IN_PS_POINT = TestInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys)
 
                 groundtruth = TestImplementation._groundtruth_total_probability(p_in_phys)
                 tot_prop_on_moms = TestImplementation.total_probability(IN_PS_POINT)

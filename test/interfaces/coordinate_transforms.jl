@@ -12,7 +12,7 @@ TESTMODEL = TestModel()
 
 @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
     MOM_TYPE = TestMomentum{MOM_EL_TYPE}
-    TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
+    TESTPSL = TestOutPhaseSpaceLayout(MOM_TYPE)
 
     TESTTRAFO = TestCoordinateTrafo()
 
@@ -58,7 +58,7 @@ TESTMODEL = TestModel()
             p_out_phys = TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
             PS_POINT = TestPhaseSpacePoint(
-                TESTPROC, TESTMODEL, TESTPSDEF, p_in_phys, p_out_phys
+                TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys
             )
 
             test_psp_prime = TESTTRAFO(PS_POINT)

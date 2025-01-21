@@ -7,9 +7,6 @@ export TestMasslessFermion, TestMasslessBoson
 export TestModel, TestModel_FAIL
 export TestProcess, TestProcess_FAIL
 
-# TODO: to be removed (https://github.com/QEDjl-project/QEDbase.jl/issues/140)
-export TestPhasespaceDef, TestPhasespaceDef_FAIL
-
 export TestInPhaseSpaceLayout, TestInPhaseSpaceLayout_FAIL
 export TestOutPhaseSpaceLayout, TestOutPhaseSpaceLayout_FAIL
 
@@ -34,11 +31,6 @@ include("model/test_impl.jl")
 
 include("process/groundtruth.jl")
 include("process/test_impl.jl")
-
-# to be removed
-include("phase_space_def/groundtruth.jl")
-include("phase_space_def/test_impl.jl")
-include("phase_space_def/utils.jl")
 
 include("phase_space_layout/groundtruth.jl")
 include("phase_space_layout/test_impl.jl")

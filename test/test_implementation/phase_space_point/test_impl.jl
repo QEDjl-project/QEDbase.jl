@@ -2,13 +2,13 @@
 struct TestPhaseSpacePoint{
     P<:AbstractProcessDefinition,
     M<:AbstractModelDefinition,
-    D<:AbstractPhasespaceDefinition,
+    L<:AbstractPhaseSpaceLayout,
     INP<:Tuple{Vararg{TestParticleStateful}},
     OUTP<:Tuple{Vararg{TestParticleStateful}},
-} <: AbstractPhaseSpacePoint{P,M,D,INP,OUTP}
+} <: AbstractPhaseSpacePoint{P,M,L,INP,OUTP}
     proc::P
     model::M
-    ps_def::D
+    psl::L
     in_parts::INP
     out_parts::OUTP
 end
@@ -16,29 +16,29 @@ end
 function TestPhaseSpacePoint(
     proc::AbstractProcessDefinition,
     model::AbstractModelDefinition,
-    ps_def::AbstractPhasespaceDefinition,
+    psl::AbstractPhaseSpaceLayout,
     in_moms::NTuple{N,MOM_TYPE},
     out_moms::NTuple{M,MOM_TYPE},
 ) where {N,M,MOM_TYPE<:AbstractFourMomentum}
     in_parts = _build_particle_statefuls(proc, in_moms, Incoming())
     out_parts = _build_particle_statefuls(proc, out_moms, Outgoing())
 
-    return TestPhaseSpacePoint(proc, model, ps_def, in_parts, out_parts)
+    return TestPhaseSpacePoint(proc, model, psl, in_parts, out_parts)
 end
 
-TestInPhaseSpacePoint{P,M,D,IN,OUT} = TestPhaseSpacePoint{
-    P,M,D,IN,OUT
+TestInPhaseSpacePoint{P,M,L,IN,OUT} = TestPhaseSpacePoint{
+    P,M,L,IN,OUT
 } where {IN<:Tuple{TestParticleStateful,Vararg},OUT<:Tuple{Vararg}}
 
 function TestInPhaseSpacePoint(
     proc::AbstractProcessDefinition,
     model::AbstractModelDefinition,
-    ps_def::AbstractPhasespaceDefinition,
+    psl::AbstractPhaseSpaceLayout,
     in_momenta::NTuple{N,MOM_TYPE},
 ) where {N,MOM_TYPE<:AbstractFourMomentum}
     in_particles = _build_particle_statefuls(proc, in_momenta, Incoming())
 
-    return TestPhaseSpacePoint(proc, model, ps_def, in_particles, ())
+    return TestPhaseSpacePoint(proc, model, psl, in_particles, ())
 end
 
 Base.getindex(psp::TestPhaseSpacePoint, ::Incoming, n::Int) = psp.in_parts[n]
@@ -49,7 +49,7 @@ QEDbase.particles(psp::TestPhaseSpacePoint, ::Outgoing) = psp.out_parts
 
 QEDbase.process(psp::TestPhaseSpacePoint) = psp.proc
 QEDbase.model(psp::TestPhaseSpacePoint) = psp.model
-QEDbase.phase_space_definition(psp::TestPhaseSpacePoint) = psp.ps_def
+QEDbase.phase_space_layout(psp::TestPhaseSpacePoint) = psp.psl
 
 function Base.isapprox(
     psp1::TestPhaseSpacePoint,
@@ -61,7 +61,7 @@ function Base.isapprox(
 )
     return process(psp1) == process(psp2) &&
            model(psp1) == model(psp2) &&
-           phase_space_definition(psp1) == phase_space_definition(psp2) &&
+           phase_space_layout(psp1) == phase_space_layout(psp2) &&
            all(
                isapprox.(
                    momenta(psp1, Incoming()),

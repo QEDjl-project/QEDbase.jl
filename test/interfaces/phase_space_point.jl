@@ -16,11 +16,11 @@ using .TestImplementation
         MOM_TYPE = TestMomentum{MOM_EL_TYPE}
         TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
         TESTMODEL = TestModel()
-        TESTPSDEF = TestPhasespaceDef{MOM_TYPE}()
+        TESTPSL = TestOutPhaseSpaceLayout(MOM_TYPE)
         IN_PS = TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
         OUT_PS = TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
-        PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSDEF, IN_PS, OUT_PS)
+        PSP = TestPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, IN_PS, OUT_PS)
 
         @testset "momentum implementations" begin
             @test @inferred momentum(PSP, Incoming(), TestBoson(), 1) == IN_PS[1]

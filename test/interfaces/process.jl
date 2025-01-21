@@ -16,7 +16,6 @@ using .TestImplementation
 
     TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
     TESTMODEL = TestModel()
-    TESTPSDEF = TestPhasespaceDef{TestMomentum{Float64}}()
 
     @testset "failed interface" begin
         TESTPROC_FAIL_ALL = TestImplementation.TestProcess_FAIL_ALL(
