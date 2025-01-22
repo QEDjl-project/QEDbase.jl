@@ -12,10 +12,8 @@ using DocumenterInterLinks
 using DocumenterCitations
 
 using QEDbase
-using QEDcore
-using QEDprocesses
 
-bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
+bib = CitationBibliography(joinpath(dirname(Base.active_project()), "Bibliography.bib"))
 
 # some paths for links
 readme_path = joinpath(project_path, "README.md")
@@ -38,7 +36,7 @@ end
 links = InterLinks("QEDcore" => "https://qedjl-project.github.io/QEDcore.jl/dev/")
 
 # setup Bibliography
-bib = CitationBibliography(joinpath(@__DIR__, "Bibliography.bib"))
+bib = CitationBibliography(joinpath(dirname(Base.active_project()), "Bibliography.bib"))
 
 # setup examples using Literate.jl
 literate_paths = [
