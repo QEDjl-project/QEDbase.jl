@@ -6,10 +6,18 @@
 # ## Step 1: Define a Custom Process Type
 #
 # Start by creating a custom type that inherits from `AbstractProcessDefinition`.
-# This type will represent your process, for example, electron-positron scattering into two photons.
+# This type will represent your process, for example, muon-anti-muon scattering into two photons.
 
 using QEDbase
-using QEDcore # for particle definitions and phase space points
+
+#!format: off
+redirect_stdout(devnull) do # hide
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "model.jl"))             # to get the custom model
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get the custom four momenta
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "phase_space_point.jl")) # to get the custom phase space points
+end # hide
+#!format: on
 
 # Define a specific process by creating a subtype of `AbstractProcessDefinition`:
 struct MyProcess <: AbstractProcessDefinition
@@ -32,7 +40,7 @@ QEDbase.outgoing_particles(proc::MyProcess) = proc.outgoing_particles
 # For our custom process, we assume average/summation over all spins and polarizations.
 # However, you can define specific spins or polarizations if needed.
 
-QEDbase.incoming_spin_pols(::MyProcess) = (AllSpin(), AllSpin())  # Both incoming particles are fermions (electron and positron)
+QEDbase.incoming_spin_pols(::MyProcess) = (AllSpin(), AllSpin())  # Both incoming particles are fermions (muon and antimuon)
 QEDbase.outgoing_spin_pols(::MyProcess) = (AllPolarization(), AllPolarization())  # Photons are boson
 
 # ## Step 4: Define the Matrix Element Calculation
@@ -40,7 +48,7 @@ QEDbase.outgoing_spin_pols(::MyProcess) = (AllPolarization(), AllPolarization())
 # The matrix element is a central part of any scattering process. It needs to be implemented for each spin and polarization combination.
 # To calculate matrix elements, you must define the `_matrix_element` function.
 
-function QEDbase._matrix_element(psp::PhaseSpacePoint{MyProcess})
+function QEDbase._matrix_element(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Calculate the matrix element for the specific process.
     ## This is a placeholder for the actual computation.
     return 1.0  # Placeholder value
@@ -51,7 +59,7 @@ end
 # To compute the cross section, we need to define the incident flux.
 # This function calculates the initial flux of incoming particles, based on their momenta and energies.
 
-function QEDbase._incident_flux(psp::InPhaseSpacePoint{MyProcess})
+function QEDbase._incident_flux(psp::AbstractInPhaseSpacePoint{MyProcess})
     ## Placeholder calculation for incident flux
     return 1.0  # Placeholder value
 end
@@ -69,7 +77,7 @@ end
 #
 # The `_is_in_phasespace` function verifies whether a particular combination of incoming and outgoing momenta is physically allowed (on-shell, momentum conservation, etc.).
 
-function QEDbase._is_in_phasespace(psp::PhaseSpacePoint{MyProcess})
+function QEDbase._is_in_phasespace(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Implement energy-momentum conservation and on-shell conditions.
     return true  # Placeholder value
 end
@@ -78,7 +86,7 @@ end
 #
 # To calculate cross sections, define the `_phase_space_factor` function, which returns the pre-differential factor of the invariant phase space integral measure.
 
-function QEDbase._phase_space_factor(psp::PhaseSpacePoint{MyProcess})
+function QEDbase._phase_space_factor(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Return the phase space factor
     return 1.0  # Placeholder value
 end
@@ -88,7 +96,7 @@ end
 # Optionally, you can define the `_total_probability` function to compute the total probability of the process.
 # This is especially useful when computing total cross sections.
 
-function QEDbase._total_probability(psp::PhaseSpacePoint{MyProcess})
+function QEDbase._total_probability(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Calculate the total probability for the process
     return 1.0  # Placeholder value
 end
@@ -98,11 +106,9 @@ end
 # After defining the required functions, you now have a complete process definition for `MyProcess`.
 # This process can be used in phase space integration, cross section calculation, and other scattering computations in `QuantumElectrodynamics.jl`.
 #
-# For example, if your process is electron-positron scattering into two photons:
+# For example, if your process is muon-anti-muon scattering into two photons:
 
-using QEDprocesses # for a predefined model: PerturbativeQED
-
-particles_in = (Electron(), Positron())
+particles_in = (Muon(), AntiMuon())
 particles_out = (Photon(), Photon())
 process = MyProcess(particles_in, particles_out)
 
@@ -113,23 +119,28 @@ println("outgoing particles: ", outgoing_particles(process))
 
 # You can define some momenta for the incoming and outgoing particles
 
-electron_mass = mass(Electron())
-electron_momentum = SFourMomentum(3.0, 0, 0, sqrt(3.0^2 - electron_mass^2))
-positron_momentum = SFourMomentum(3.0, 0, 0, -sqrt(3.0^2 - electron_mass^2))
-incoming_momenta = (electron_momentum, positron_momentum)
-photon_momentum1 = SFourMomentum(3.0, 3.0, 0, 0)
-photon_momentum2 = SFourMomentum(3.0, -3.0, 0, 0)
+muon_mass = mass(Muon())
+muon_momentum = CustomFourMomentum(500.0, 0, 0, sqrt(500.0^2 - muon_mass^2))
+antimuon_momentum = CustomFourMomentum(500.0, 0, 0, -sqrt(500.0^2 - muon_mass^2))
+incoming_momenta = (muon_momentum, antimuon_momentum)
+photon_momentum1 = CustomFourMomentum(500.0, 500.0, 0, 0)
+photon_momentum2 = CustomFourMomentum(500.0, -500.0, 0, 0)
 outgoing_momenta = (photon_momentum1, photon_momentum2)
 
-# And you can define phase space definitions and computational models (here just as
+# And you can define phase space layouts and computational models (here just as
 # placeholder):
 
-ps_def = PhasespaceDefinition(SphericalCoordinateSystem(), CenterOfMomentumFrame())
-model = PerturbativeQED()
+psl = ExamplePhaseSpaceLayout()
+model = CustomModel()
 
 # Finally, you can build a phase space point for your process
 
-psp = PhaseSpacePoint(process, model, ps_def, incoming_momenta, outgoing_momenta)
+incoming_ps =
+    ExampleParticleStateful.(Incoming(), incoming_particles(process), incoming_momenta)
+outgoing_ps =
+    ExampleParticleStateful.(Outgoing(), outgoing_particles(process), outgoing_momenta)
+
+psp = ExamplePhaseSpacePoint(process, model, psl, incoming_ps, outgoing_ps)
 
 # For this phase space point, the differential cross section can be calculated by calling
 

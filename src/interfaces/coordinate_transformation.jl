@@ -18,8 +18,6 @@ Implementing the interface by defining the interface functions:
 ```jldoctest trafo_interface
 julia> using QEDbase
 
-julia> using QEDcore
-
 julia> struct TestTrafo{T} <: AbstractCoordinateTransformation
            a::T
        end
@@ -32,7 +30,7 @@ julia> Base.inv(trafo::TestTrafo) = TestTrafo(inv(trafo.a))
 
 The `TestTrafo` can then be used to transform four-momenta:
 
-```jldoctest trafo_interface
+```julia
 julia> trafo = TestTrafo(2.0)
 TestTrafo{Float64}(2.0)
 

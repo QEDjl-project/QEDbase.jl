@@ -16,29 +16,44 @@
 # ```
 
 # ## Step 0: Import the Necessary Ingredients
-# We'll begin by importing necessary functionality from `QEDbase`, `QEDcore`, and `QEDprocesses`.
+# We'll begin by importing necessary functionality from `QEDbase`, the muon and anti-muon particles from the
+# particles tutorial, and the `ParticleStateful` from its respective tutorial.
 
 using QEDbase
-using QEDcore       # Predefined particles and four-momenta
-using QEDprocesses  # Physics models and processes
+
+#!format: off
+redirect_stdout(devnull) do # hide
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle_stateful.jl")) # to get custom particle stateful definition
+end # hide
+#!format: on
+
+# We'll also need a `Photon` type which we briefly define right here.
+
+struct Photon <: AbstractParticleType end
+QEDbase.is_boson(::Photon) = true
+QEDbase.is_particle(::Photon) = true
+QEDbase.is_anti_particle(::Photon) = true
+QEDbase.mass(::Photon) = 0.0
+QEDbase.charge(::Photon) = 0.0
 
 # ## Step 1: Define an Example Process
-# We define a process that describes electron-positron annihilation. This process will involve
-# two incoming particles (an electron and a positron) and two outgoing particles (two photons).
+# We define a process that describes muon-anti-muon annihilation. This process will involve
+# two incoming particles (a muon and an anti-muon) and two outgoing particles (two photons).
 
 struct ExampleProcess <: AbstractProcessDefinition end
 
 # Next, we specify the incoming and outgoing particles for the process by overloading the required interface functions:
 
 # ### Define Incoming and Outgoing Particles
-# The incoming particles are an electron and a positron, and the outgoing particles are two photons.
+# The incoming particles are a muon and an anti-muon, and the outgoing particles are two photons.
 
 function QEDbase.incoming_particles(::ExampleProcess)
-    return (Electron(), Positron())  # These particle types are predefined in QEDcore
+    return (Muon(), AntiMuon())  # These particle types are defined in the particles tutorial.
 end
 
 function QEDbase.outgoing_particles(::ExampleProcess)
-    return (Photon(), Photon())  # Photons are also predefined in QEDcore
+    return (Photon(), Photon())  # Photons are defined above. They are also properly defined in QEDcore.
 end
 
 # At this point, we have defined our `ExampleProcess` with the required particles.
@@ -60,7 +75,7 @@ struct ExamplePhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 
 # ## Step 4: Define an Example Phase Space Point
 # We now define the `ExamplePhaseSpacePoint` type, which will represent a specific point
-# in the phase space of the electron-positron annihilation process. This type holds the process,
+# in the phase space of the muon-anti-muon annihilation process. This type holds the process,
 # the model, the phase space definition, and the incoming and outgoing particles.
 
 struct ExamplePhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES} <:
@@ -121,7 +136,7 @@ function QEDbase.momenta(psp::ExamplePhaseSpacePoint, dir::ParticleDirection)
 end
 
 # ## Step 7: Test the Implementation
-# Finally, we’ll test our implementation using the **electron-positron annihilation** process.
+# Finally, we’ll test our implementation using the **muon-anti-muon annihilation** process.
 #
 # 1. Create an instance of the process (`ExampleProcess`).
 # 2. Create an instance of the model (`ExampleModel`).
@@ -134,13 +149,15 @@ model = ExampleModel()
 psl = ExamplePhaseSpaceLayout()
 
 in_particles = (
-    ParticleStateful(Incoming(), Electron(), SFourMomentum(1.0, 0.0, 0.0, 1.0)),
-    ParticleStateful(Incoming(), Positron(), SFourMomentum(1.0, 0.0, 0.0, -1.0)),
+    ExampleParticleStateful(Incoming(), Muon(), CustomFourMomentum(1.0, 0.0, 0.0, 1.0)),
+    ExampleParticleStateful(
+        Incoming(), AntiMuon(), CustomFourMomentum(1.0, 0.0, 0.0, -1.0)
+    ),
 )
 
 out_particles = (
-    ParticleStateful(Outgoing(), Photon(), SFourMomentum(1.0, 1.0, 0.0, 0.0)),
-    ParticleStateful(Outgoing(), Photon(), SFourMomentum(1.0, -1.0, 0.0, 0.0)),
+    ExampleParticleStateful(Outgoing(), Photon(), CustomFourMomentum(1.0, 1.0, 0.0, 0.0)),
+    ExampleParticleStateful(Outgoing(), Photon(), CustomFourMomentum(1.0, -1.0, 0.0, 0.0)),
 )
 
 psp = ExamplePhaseSpacePoint(proc, model, psl, in_particles, out_particles)
@@ -154,5 +171,5 @@ println("Outgoing momenta: ", outgoing_momenta)
 # ## Conclusion
 #
 # We have successfully defined a custom phase space point type, implemented the necessary interface functions,
-# and verified the momenta for an electron-positron annihilation process.
+# and verified the momenta for a muon-anti-muon annihilation process.
 # This phase space point system provides a flexible way to work with scattering processes.
