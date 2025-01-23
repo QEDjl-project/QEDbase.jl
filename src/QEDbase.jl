@@ -122,7 +122,6 @@ include("interfaces/coordinate_transformation.jl")
 
 include("implementations/phase_space_layout/build_momenta.jl")
 
-include("implementations/process/momenta.jl")
 include("implementations/process/particles.jl")
 include("implementations/process/spin_pols.jl")
 include("implementations/process/spin_pol_iterator.jl")

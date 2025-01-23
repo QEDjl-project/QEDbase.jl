@@ -23,7 +23,7 @@ constructed from phase space coordinates.
 ## Interface Functions to Implement:
 - `phase_space_dimension(proc, model, layout::AbstractInPhaseSpaceLayout)`: Defines the number
     of independent phase space coordinates for the incoming particles.
-- `build_momenta(proc, model, in_psl::AbstractInPhaseSpaceLayout, in_coords::Tuple)`: Constructs
+- `_build_momenta(proc, model, in_psl::AbstractInPhaseSpaceLayout, in_coords::Tuple)`: Constructs
     the momenta for the incoming particles using the phase space coordinates.
 """
 abstract type AbstractInPhaseSpaceLayout <: AbstractPhaseSpaceLayout end
@@ -44,7 +44,7 @@ allowing consistency between the two configurations in the process.
     number of independent phase space coordinates for the outgoing particles.
 - `in_phase_space_layout(out_psl::AbstractOutPhaseSpaceLayout)`: Provides the associated
     incoming phase space layout to ensure consistency between incoming and outgoing configurations.
-- `build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)`:
+- `_build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)`:
     Constructs the momenta for the outgoing particles, ensuring they comply with energy and momentum conservation based on the total incoming four-momentum.
 """
 abstract type AbstractOutPhaseSpaceLayout{IN_PSL<:AbstractInPhaseSpaceLayout} <:
