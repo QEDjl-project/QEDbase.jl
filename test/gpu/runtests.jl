@@ -84,7 +84,7 @@ if metal_tests
             "trying to test with Metal.jl but it is not functional (Metal.functional() == false)",
         )
         push!(GPUS, (Metal, MtlVector))
-        GPU_FLOAT_TYPES[oneAPI] = [Float32, Float64]
+        GPU_FLOAT_TYPES[Metal] = [Float32]
         @info "Testing with Metal.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
