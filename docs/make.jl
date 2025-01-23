@@ -13,8 +13,6 @@ using DocumenterCitations
 
 using QEDbase
 
-bib = CitationBibliography(joinpath(dirname(Base.active_project()), "Bibliography.bib"))
-
 # some paths for links
 readme_path = joinpath(project_path, "README.md")
 index_path = joinpath(project_path, "docs/src/index.md")
