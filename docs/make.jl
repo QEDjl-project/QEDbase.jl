@@ -31,14 +31,19 @@ open(readme_path, "r") do readme_in
 end
 
 # setup interlinks
-links = InterLinks("QEDcore" => "https://qedjl-project.github.io/QEDcore.jl/dev/")
+links = InterLinks(
+    "QEDcore" => "https://qedjl-project.github.io/QEDcore.jl/dev/",
+    "QEDprocesses" => "https://qedjl-project.github.io/QEDprocesses.jl/dev/",
+)
 
 # setup Bibliography
 bib = CitationBibliography(joinpath(dirname(Base.active_project()), "Bibliography.bib"))
 
 # setup examples using Literate.jl
 literate_paths = [
+    Base.Filesystem.joinpath(project_path, "docs/src/tutorial/four_momentum.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/lorentz_vectors.jl"),
+    Base.Filesystem.joinpath(project_path, "docs/src/tutorial/model.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/particle.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/particle_stateful.jl"),
     Base.Filesystem.joinpath(project_path, "docs/src/tutorial/process.jl"),
@@ -52,27 +57,29 @@ tutorial_output_dir_name = splitpath(tutorial_output_dir)[end]
 
 pages = [
     "Home" => "index.md",
+    "Phase Space Points" => "phase_space_point.md",
     "Tutorials" => [
-        #"Dirac Tensors" => "dirac_tensors.md",
+        "Four Momentum" => joinpath(tutorial_output_dir_name, "four_momentum.md"),
         "Lorentz Vectors" => joinpath(tutorial_output_dir_name, "lorentz_vectors.md"),
         "Particles" => joinpath(tutorial_output_dir_name, "particle.md"),
         "Stateful Particles" =>
             joinpath(tutorial_output_dir_name, "particle_stateful.md"),
+        "Physics Model" => joinpath(tutorial_output_dir_name, "model.md"),
         "Scattering Process" => joinpath(tutorial_output_dir_name, "process.md"),
         "Phase Space Points" =>
             joinpath(tutorial_output_dir_name, "phase_space_point.md"),
     ],
     "API reference" => [
-        "Contents" => "library/outline.md",
-        "Lorentz vectors" => "library/lorentz_vector.md",
-        "Dirac tensors" => "library/dirac_objects.md",
-        "Particles" => "library/particles.md",
-        "Scattering process" => "library/process.md",
-        "Phase space layout" => "library/phase_space_layout.md",
-        "Phase space description" => "library/phase_space.md",
-        "Probability and cross section" => "library/cross_section.md",
-        "Testing functionality" => "library/mocks.md",
-        "Function index" => "library/function_index.md",
+        "Contents" => joinpath("library", "outline.md"),
+        "Lorentz vectors" => joinpath("library", "lorentz_vector.md"),
+        "Dirac tensors" => joinpath("library", "dirac_objects.md"),
+        "Particles" => joinpath("library", "particles.md"),
+        "Scattering process" => joinpath("library", "process.md"),
+        "Phase space layout" => joinpath("library", "phase_space_layout.md"),
+        "Phase space description" => joinpath("library", "phase_space.md"),
+        "Probability and cross section" => joinpath("library", "cross_section.md"),
+        "Testing functionality" => joinpath("library", "mocks.md"),
+        "Function index" => joinpath("library", "function_index.md"),
     ],
     "refs.md",
 ]
@@ -83,7 +90,7 @@ try
         Literate.markdown(file, tutorial_output_dir; documenter=true)
     end
 
-    # geneate docs with Documenter.jl
+    # generate docs with Documenter.jl
     makedocs(;
         modules=[QEDbase],
         checkdocs=:exports,

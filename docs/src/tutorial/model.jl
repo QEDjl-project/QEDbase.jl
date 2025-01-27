@@ -5,11 +5,9 @@
 
 # First we need particle definitions from the particles tutorial:
 
-#!format: off
 redirect_stdout(devnull) do # hide
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))    # to get predefined particles
 end # hide
-#!format: on
 
 struct CustomModel <: AbstractModelDefinition end
 
@@ -27,7 +25,7 @@ function QEDbase.out_phase_space_dimension(proc::AbstractProcessDefinition, ::Cu
     return 3 * number_outgoing_particles(proc) - 4
 end
 
-# The [`isphysical`](@ref) function should return whether the given process is physical in this model.
+# The [`isphysical`](@extref QEDprocesses.isphysical) function should return whether the given process is physical in this model.
 # For the electromagnetic interaction this means the fermion and anti-fermions need to match up.
 
 function isphysical(proc::AbstractProcessDefinition, ::CustomModel)
