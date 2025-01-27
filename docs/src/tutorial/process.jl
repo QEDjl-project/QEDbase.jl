@@ -10,14 +10,12 @@
 
 using QEDbase
 
-#!format: off
 redirect_stdout(devnull) do # hide
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "model.jl"))             # to get the custom model
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get the custom four momenta
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "phase_space_point.jl")) # to get the custom phase space points
 end # hide
-#!format: on
 
 # Define a specific process by creating a subtype of `AbstractProcessDefinition`:
 struct MyProcess <: AbstractProcessDefinition

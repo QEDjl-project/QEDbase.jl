@@ -1,4 +1,4 @@
-# # Define a Custom Phase Space Point
+# # [Tutorial: Define a Custom Phase Space Point](@id tutorial_psp) 
 #
 # In this tutorial, we will define a custom **phase space point** type following the interface
 # specification used in `QuantumElectrodynamics.jl`.
@@ -21,12 +21,10 @@
 
 using QEDbase
 
-#!format: off
 redirect_stdout(devnull) do # hide
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
 include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle_stateful.jl")) # to get custom particle stateful definition
 end # hide
-#!format: on
 
 # We'll also need a `Photon` type which we briefly define right here.
 

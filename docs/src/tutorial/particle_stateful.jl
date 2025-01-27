@@ -57,12 +57,10 @@ end
 #
 # We can now create instances of `ExampleParticleStateful` for, say, `Muon` and `AntiMuon`.
 
-#!format: off
 redirect_stdout(devnull) do # hide
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get custom four momentum vector
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get custom four momentum vector
 end # hide
-#!format: on
 
 # Create a four-momentum vector (dummy example)
 momentum_muon = CustomFourMomentum(1.0, 0.0, 0.0, 0.0);  # E, px, py, pz
@@ -86,8 +84,8 @@ println("Outgoing antimuon momentum: ", momentum(outgoing_antimuon))
 # ## Summary
 #
 # In this tutorial, we created a general `ExampleParticleStateful` type that can represent any particle species 
-# (like `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle), but also `Electron` and 
-# `Positron` from `QEDcore`) by using the species as a type parameter. This approach avoids the need to define 
+# (like `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle), but also [`Electron`](@extref QEDcore.Electron) and 
+# [`Positron`](@extref QEDcore.Positron) from `QEDcore`) by using the species as a type parameter. This approach avoids the need to define 
 # separate stateful types for each particle, making the implementation more flexible and reusable.
 #
 # The key steps were:
