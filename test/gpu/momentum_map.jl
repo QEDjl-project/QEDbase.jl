@@ -36,8 +36,8 @@ TESTTRAFO = MockCoordinateTrafo()
                                                  Iterators.product(
             (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
         )
-            INCOMING_PARTICLES = Tuple(rand(RNG, PARTICLE_SET, N_INCOMING))
-            OUTGOING_PARTICLES = Tuple(rand(RNG, PARTICLE_SET, N_OUTGOING))
+            INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
+            OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
             TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
 
