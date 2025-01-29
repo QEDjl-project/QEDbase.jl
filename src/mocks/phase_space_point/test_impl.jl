@@ -1,10 +1,10 @@
 
-struct TestPhaseSpacePoint{
+struct MockPhaseSpacePoint{
     P<:AbstractProcessDefinition,
     M<:AbstractModelDefinition,
     D<:AbstractPhasespaceDefinition,
-    INP<:Tuple{Vararg{TestParticleStateful}},
-    OUTP<:Tuple{Vararg{TestParticleStateful}},
+    INP<:Tuple{Vararg{MockParticleStateful}},
+    OUTP<:Tuple{Vararg{MockParticleStateful}},
 } <: AbstractPhaseSpacePoint{P,M,D,INP,OUTP}
     proc::P
     model::M
@@ -13,7 +13,7 @@ struct TestPhaseSpacePoint{
     out_parts::OUTP
 end
 
-function TestPhaseSpacePoint(
+function MockPhaseSpacePoint(
     proc::AbstractProcessDefinition,
     model::AbstractModelDefinition,
     ps_def::AbstractPhasespaceDefinition,
@@ -23,14 +23,14 @@ function TestPhaseSpacePoint(
     in_parts = _build_particle_statefuls(proc, in_moms, Incoming())
     out_parts = _build_particle_statefuls(proc, out_moms, Outgoing())
 
-    return TestPhaseSpacePoint(proc, model, ps_def, in_parts, out_parts)
+    return MockPhaseSpacePoint(proc, model, ps_def, in_parts, out_parts)
 end
 
-TestInPhaseSpacePoint{P,M,D,IN,OUT} = TestPhaseSpacePoint{
+MockInPhaseSpacePoint{P,M,D,IN,OUT} = MockPhaseSpacePoint{
     P,M,D,IN,OUT
-} where {IN<:Tuple{TestParticleStateful,Vararg},OUT<:Tuple{Vararg}}
+} where {IN<:Tuple{MockParticleStateful,Vararg},OUT<:Tuple{Vararg}}
 
-function TestInPhaseSpacePoint(
+function MockInPhaseSpacePoint(
     proc::AbstractProcessDefinition,
     model::AbstractModelDefinition,
     ps_def::AbstractPhasespaceDefinition,
@@ -38,22 +38,22 @@ function TestInPhaseSpacePoint(
 ) where {N,MOM_TYPE<:AbstractFourMomentum}
     in_particles = _build_particle_statefuls(proc, in_momenta, Incoming())
 
-    return TestPhaseSpacePoint(proc, model, ps_def, in_particles, ())
+    return MockPhaseSpacePoint(proc, model, ps_def, in_particles, ())
 end
 
-Base.getindex(psp::TestPhaseSpacePoint, ::Incoming, n::Int) = psp.in_parts[n]
-Base.getindex(psp::TestPhaseSpacePoint, ::Outgoing, n::Int) = psp.out_parts[n]
+Base.getindex(psp::MockPhaseSpacePoint, ::Incoming, n::Int) = psp.in_parts[n]
+Base.getindex(psp::MockPhaseSpacePoint, ::Outgoing, n::Int) = psp.out_parts[n]
 
-QEDbase.particles(psp::TestPhaseSpacePoint, ::Incoming) = psp.in_parts
-QEDbase.particles(psp::TestPhaseSpacePoint, ::Outgoing) = psp.out_parts
+QEDbase.particles(psp::MockPhaseSpacePoint, ::Incoming) = psp.in_parts
+QEDbase.particles(psp::MockPhaseSpacePoint, ::Outgoing) = psp.out_parts
 
-QEDbase.process(psp::TestPhaseSpacePoint) = psp.proc
-QEDbase.model(psp::TestPhaseSpacePoint) = psp.model
-QEDbase.phase_space_definition(psp::TestPhaseSpacePoint) = psp.ps_def
+QEDbase.process(psp::MockPhaseSpacePoint) = psp.proc
+QEDbase.model(psp::MockPhaseSpacePoint) = psp.model
+QEDbase.phase_space_definition(psp::MockPhaseSpacePoint) = psp.ps_def
 
 function Base.isapprox(
-    psp1::TestPhaseSpacePoint,
-    psp2::TestPhaseSpacePoint;
+    psp1::MockPhaseSpacePoint,
+    psp2::MockPhaseSpacePoint;
     atol::Real=0.0,
     rtol::Real=Base.rtoldefault(Float64),
     nans::Bool=false,

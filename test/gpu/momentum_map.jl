@@ -6,16 +6,17 @@ end
 
 using Random
 using QEDbase
+using QEDbase.Mocks
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-MOM_TYPE = TestImplementation.TestMomentum{Float64}
+MOM_TYPE = MockMomentum{Float64}
 
-TESTMODEL = TestImplementation.TestModel()
-TESTPSDEF = TestImplementation.TestPhasespaceDef{MOM_TYPE}()
-TESTTRAFO = TestImplementation.TestCoordinateTrafo()
+TESTMODEL = MockModel()
+TESTPSDEF = MockPhasespaceDef{MOM_TYPE}()
+TESTTRAFO = MockCoordinateTrafo()
 
 @testset "Testing with $GPU_MODULE" for (GPU_MODULE, VECTOR_TYPE) in GPUS
     @testset "momentum map" begin
@@ -35,24 +36,18 @@ TESTTRAFO = TestImplementation.TestCoordinateTrafo()
                                                  Iterators.product(
             (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
         )
-            INCOMING_PARTICLES = Tuple(
-                rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING)
-            )
-            OUTGOING_PARTICLES = Tuple(
-                rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING)
-            )
+            INCOMING_PARTICLES = Tuple(rand(RNG, PARTICLE_SET, N_INCOMING))
+            OUTGOING_PARTICLES = Tuple(rand(RNG, PARTICLE_SET, N_OUTGOING))
 
-            TESTPROC = TestImplementation.TestProcess(
-                INCOMING_PARTICLES, OUTGOING_PARTICLES
-            )
+            TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
 
             test_psps = [
-                TestImplementation.TestPhaseSpacePoint(
+                MockPhaseSpacePoint(
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,
-                    TestImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
-                    TestImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
+                    _rand_momenta(RNG, N_INCOMING, MOM_TYPE),
+                    _rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
                 ) for _ in 1:100
             ]
             gpu_test_psps = VECTOR_TYPE(test_psps)

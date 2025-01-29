@@ -1,22 +1,22 @@
-module TestImplementation
+module Mocks
 
-export TestMomentum, TestMomentumMutable
-export TestFermion, TestBoson
-export TestMasslessFermion, TestMasslessBoson
+export MockMomentum, MockMomentumMutable
+export MockFermion, MockBoson
+export MockMasslessFermion, MockMasslessBoson
 
-export TestModel, TestModel_FAIL
-export TestProcess, TestProcess_FAIL
+export MockModel, MockModel_FAIL
+export MockProcess, MockProcess_FAIL
 
 # TODO: to be removed (https://github.com/QEDjl-project/QEDbase.jl/issues/140)
-export TestPhasespaceDef, TestPhasespaceDef_FAIL
+export MockPhasespaceDef, MockPhasespaceDef_FAIL
 
-export TestInPhaseSpaceLayout, TestInPhaseSpaceLayout_FAIL
-export TestOutPhaseSpaceLayout, TestOutPhaseSpaceLayout_FAIL
+export MockInPhaseSpaceLayout, MockInPhaseSpaceLayout_FAIL
+export MockOutPhaseSpaceLayout, MockOutPhaseSpaceLayout_FAIL
 
-export TestParticleStateful
-export TestPhaseSpacePoint, TestInPhaseSpacePoint
+export MockParticleStateful
+export MockPhaseSpacePoint, MockInPhaseSpacePoint
 
-export TestCoordinateTrafo
+export MockCoordinateTrafo
 
 using Random
 using QEDbase

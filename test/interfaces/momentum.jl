@@ -1,7 +1,5 @@
 using QEDbase
-
-include("../test_implementation/TestImplementation.jl")
-using .TestImplementation: TestMomentum, TestMomentumMutable
+using QEDbase.Mocks
 
 lorentz_getter = [
     getT,
@@ -67,16 +65,16 @@ lorentz_setter = [
 
 @testset "LorentzVectorInterface" begin
     @testset "CustomType" begin
-        @test hasmethod(minkowski_dot, Tuple{TestMomentum,TestMomentum})
+        @test hasmethod(minkowski_dot, Tuple{MockMomentum,MockMomentum})
 
         for fun in lorentz_getter
-            @test hasmethod(fun, Tuple{TestMomentum})
+            @test hasmethod(fun, Tuple{MockMomentum})
         end
     end
 
     @testset "MutableCustomType" begin
         for fun in lorentz_setter
-            @test hasmethod(fun, Tuple{TestMomentumMutable,<:Union{}})
+            @test hasmethod(fun, Tuple{MockMomentumMutable,<:Union{}})
         end
     end
 end # LorentzVectorInterface

@@ -3,7 +3,7 @@ Return a tuple of random four momenta, i.e. a random phase space point.
 """
 function _rand_momenta(
     rng::AbstractRNG, n, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     return NTuple{n,mom_type}(mom_type(rand(rng, 4)) for _ in 1:n)
 end
 
@@ -13,7 +13,7 @@ n1 is the size of the phase space point, n2 is the number of points.
 """
 function _rand_momenta(
     rng::AbstractRNG, n1, n2, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     moms = Vector{NTuple{n1,mom_type}}(undef, n2)
     for i in 1:n2
         moms[i] = _rand_momenta(rng, n1, mom_type)
@@ -27,7 +27,7 @@ i.e. the first entry of the phase space is the null momentum.
 """
 function _rand_in_momenta_failing(
     rng::AbstractRNG, n, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     return (zero(mom_type), _rand_momenta(rng, n - 1, mom_type)...)
 end
 
@@ -37,7 +37,7 @@ i.e. the last entry of the phase space is the unit momentum.
 """
 function _rand_out_momenta_failing(
     rng::AbstractRNG, n, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     return (_rand_momenta(rng, n - 1, mom_type)..., one(mom_type))
 end
 
@@ -48,7 +48,7 @@ n1 is the size of the phase space point, n2 is the number of points.
 """
 function _rand_in_momenta_failing_mix(
     rng::AbstractRNG, n1, n2, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     moms = _rand_momenta(rng, n1, n2, mom_type)
     moms[1] = _rand_in_momenta_failing(rng, n1, mom_type)
     return moms
@@ -61,7 +61,7 @@ n1 is the size of the phase space point, n2 is the number of points.
 """
 function _rand_in_momenta_failing_all(
     rng::AbstractRNG, n1, n2, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     moms = Vector{NTuple{n1,mom_type}}(undef, n2)
 
     for i in 1:n2
@@ -77,7 +77,7 @@ n1 is the size of the phase space point, n2 is the number of points.
 """
 function _rand_out_momenta_failing_mix(
     rng::AbstractRNG, n1, n2, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     moms = _rand_momenta(rng, n1, n2, mom_type)
     moms[end] = _rand_out_momenta_failing(rng, n1, mom_type)
     return moms
@@ -90,7 +90,7 @@ n1 is the size of the phase space point, n2 is the number of points.
 """
 function _rand_out_momenta_failing_all(
     rng::AbstractRNG, n1, n2, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractTestMomentum}
+) where {MOM_TYPE<:AbstractMockMomentum}
     moms = Vector{NTuple{n1,mom_type}}(undef, n2)
     for i in 1:n2
         moms[i] = _rand_out_momenta_failing(rng, n1, mom_type)

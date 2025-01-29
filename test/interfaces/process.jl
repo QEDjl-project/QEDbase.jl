@@ -1,25 +1,23 @@
 using Random
 using QEDbase
+using QEDbase.Mocks
 
 RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-include("../test_implementation/TestImplementation.jl")
-using .TestImplementation
-
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
 )
-    INCOMING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING))
-    OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
+    INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
+    OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
-    TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
-    TESTMODEL = TestModel()
-    TESTPSDEF = TestPhasespaceDef{TestMomentum{Float64}}()
+    TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+    TESTMODEL = MockModel()
+    TESTPSDEF = MockPhasespaceDef{MockMomentum{Float64}}()
 
     @testset "failed interface" begin
-        TESTPROC_FAIL_ALL = TestImplementation.TestProcess_FAIL_ALL(
+        TESTPROC_FAIL_ALL = Mocks.MockProcess_FAIL_ALL(
             INCOMING_PARTICLES, OUTGOING_PARTICLES
         )
 
@@ -47,14 +45,14 @@ using .TestImplementation
         @test @inferred number_particles(TESTPROC, Outgoing()) == N_OUTGOING
 
         @testset "$dir $species" for (dir, species) in Iterators.product(
-            (Incoming(), Outgoing()), TestImplementation.PARTICLE_SET
+            (Incoming(), Outgoing()), Mocks.PARTICLE_SET
         )
             @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
-                MOM_TYPE = TestMomentum{MOM_EL_TYPE}
+                MOM_TYPE = MockMomentum{MOM_EL_TYPE}
                 groundtruth_particle_count = count(
                     x -> x == species, particles(TESTPROC, dir)
                 )
-                test_ps = TestParticleStateful(dir, species, zero(MOM_TYPE))
+                test_ps = MockParticleStateful(dir, species, zero(MOM_TYPE))
 
                 @test @inferred number_particles(TESTPROC, dir, species) ==
                     groundtruth_particle_count
@@ -91,8 +89,8 @@ using .TestImplementation
 end
 
 @testset "Process Multiplicity" begin
-    boson = TestBoson()
-    fermion = TestFermion()
+    boson = MockBoson()
+    fermion = MockFermion()
 
     _mult(::AbstractDefinitePolarization) = 1
     _mult(::AbstractDefiniteSpin) = 1
@@ -103,7 +101,7 @@ end
         spins = (SpinUp(), SpinDown(), AllSpin())
         pols = (PolX(), PolY(), AllPol())
         for (p1, s1, p2, s2) in Iterators.product(pols, spins, pols, spins)
-            proc = TestImplementation.TestProcessSP(
+            proc = Mocks.MockProcessSP(
                 (boson, fermion), (boson, fermion), (p1, s1), (p2, s2)
             )
             @test @inferred multiplicity(proc) == prod(_mult.((p1, s1, p2, s2)))
@@ -115,7 +113,7 @@ end
     # some special cases for synced spins and pols testing
     for i in 1:4
         # i synced bosons
-        proc = TestImplementation.TestProcessSP(
+        proc = Mocks.MockProcessSP(
             (ntuple(_ -> boson, i)..., fermion),
             (boson, fermion),
             (ntuple(_ -> SyncedPolarization(1), i)..., AllSpin()),
@@ -125,7 +123,7 @@ end
         @test @inferred incoming_multiplicity(proc) == 4
         @test @inferred outgoing_multiplicity(proc) == 4
 
-        proc = TestImplementation.TestProcessSP(
+        proc = Mocks.MockProcessSP(
             (boson, fermion),
             (ntuple(_ -> boson, i)..., fermion),
             (AllPol(), SpinDown()),
@@ -137,7 +135,7 @@ end
 
         for j in 1:4
             # ... with j synced fermions
-            proc = TestImplementation.TestProcessSP(
+            proc = Mocks.MockProcessSP(
                 (ntuple(_ -> boson, i)..., fermion),
                 (boson, ntuple(_ -> fermion, j)),
                 (ntuple(_ -> SyncedPolarization(1), i)..., SpinDown()),
@@ -150,7 +148,7 @@ end
     end
 
     @testset "multiple differing synced polarizations" begin
-        proc = TestImplementation.TestProcessSP(
+        proc = Mocks.MockProcessSP(
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(_ -> SyncedPolarization(1), 2)..., SpinUp()),
@@ -162,7 +160,7 @@ end
     end
 
     @testset "synced polarization across in and out particles" begin
-        proc = TestImplementation.TestProcessSP(
+        proc = Mocks.MockProcessSP(
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(_ -> boson, 2)..., fermion),
             (ntuple(i -> SyncedPolarization(i), 2)..., SpinUp()),
