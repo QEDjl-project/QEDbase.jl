@@ -46,8 +46,8 @@ TESTTRAFO = MockCoordinateTrafo()
                     TESTPROC,
                     TESTMODEL,
                     TESTPSDEF,
-                    _rand_momenta(RNG, N_INCOMING, MOM_TYPE),
-                    _rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
+                    Mocks._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
+                    Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
                 ) for _ in 1:100
             ]
             gpu_test_psps = VECTOR_TYPE(test_psps)
