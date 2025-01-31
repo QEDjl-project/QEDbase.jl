@@ -15,8 +15,8 @@ RNG = MersenneTwister(137137)
         TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
         TESTMODEL = MockModel()
         TESTPSL = MockOutPhaseSpaceLayout(MOM_TYPE)
-        IN_PS = MockImplementation._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
-        OUT_PS = MockImplementation._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
+        IN_PS = Mocks._rand_momenta(RNG, N_INCOMING, MOM_TYPE)
+        OUT_PS = Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE)
 
         PSP = MockPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, IN_PS, OUT_PS)
 

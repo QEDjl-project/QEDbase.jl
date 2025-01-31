@@ -156,7 +156,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     end
 
                     for PS_DEF in (TESTPSL, TESTPSL_FAIL)
-                        if MockImplementation._any_fail(PROC, MODEL, PS_DEF)
+                        if Mocks._any_fail(PROC, MODEL, PS_DEF)
                             for (P_IN, P_OUT) in p_combs
                                 psp = MockPhaseSpacePoint(PROC, MODEL, PS_DEF, P_IN, P_OUT)
                                 @test_throws MethodError QEDbase._phase_space_factor(psp)

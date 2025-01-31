@@ -12,15 +12,13 @@ RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
-MOM_TYPE = MockMomentum{Float64}
-
 TESTMODEL = MockModel()
 TESTTRAFO = MockCoordinateTrafo()
 
 @testset "Testing with $GPU_MODULE" for (GPU_MODULE, VECTOR_TYPE) in GPUS
     @testset "testing with $MOM_EL_TYPE" for MOM_EL_TYPE in GPU_FLOAT_TYPES[GPU_MODULE]
-        MOM_TYPE = TestImplementation.TestMomentum{MOM_EL_TYPE}
-        TESTPSL = TestImplementation.TestOutPhaseSpaceLayout(MOM_TYPE)
+        MOM_TYPE = MockMomentum{MOM_EL_TYPE}
+        TESTPSL = MockOutPhaseSpaceLayout(MOM_TYPE)
 
         @testset "momentum map" begin
             @testset "momenta" begin
