@@ -9,7 +9,7 @@
     particle_types::Tuple{SPECIES_T,Vararg{AbstractParticleType}}, dir::DIR_T, ELTYPE::Type
 ) where {SPECIES_T<:AbstractParticleType,DIR_T<:ParticleDirection}
     return (
-        TestParticleStateful{DIR_T,SPECIES_T,ELTYPE},
+        MockParticleStateful{DIR_T,SPECIES_T,ELTYPE},
         _assemble_tuple_type(particle_types[2:end], dir, ELTYPE)...,
     )
 end
@@ -21,7 +21,7 @@ end
     moms::Tuple{AbstractFourMomentum,Vararg},
 ) where {P}
     return (
-        TestParticleStateful(dir, particles[1], moms[1]),
+        MockParticleStateful(dir, particles[1], moms[1]),
         _build_ps_helper(dir, particles[2:end], moms[2:end])...,
     )
 end

@@ -1,16 +1,16 @@
 
 function QEDbase._incident_flux(
-    in_psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
+    in_psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel,<:MockPhasespaceDef}
 )
     return _groundtruth_incident_flux(momenta(in_psp, Incoming()))
 end
 
-function QEDbase._averaging_norm(proc::TestProcess)
+function QEDbase._averaging_norm(proc::MockProcess)
     return _groundtruth_averaging_norm(proc)
 end
 
 function QEDbase._matrix_element(
-    psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
+    psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel,<:MockPhasespaceDef}
 )
     in_ps = momenta(psp, Incoming())
     out_ps = momenta(psp, Outgoing())
@@ -18,7 +18,7 @@ function QEDbase._matrix_element(
 end
 
 function QEDbase._is_in_phasespace(
-    psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
+    psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel,<:MockPhasespaceDef}
 )
     in_ps = momenta(psp, Incoming())
     out_ps = momenta(psp, Outgoing())
@@ -26,7 +26,7 @@ function QEDbase._is_in_phasespace(
 end
 
 function QEDbase._phase_space_factor(
-    psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
+    psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel,<:MockPhasespaceDef}
 )
     in_ps = momenta(psp, Incoming())
     out_ps = momenta(psp, Outgoing())
@@ -34,7 +34,7 @@ function QEDbase._phase_space_factor(
 end
 
 function QEDbase._total_probability(
-    in_psp::TestPhaseSpacePoint{<:TestProcess,<:TestModel,<:TestPhasespaceDef}
+    in_psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel,<:MockPhasespaceDef}
 )
     return _groundtruth_total_probability(momenta(in_psp, Incoming()))
 end

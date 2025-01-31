@@ -75,6 +75,7 @@ pages = [
         "Phase space layout" => "library/phase_space_layout.md",
         "Phase space description" => "library/phase_space.md",
         "Probability and cross section" => "library/cross_section.md",
+        "Testing functionality" => "library/mocks.md",
         "Function index" => "library/function_index.md",
     ],
     "refs.md",

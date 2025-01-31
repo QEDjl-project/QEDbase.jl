@@ -1,21 +1,19 @@
 using QEDbase
-
-include("../test_implementation/TestImplementation.jl")
-using .TestImplementation: TestModel, TestModel_FAIL
+using QEDbase.Mocks
 
 @testset "hard interface" begin
-    TESTMODEL = @inferred TestModel()
+    TESTMODEL = @inferred MockModel()
     @test @inferred fundamental_interaction_type(TESTMODEL) ==
-        TestImplementation._groundtruth_interaction_type()
+        Mocks._groundtruth_interaction_type()
 end
 
 @testset "interface fail" begin
-    TESTMODEL_FAIL = TestModel_FAIL()
+    TESTMODEL_FAIL = MockModel_FAIL()
     @test_throws MethodError fundamental_interaction_type(TESTMODEL_FAIL)
 end
 
 @testset "broadcast" begin
     test_func(model) = model
-    TESTMODEL = TestModel()
+    TESTMODEL = MockModel()
     @test test_func.(TESTMODEL) == TESTMODEL
 end

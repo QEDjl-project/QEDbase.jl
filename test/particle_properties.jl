@@ -1,9 +1,7 @@
-using QEDbase
 using StaticArrays
 using Random
-
-include("test_implementation/TestImplementation.jl")
-using .TestImplementation: TestBoson, TestFermion
+using QEDbase
+using QEDbase.Mocks
 
 # test function to test scalar broadcasting
 test_broadcast(x::AbstractParticle) = x
@@ -34,21 +32,21 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
 end
 
 TESTPROCS = (
-    TestImplementation.TestProcessSP(
-        (TestBoson(), TestFermion()),
-        (TestBoson(), TestFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (AllPol(), AllSpin()),
         (AllPol(), AllSpin()),
     ),
-    TestImplementation.TestProcessSP(
-        (TestBoson(), TestBoson(), TestFermion()),
-        (TestBoson(), TestFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (SyncedPol(1), SyncedPol(1), AllSpin()),
         (AllPol(), AllSpin()),
     ),
-    TestImplementation.TestProcessSP(
-        (TestBoson(), TestBoson(), TestFermion()),
-        (TestBoson(), TestFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (SyncedPol(1), SyncedPol(2), SyncedSpin(2)),
         (SyncedPol(2), SyncedSpin(2)),
     ),

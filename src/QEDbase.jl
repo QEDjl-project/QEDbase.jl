@@ -136,4 +136,6 @@ include("implementations/cross_section/diff_cross_section.jl")
 include("implementations/cross_section/total_probability.jl")
 include("implementations/cross_section/total_cross_section.jl")
 
+include("mocks/Mocks.jl")
+
 end #QEDbase

@@ -1,10 +1,8 @@
 using Random
 using QEDbase
+using QEDbase.Mocks
 
 RNG = MersenneTwister(137137)
-
-include("../test_implementation/TestImplementation.jl")
-using .TestImplementation
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
@@ -12,26 +10,24 @@ using .TestImplementation
     @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
         ATOL = 0.0
         RTOL = sqrt(eps(MOM_EL_TYPE))
-        MOM_TYPE = TestMomentum{MOM_EL_TYPE}
-        INCOMING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_INCOMING))
-        OUTGOING_PARTICLES = Tuple(rand(RNG, TestImplementation.PARTICLE_SET, N_OUTGOING))
+        MOM_TYPE = MockMomentum{MOM_EL_TYPE}
+        INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
+        OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
-        TESTPROC = TestProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
-        TESTMODEL = TestModel()
+        TESTPROC = MockProcess(INCOMING_PARTICLES, OUTGOING_PARTICLES)
+        TESTMODEL = MockModel()
 
-        TESTINPSL = TestInPhaseSpaceLayout{MOM_TYPE}()
+        TESTINPSL = MockInPhaseSpaceLayout{MOM_TYPE}()
         TESTINCOORDS = Tuple(rand(RNG, 4 * N_INCOMING))
         test_in_moms = @inferred build_momenta(TESTPROC, TESTMODEL, TESTINPSL, TESTINCOORDS)
-        groundtruth_in_moms = TestImplementation._groundtruth_in_moms(
-            TESTINCOORDS, MOM_TYPE
-        )
+        groundtruth_in_moms = Mocks._groundtruth_in_moms(TESTINCOORDS, MOM_TYPE)
 
-        TESTOUTPSL = TestOutPhaseSpaceLayout(TESTINPSL)
+        TESTOUTPSL = MockOutPhaseSpaceLayout(TESTINPSL)
         TESTOUTCOORDS = Tuple(rand(RNG, 4 * N_OUTGOING - 4))
         test_out_moms = @inferred build_momenta(
             TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS
         )
-        groundtruth_out_moms = TestImplementation._groundtruth_out_moms(
+        groundtruth_out_moms = Mocks._groundtruth_out_moms(
             test_in_moms, TESTOUTCOORDS, MOM_TYPE
         )
 

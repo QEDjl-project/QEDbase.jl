@@ -82,7 +82,7 @@ if metal_tests
     end
 end
 
-include("../test_implementation/TestImplementation.jl")
+#include("../test_implementation/TestImplementation.jl")
 
 # from here on, we cannot use safe test sets or we would unload the GPU libraries again
 include("momentum_map.jl")
