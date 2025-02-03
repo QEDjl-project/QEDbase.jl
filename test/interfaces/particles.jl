@@ -7,6 +7,8 @@ RNG = MersenneTwister(137137)
 ATOL = 0.0
 RTOL = sqrt(eps())
 
+BUF = IOBuffer()
+
 @testset "particle properties" begin
     @testset "particle" begin
         @test is_particle(MockFermion()) == true
@@ -48,6 +50,16 @@ RTOL = sqrt(eps())
         @test charge(MockMasslessFermion()) == Mocks._CHARGE_TEST_FERMION
         @test charge(MockBoson()) == Mocks._CHARGE_TEST_BOSON
         @test charge(MockMasslessBoson()) == Mocks._CHARGE_TEST_BOSON
+    end
+
+    @testset "show" begin
+        @testset "$PART" for PART in QEDbase.Mocks.PARTICLE_SET
+            take!(BUF)
+            print(BUF, PART)
+            @test String(take!(BUF)) == join(
+                lowercase.(QEDbase._split_uppercase(string(nameof(typeof(PART))))), " "
+            )
+        end
     end
 
     @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)

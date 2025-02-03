@@ -68,6 +68,10 @@ end
     return _groundtruth_out_moms(in_moms, out_coords, eltype(out_psl))
 end
 
+function Base.show(io::IO, psl::QEDbase.Mocks.MockOutPhaseSpaceLayout)
+    return print(io, "mock out phase space layout")
+end
+
 struct MockInPhaseSpaceLayout_FAIL <: QEDbase.AbstractInPhaseSpaceLayout end
 struct MockOutPhaseSpaceLayout_FAIL <:
        QEDbase.AbstractOutPhaseSpaceLayout{MockInPhaseSpaceLayout}

@@ -23,6 +23,13 @@ function QEDbase.out_phase_space_dimension(proc::MockProcess, ::MockModel)
     return _groundtruth_out_ps_dim(proc)
 end
 
+function Base.show(io::IO, proc::MockProcess)
+    N = number_incoming_particles(proc)
+    M = number_outgoing_particles(proc)
+    print(io, "mock process ($N -> $M)")
+    return nothing
+end
+
 """
     MockProcessSP
 
