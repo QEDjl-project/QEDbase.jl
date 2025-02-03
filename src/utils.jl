@@ -13,11 +13,11 @@ function _as_svec end
 
 """
 
-    _split_uppercase(s::String)
+    _split_uppercase(s::AbstractString)
 
 Return a split of the given string delimited at the upper case letters in the string.
 
 """
-@inline function _split_uppercase(s::String)
+@inline function _split_uppercase(s::AbstractString)
     return split(s, r"(?=[A-Z])")
 end
