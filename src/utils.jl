@@ -10,3 +10,14 @@ function _as_svec end
 @inline _as_svec(x) = SVector((x,))
 @inline _as_svec(x::SVector{N,T}) where {N,T} = x
 @inline _as_svec(x::NTuple) = SVector(x)
+
+"""
+
+    _split_uppercase(s::String)
+
+Return a split of the given string delimited at the upper case letters in the string.
+
+"""
+@inline function _split_uppercase(s::String)
+    return split(s, r"(?=[A-Z])")
+end

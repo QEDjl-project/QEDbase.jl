@@ -22,6 +22,8 @@ struct MockModel <: AbstractModelDefinition end
 
 QEDbase.fundamental_interaction_type(::MockModel) = _groundtruth_interaction_type()
 
+Base.show(io::IO, m::QEDbase.Mocks.MockModel) = print(io, "mock model")
+
 """
     struct MockModel_FAIL <: AbstractModelDefinition
 
