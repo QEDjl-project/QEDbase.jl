@@ -77,4 +77,8 @@ struct MockOutPhaseSpaceLayout_FAIL <:
        QEDbase.AbstractOutPhaseSpaceLayout{MockInPhaseSpaceLayout}
     in_psl::MockInPhaseSpaceLayout
 end
-MockOutPhaseSpaceLayout_FAIL() = MockOutPhaseSpaceLayout_FAIL(MockInPhaseSpaceLayout())
+function MockOutPhaseSpaceLayout_FAIL(
+    mom_type::Type{MOM_TYPE}
+) where {MOM_TYPE<:AbstractMockMomentum}
+    return MockOutPhaseSpaceLayout_FAIL(MockInPhaseSpaceLayout{MOM_TYPE}())
+end

@@ -19,10 +19,10 @@ struct Muon <: AbstractParticleType end
 
 # Since Muon is a subtype of AbstractParticleType, it is a singleton (no stateful properties).
 # Implementing static functions for particle classification
-is_fermion(::Muon) = true         # Muon is a fermion
-is_boson(::Muon) = false          # Muon is not a boson
-is_particle(::Muon) = true        # Muon is a particle (not an anti-particle)
-is_anti_particle(::Muon) = false  # Muon is not an anti-particle
+QEDbase.is_fermion(::Muon) = true         # Muon is a fermion
+QEDbase.is_boson(::Muon) = false          # Muon is not a boson
+QEDbase.is_particle(::Muon) = true        # Muon is a particle (not an anti-particle)
+QEDbase.is_anti_particle(::Muon) = false  # Muon is not an anti-particle
 
 # ## Define Physical Properties
 #
@@ -30,8 +30,8 @@ is_anti_particle(::Muon) = false  # Muon is not an anti-particle
 # These functions return the mass and charge of the `Muon`.
 
 # Define the physical properties of the Muon
-mass(::Muon) = 105.66  # Muon mass in MeV/c^2
-charge(::Muon) = -1.0  # Muon has a charge of -1 (same as electron)
+QEDbase.mass(::Muon) = 105.66  # Muon mass in MeV/c^2
+QEDbase.charge(::Muon) = -1.0  # Muon has a charge of -1 (same as electron)
 
 # ## Anti-Particle Implementation (Optional)
 #
@@ -42,14 +42,14 @@ charge(::Muon) = -1.0  # Muon has a charge of -1 (same as electron)
 struct AntiMuon <: AbstractParticleType end
 
 # Implement static functions for the AntiMuon
-is_fermion(::AntiMuon) = true        # AntiMuon is also a fermion
-is_boson(::AntiMuon) = false         # AntiMuon is not a boson
-is_particle(::AntiMuon) = false      # AntiMuon is not a regular particle (it's an anti-particle)
-is_anti_particle(::AntiMuon) = true  # AntiMuon is an anti-particle
+QEDbase.is_fermion(::AntiMuon) = true        # AntiMuon is also a fermion
+QEDbase.is_boson(::AntiMuon) = false         # AntiMuon is not a boson
+QEDbase.is_particle(::AntiMuon) = false      # AntiMuon is not a regular particle (it's an anti-particle)
+QEDbase.is_anti_particle(::AntiMuon) = true  # AntiMuon is an anti-particle
 
 # Define the physical properties for the AntiMuon
-mass(::AntiMuon) = 105.66  # AntiMuon has the same mass as Muon
-charge(::AntiMuon) = 1.0   # AntiMuon has the opposite charge of Muon
+QEDbase.mass(::AntiMuon) = 105.66  # AntiMuon has the same mass as Muon
+QEDbase.charge(::AntiMuon) = 1.0   # AntiMuon has the opposite charge of Muon
 
 # ## Example Usage
 #

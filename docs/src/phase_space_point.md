@@ -31,11 +31,5 @@ For any given process, we need a way to:
   number and type of particles, momentum conservation).
 - Access the momenta of individual particles or compute derived quantities.
 
-In [this tutorial], we show how to create and use an `ExamplePhaseSpacePoint`,
-following the interface specification given by [`AbstractPhaseSpacePoint']. We'll be using
-particles and momenta from libraries like `QEDcore` and `QEDprocesses`, focusing on the
-electron-positron annihilation process.
-
-## Reference implementation
-
-TBW
+In [this tutorial](@ref tutorial_psp), we show how to create and use an `ExamplePhaseSpacePoint`,
+following the interface specification given by [`AbstractPhaseSpacePoint`](@ref).

@@ -5,6 +5,7 @@ functional, and execute the unit tests then. Additionally, if an environment var
 """
 
 GPUS = Vector{Tuple{Module,Type}}()
+GPU_FLOAT_TYPES = Dict{Module,Vector{Type}}()
 
 # check if we test with AMDGPU
 amdgpu_tests = tryparse(Bool, get(ENV, "TEST_AMDGPU", "0"))
@@ -18,6 +19,7 @@ if amdgpu_tests
             "trying to test with AMDGPU.jl but it is not functional (AMDGPU.functional() == false)",
         )
         push!(GPUS, (AMDGPU, ROCVector))
+        GPU_FLOAT_TYPES[AMDGPU] = [Float32, Float64]
         @info "Testing with AMDGPU.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -37,6 +39,7 @@ if cuda_tests
             "trying to test with CUDA.jl but it is not functional (CUDA.functional() == false)",
         )
         push!(GPUS, (CUDA, CuVector))
+        GPU_FLOAT_TYPES[CUDA] = [Float32, Float64]
         @info "Testing with CUDA.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -56,6 +59,12 @@ if oneapi_tests
             "trying to test with oneAPI.jl but it is not functional (oneAPI.functional() == false)",
         )
         push!(GPUS, (oneAPI, oneVector))
+        GPU_FLOAT_TYPES[oneAPI] = [Float32]
+        if oneL0.module_properties(device()).fp64flags & oneL0.ZE_DEVICE_MODULE_FLAG_FP64 ==
+            oneL0.ZE_DEVICE_MODULE_FLAG_FP64
+            # This checks whether the Intel GPU supports Float64, see oneAPI Readme
+            push!(GPU_FLOAT_TYPES[oneAPI], Float64)
+        end
         @info "Testing with oneAPI.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"
@@ -75,6 +84,7 @@ if metal_tests
             "trying to test with Metal.jl but it is not functional (Metal.functional() == false)",
         )
         push!(GPUS, (Metal, MtlVector))
+        GPU_FLOAT_TYPES[Metal] = [Float32]
         @info "Testing with Metal.jl"
     catch e
         @error "failed to run GPU tests, make sure the required libraries are installed\n$(e)"

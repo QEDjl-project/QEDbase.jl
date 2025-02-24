@@ -1,13 +1,5 @@
 # Phase Space Description
 
-## Frames and Coordinate Systems
-
-```@docs
-AbstractCoordinateSystem
-AbstractFrameOfReference
-AbstractPhasespaceDefinition
-```
-
 ## Stateful Particles
 
 ```@docs
@@ -30,7 +22,7 @@ AbstractOutPhaseSpacePoint
 ```@docs
 process
 model
-phase_space_definition
+phase_space_layout
 ```
 
 ### Convenience Functions

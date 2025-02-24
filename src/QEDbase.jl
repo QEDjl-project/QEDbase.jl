@@ -72,13 +72,10 @@ export AbstractInPhaseSpaceLayout
 export AbstractOutPhaseSpaceLayout
 export build_momenta, phase_space_dimension, in_phase_space_layout
 
-# Abstract phase space definition interface
-export AbstractCoordinateSystem, AbstractFrameOfReference, AbstractPhasespaceDefinition
-
 # Abstract phase space point interface
 export AbstractParticleStateful, AbstractPhaseSpacePoint
 export particle_direction, particle_species, momentum
-export process, model, phase_space_definition, momenta
+export process, model, phase_space_layout, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
 # Abstract coordinate transformation interface
@@ -115,18 +112,16 @@ include("interfaces/particle.jl")
 include("interfaces/particles/direction.jl")
 include("interfaces/particles/spin_pol.jl")
 
-include("interfaces/phase_space.jl")
+include("interfaces/phase_space_layout.jl")
+
 include("interfaces/particle_stateful.jl")
 include("interfaces/process.jl")
 include("interfaces/phase_space_point.jl")
-
-include("interfaces/phase_space_layout.jl")
 
 include("interfaces/coordinate_transformation.jl")
 
 include("implementations/phase_space_layout/build_momenta.jl")
 
-include("implementations/process/momenta.jl")
 include("implementations/process/particles.jl")
 include("implementations/process/spin_pols.jl")
 include("implementations/process/spin_pol_iterator.jl")

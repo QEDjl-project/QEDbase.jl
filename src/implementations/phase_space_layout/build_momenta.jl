@@ -71,8 +71,8 @@ A scalar version of `build_momenta` for incoming phase space layouts (`in_psl`),
     incoming particles.
 
 ## Returns:
-- A collection of four-momenta representing the incoming particles. Because of performance
-    reasons, it is recommened to return a `Tuple` of four-momenta.
+- A collection of four-momenta representing the incoming particles. For performance
+    reasons, it is recommended to return a `Tuple` of four-momenta.
 
 ## Notes:
 This function is a convenience wrapper around `build_momenta`, automatically converting the
