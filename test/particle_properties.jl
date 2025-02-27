@@ -1,10 +1,7 @@
-using QEDbase
-using QEDcore
 using StaticArrays
 using Random
-
-include("test_implementation/TestImplementation.jl")
-using .TestImplementation: TestParticleBoson, TestParticleFermion
+using QEDbase
+using QEDbase.Mocks
 
 # test function to test scalar broadcasting
 test_broadcast(x::AbstractParticle) = x
@@ -35,21 +32,21 @@ test_broadcast(x::AbstractSpinOrPolarization) = x
 end
 
 TESTPROCS = (
-    TestImplementation.TestProcessSP(
-        (TestParticleBoson(), TestParticleFermion()),
-        (TestParticleBoson(), TestParticleFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (AllPol(), AllSpin()),
         (AllPol(), AllSpin()),
     ),
-    TestImplementation.TestProcessSP(
-        (TestParticleBoson(), TestParticleBoson(), TestParticleFermion()),
-        (TestParticleBoson(), TestParticleFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (SyncedPol(1), SyncedPol(1), AllSpin()),
         (AllPol(), AllSpin()),
     ),
-    TestImplementation.TestProcessSP(
-        (TestParticleBoson(), TestParticleBoson(), TestParticleFermion()),
-        (TestParticleBoson(), TestParticleFermion()),
+    Mocks.MockProcessSP(
+        (MockBoson(), MockBoson(), MockFermion()),
+        (MockBoson(), MockFermion()),
         (SyncedPol(1), SyncedPol(2), SyncedSpin(2)),
         (SyncedPol(2), SyncedSpin(2)),
     ),

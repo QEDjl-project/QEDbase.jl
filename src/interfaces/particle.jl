@@ -165,7 +165,7 @@ base_state(::Photon,      ::Outgoing, mom) # -> SVector{2,SLorentzVector{Complex
 # Example
 
 ```julia
-using QEDbase
+using QEDbase, QEDcore
 
 mass = 1.0                              # set electron mass to 1.0
 px,py,pz = rand(3)                      # generate random spatial components
@@ -177,7 +177,7 @@ mom = SFourMomentum(E, px, py, pz)      # initialize the four-momentum of the el
 electron_state = base_state(QEDcore.Electron(), Incoming(), mom, SpinUp())
 ```
 
-```jldoctest
+```julia
 julia> using QEDbase; using QEDcore;
 
 julia> mass = 1.0; px,py,pz = (0.1, 0.2, 0.3); E = sqrt(px^2 + py^2 + pz^2 + mass^2); mom = SFourMomentum(E, px, py, pz)

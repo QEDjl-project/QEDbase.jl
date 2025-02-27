@@ -39,47 +39,54 @@ end
 # These functions extract the respective properties from the `ExampleParticleStateful` object.
 
 # Define the particle_direction function
-function particle_direction(part::ExampleParticleStateful)
+function QEDbase.particle_direction(part::ExampleParticleStateful)
     return part.direction
 end
 
 # Define the particle_species function
-function particle_species(part::ExampleParticleStateful)
+function QEDbase.particle_species(part::ExampleParticleStateful)
     return part.species
 end
 
 # Define the momentum function
-function momentum(part::ExampleParticleStateful)
+function QEDbase.momentum(part::ExampleParticleStateful)
     return part.mom
 end
 
 # ## Example Usage
 #
-# We can now create instances of `ExampleParticleStateful` for, say, `Electron` and `Positron`.
-using QEDcore  # to get predefined particles and four-momentum
+# We can now create instances of `ExampleParticleStateful` for, say, `Muon` and `AntiMuon`.
+
+redirect_stdout(devnull) do # hide
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get custom four momentum vector
+end # hide
 
 # Create a four-momentum vector (dummy example)
-momentum_electron = SFourMomentum(1.0, 0.0, 0.0, 0.0);  # E, px, py, pz
+momentum_muon = CustomFourMomentum(1.0, 0.0, 0.0, 0.0);  # E, px, py, pz
 
-# Create an incoming Electron using ExampleParticleStateful
-incoming_electron = ExampleParticleStateful(Incoming(), Electron(), momentum_electron);
+# Create an incoming Muon using ExampleParticleStateful
+incoming_muon = ExampleParticleStateful(Incoming(), Muon(), momentum_muon);
 
-# Create an outgoing Positron using ExampleParticleStateful
-outgoing_positron = ExampleParticleStateful(Outgoing(), Positron(), momentum_electron);
+# Create an outgoing AntiMuon using ExampleParticleStateful
+outgoing_antimuon = ExampleParticleStateful(Outgoing(), AntiMuon(), momentum_muon);
 
 # Access particle properties
-println("Incoming electron mass: ", mass(particle_species(incoming_electron)))
+println("Incoming muon mass: ", mass(particle_species(incoming_muon)))
 println(
-    "Is the outgoing positron a fermion? ", is_fermion(particle_species(outgoing_positron))
+    "Is the outgoing antimuon a fermion? ", is_fermion(particle_species(outgoing_antimuon))
 )
 
 # Access momentum
-println("Incoming electron momentum: ", momentum(incoming_electron))
-println("Outgoing positron momentum: ", momentum(outgoing_positron))
+println("Incoming muon momentum: ", momentum(incoming_muon))
+println("Outgoing antimuon momentum: ", momentum(outgoing_antimuon))
 
 # ## Summary
 #
-# In this tutorial, we created a general `ExampleParticleStateful` type that can represent any particle species (like `Electron`,`Positron` from `QEDcore`, but also `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle)) by using the species as a type parameter. This approach avoids the need to define separate stateful types for each particle, making the implementation more flexible and reusable.
+# In this tutorial, we created a general `ExampleParticleStateful` type that can represent any particle species 
+# (like `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle), but also [`Electron`](@extref QEDcore.Electron) and 
+# [`Positron`](@extref QEDcore.Positron) from `QEDcore`) by using the species as a type parameter. This approach avoids the need to define 
+# separate stateful types for each particle, making the implementation more flexible and reusable.
 #
 # The key steps were:
 #

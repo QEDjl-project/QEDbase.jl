@@ -1,22 +1,19 @@
 using QEDbase
-
-struct TestModel <: AbstractModelDefinition end
-QEDbase.fundamental_interaction_type(::TestModel) = :test_interaction
-
-struct TestModel_FAIL <: AbstractModelDefinition end
+using QEDbase.Mocks
 
 @testset "hard interface" begin
-    TESTMODEL = TestModel()
-    @test fundamental_interaction_type(TESTMODEL) == :test_interaction
+    TESTMODEL = @inferred MockModel()
+    @test @inferred fundamental_interaction_type(TESTMODEL) ==
+        Mocks._groundtruth_interaction_type()
 end
 
 @testset "interface fail" begin
-    TESTMODEL_FAIL = TestModel_FAIL()
+    TESTMODEL_FAIL = MockModel_FAIL()
     @test_throws MethodError fundamental_interaction_type(TESTMODEL_FAIL)
 end
 
 @testset "broadcast" begin
     test_func(model) = model
-    TESTMODEL = TestModel()
+    TESTMODEL = MockModel()
     @test test_func.(TESTMODEL) == TESTMODEL
 end
