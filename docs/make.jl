@@ -2,7 +2,7 @@
 using Pkg
 
 # targeting the correct source code
-# this asumes the make.jl script is located in QEDbase.jl/docs
+# this assumes the make.jl script is located in QEDbase.jl/docs
 project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
 Pkg.develop(; path=project_path)
 
