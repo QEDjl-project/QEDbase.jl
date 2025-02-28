@@ -14,7 +14,7 @@
 # To define a valid `AbstractFourMomentum` type, create a type with the fields `.E`, `.px`, `.py` and `.pz`.
 using QEDbase
 
-struct CustomFourMomentum <: AbstractFourMomentum
+struct CustomFourMomentum <: AbstractFourMomentum{Float64}
     E::Float64  # energy component
     px::Float64 # x component
     py::Float64 # y component

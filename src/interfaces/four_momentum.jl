@@ -7,7 +7,7 @@ Also see: [`QEDcore.SFourMomentum`](@extref), [`QEDcore.MFourMomentum`](@extref)
 """
 abstract type AbstractFourMomentum{T_ELEM<:Real} <: AbstractLorentzVector{T_ELEM} end
 
-function Base.getproperty(P::TM, sym::Symbol) where {TM<:AbstractFourMomentum}
+function Base.getproperty(P::AbstractFourMomentum{T}, sym::Symbol)::T where {T}
     if sym == :t
         return P.E
     elseif sym == :x
