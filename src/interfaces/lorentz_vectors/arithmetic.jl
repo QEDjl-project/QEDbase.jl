@@ -120,9 +120,11 @@ Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square ro
 
 """
 @traitfn function getInvariantMass(lv::T) where {T; IsLorentzVectorLike{T}}
+    # assume nothrow since we make sure that sqrt is only called on positive values
+    Base.@assume_effects :nothrow
     m2 = getInvariantMass2(lv)
     if m2 < zero(m2)
-        # Think about including this waring, maybe optional with a global PRINT_WARINGS switch.
+        # Think about including this warning, maybe optional with a global PRINT_WARNINGS switch.
         #@warn("The square of the invariant mass (m2=P*P) is negative. The value -sqrt(-m2) is returned.")
         return -sqrt(-m2)
     else
@@ -319,7 +321,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square 
 @traitfn function getTransverseMass(lv::T) where {T; IsLorentzVectorLike{T}}
     mT2 = getTransverseMass2(lv)
     if mT2 < zero(mT2)
-        # add optional waring: negative transverse mass -> -sqrt(-mT2) is returned.
+        # add optional warning: negative transverse mass -> -sqrt(-mT2) is returned.
         -sqrt(-mT2)
     else
         sqrt(mT2)
