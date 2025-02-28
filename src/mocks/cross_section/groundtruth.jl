@@ -67,7 +67,9 @@ end
 
 Mock implementation of the unsafe differential probability. Uses the test implementations of `_groundtruth_matrix_element`,`_groundtruth_averaging_norm` and `_groundtruth_phase_space_factor`.
 """
-function _groundtruth_unsafe_probability(proc, in_ps, out_ps)
+function _groundtruth_unsafe_probability(
+    proc, in_ps::NTuple{I,<:AbstractMockMomentum}, out_ps::NTuple{O,<:AbstractMockMomentum}
+) where {I,O}
     mat_el = _groundtruth_matrix_element(in_ps, out_ps)
     mat_el_sq = abs2.(mat_el)
     normalization = _groundtruth_averaging_norm(proc)
@@ -77,9 +79,12 @@ function _groundtruth_unsafe_probability(proc, in_ps, out_ps)
 end
 
 function _groundtruth_unsafe_probability(
-    proc, in_ps::AbstractVector, out_ps::AbstractMatrix
-)
-    res = Vector{Float64}(undef, size(out_ps, 2))
+    proc,
+    in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_unsafe_probability(proc, in_ps, view(out_ps, :, i))
     end
@@ -87,9 +92,12 @@ function _groundtruth_unsafe_probability(
 end
 
 function _groundtruth_unsafe_probability(
-    proc, in_ps::AbstractMatrix, out_ps::AbstractVector
-)
-    res = Vector{Float64}(undef, size(in_ps, 2))
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_unsafe_probability(proc, view(in_ps, :, i), out_ps)
     end
@@ -97,9 +105,12 @@ function _groundtruth_unsafe_probability(
 end
 
 function _groundtruth_unsafe_probability(
-    proc, in_ps::AbstractMatrix, out_ps::AbstractMatrix
-)
-    res = Matrix{Float64}(undef, size(in_ps, 2), size(out_ps, 2))
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)
             res[i, j] = _groundtruth_unsafe_probability(
@@ -115,31 +126,49 @@ end
 
 Mock implementation of the safe differential probability. Uses the test implementations of `_groundtruth_is_in_phasespace` and `_groundtruth_unsafe_probability`.
 """
-function _groundtruth_safe_probability(proc, in_ps, out_ps)
+function _groundtruth_safe_probability(
+    proc, in_ps::NTuple{I,<:AbstractMockMomentum}, out_ps::NTuple{O,<:AbstractMockMomentum}
+) where {I,O}
+    RES_TYPE = eltype(eltype(in_ps))
     if !_groundtruth_is_in_phasespace(in_ps, out_ps)
-        return zero(Float64)
+        return zero(RES_TYPE)
     end
     return _groundtruth_unsafe_probability(proc, in_ps, out_ps)
 end
 
-function _groundtruth_safe_probability(proc, in_ps::AbstractVector, out_ps::AbstractMatrix)
-    res = Vector{Float64}(undef, size(out_ps, 2))
+function _groundtruth_safe_probability(
+    proc,
+    in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_safe_probability(proc, in_ps, view(out_ps, :, i))
     end
     return res
 end
 
-function _groundtruth_safe_probability(proc, in_ps::AbstractMatrix, out_ps::AbstractVector)
-    res = Vector{Float64}(undef, size(in_ps, 2))
+function _groundtruth_safe_probability(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_safe_probability(proc, view(in_ps, :, i), out_ps)
     end
     return res
 end
 
-function _groundtruth_safe_probability(proc, in_ps::AbstractMatrix, out_ps::AbstractMatrix)
-    res = Matrix{Float64}(undef, size(in_ps, 2), size(out_ps, 2))
+function _groundtruth_safe_probability(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)
             res[i, j] = _groundtruth_safe_probability(
@@ -160,24 +189,39 @@ function _groundtruth_unsafe_diffCS(proc, in_ps, out_ps)
     return _groundtruth_unsafe_probability(proc, in_ps, out_ps) / (4 * init_flux)
 end
 
-function _groundtruth_unsafe_diffCS(proc, in_ps::AbstractVector, out_ps::AbstractMatrix)
-    res = Vector{Float64}(undef, size(out_ps, 2))
+function _groundtruth_unsafe_diffCS(
+    proc,
+    in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_unsafe_diffCS(proc, in_ps, view(out_ps, :, i))
     end
     return res
 end
 
-function _groundtruth_unsafe_diffCS(proc, in_ps::AbstractMatrix, out_ps::AbstractVector)
-    res = Vector{Float64}(undef, size(in_ps, 2))
+function _groundtruth_unsafe_diffCS(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_unsafe_diffCS(proc, view(in_ps, :, i), out_ps)
     end
     return res
 end
 
-function _groundtruth_unsafe_diffCS(proc, in_ps::AbstractMatrix, out_ps::AbstractMatrix)
-    res = Matrix{Float64}(undef, size(in_ps, 2), size(out_ps, 2))
+function _groundtruth_unsafe_diffCS(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = momentum_eltype(eltype(in_ps))
+    res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)
             res[i, j] = _groundtruth_unsafe_diffCS(
@@ -194,30 +238,46 @@ end
 Mock implementation of the safe differential cross section. Uses the test implementations of `_groundtruth_is_in_phasespace` and `_groundtruth_unsafe_diffCS`.
 """
 function _groundtruth_safe_diffCS(proc, in_ps, out_ps)
+    RES_TYPE = eltype(eltype(in_ps))
     if !_groundtruth_is_in_phasespace(in_ps, out_ps)
-        return zero(Float64)
+        return zero(RES_TYPE)
     end
     return _groundtruth_unsafe_diffCS(proc, in_ps, out_ps)
 end
 
-function _groundtruth_safe_diffCS(proc, in_ps::AbstractVector, out_ps::AbstractMatrix)
-    res = Vector{Float64}(undef, size(out_ps, 2))
+function _groundtruth_safe_diffCS(
+    proc,
+    in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_safe_diffCS(proc, in_ps, view(out_ps, :, i))
     end
     return res
 end
 
-function _groundtruth_safe_diffCS(proc, in_ps::AbstractMatrix, out_ps::AbstractVector)
-    res = Vector{Float64}(undef, size(in_ps, 2))
+function _groundtruth_safe_diffCS(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_safe_diffCS(proc, view(in_ps, :, i), out_ps)
     end
     return res
 end
 
-function _groundtruth_safe_diffCS(proc, in_ps::AbstractMatrix, out_ps::AbstractMatrix)
-    res = Matrix{Float64}(undef, size(in_ps, 2), size(out_ps, 2))
+function _groundtruth_safe_diffCS(
+    proc,
+    in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
+    out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
+) where {I,O}
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
+    res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)
             res[i, j] = _groundtruth_safe_diffCS(
