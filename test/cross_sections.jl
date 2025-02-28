@@ -122,8 +122,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     TESTPROC, p_in_phys, p_out_phys
                 )
 
-                # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                # @test diffCS_on_psp isa MOM_EL_TYPE
+                @test diffCS_on_psp isa MOM_EL_TYPE
                 @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
             end
 
@@ -136,8 +135,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     diffCS_on_psp = differential_cross_section(PS_POINT)
                     groundtruth = Mocks._groundtruth_safe_diffCS(TESTPROC, P_IN, P_OUT)
 
-                    # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                    # @test diffCS_on_psp isa MOM_EL_TYPE
+                    @test diffCS_on_psp isa MOM_EL_TYPE
                     @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
                 end
             end
@@ -189,8 +187,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     TESTPROC, p_in_phys, p_out_phys
                 )
 
-                # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                # @test prop_on_psp isa MOM_EL_TYPE
+                @test prop_on_psp isa MOM_EL_TYPE
                 @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
             end
 
@@ -201,8 +198,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     )
                     prop_on_psp = differential_probability(PS_POINT)
                     groundtruth = Mocks._groundtruth_safe_probability(TESTPROC, P_IN, P_OUT)
-                    # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                    # @test prop_on_psp isa MOM_EL_TYPE
+                    @test prop_on_psp isa MOM_EL_TYPE
                     @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
                 end
             end
