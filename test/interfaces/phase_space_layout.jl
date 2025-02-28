@@ -27,6 +27,9 @@ RNG = MersenneTwister(137137)
         test_out_moms = @inferred build_momenta(
             TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS
         )
+        test_out_moms_from_coords = @inferred build_momenta(
+            TESTPROC, TESTMODEL, TESTOUTPSL, TESTINCOORDS, TESTOUTCOORDS
+        )
         groundtruth_out_moms = Mocks._groundtruth_out_moms(
             test_in_moms, TESTOUTCOORDS, MOM_TYPE
         )
@@ -40,11 +43,33 @@ RNG = MersenneTwister(137137)
             end
 
             @testset "out-phase-space layout" begin
-                @test length(test_out_moms) == N_OUTGOING
-                @test all(
-                    isapprox.(test_out_moms, groundtruth_out_moms, atol=ATOL, rtol=RTOL)
-                )
-                @test isapprox(sum(test_in_moms), sum(test_out_moms), atol=ATOL, rtol=RTOL)
+                @testset "in momenta based" begin
+                    @test length(test_out_moms) == N_OUTGOING
+                    @test all(
+                        isapprox.(test_out_moms, groundtruth_out_moms, atol=ATOL, rtol=RTOL)
+                    )
+                    @test isapprox(
+                        sum(test_in_moms), sum(test_out_moms), atol=ATOL, rtol=RTOL
+                    )
+                end
+
+                @testset "in coords based" begin
+                    @test length(test_out_moms_from_coords) == N_OUTGOING
+                    @test all(
+                        isapprox.(
+                            test_out_moms_from_coords,
+                            groundtruth_out_moms,
+                            atol=ATOL,
+                            rtol=RTOL,
+                        ),
+                    )
+                    @test isapprox(
+                        sum(test_in_moms),
+                        sum(test_out_moms_from_coords),
+                        atol=ATOL,
+                        rtol=RTOL,
+                    )
+                end
             end
 
             @testset "Error handling" begin
@@ -62,8 +87,24 @@ RNG = MersenneTwister(137137)
                 # "no coordinates" is already the lowest amount
                 if N_OUTGOING != 1
                     # not enough coordinates
+
                     @test_throws InvalidInputError build_momenta(
                         TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS[2:end]
+                    )
+                    @test_throws InvalidInputError build_momenta(
+                        TESTPROC, TESTMODEL, TESTOUTPSL, TESTINCOORDS, TESTOUTCOORDS[2:end]
+                    )
+
+                    @test_throws InvalidInputError build_momenta(
+                        TESTPROC, TESTMODEL, TESTOUTPSL, TESTINCOORDS[2:end], TESTOUTCOORDS
+                    )
+
+                    @test_throws InvalidInputError build_momenta(
+                        TESTPROC,
+                        TESTMODEL,
+                        TESTOUTPSL,
+                        TESTINCOORDS[2:end],
+                        TESTOUTCOORDS[2:end],
                     )
                 end
 
@@ -73,6 +114,22 @@ RNG = MersenneTwister(137137)
                     TESTMODEL,
                     test_in_moms,
                     TESTOUTPSL,
+                    (TESTOUTCOORDS..., rand(RNG)),
+                )
+
+                @test_throws InvalidInputError build_momenta(
+                    TESTPROC,
+                    TESTMODEL,
+                    TESTOUTPSL,
+                    (TESTINCOORDS..., rand(RNG)),
+                    TESTOUTCOORDS,
+                )
+
+                @test_throws InvalidInputError build_momenta(
+                    TESTPROC,
+                    TESTMODEL,
+                    TESTOUTPSL,
+                    (TESTINCOORDS..., rand(RNG)),
                     (TESTOUTCOORDS..., rand(RNG)),
                 )
             end

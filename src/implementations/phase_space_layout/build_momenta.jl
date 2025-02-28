@@ -117,6 +117,65 @@ function _build_momenta(
     return _build_momenta(proc, model, in_moms, out_psl, out_coords)
 end
 
+function _build_momenta(
+    ::Val{Ncin},
+    ::Val{Ncout},
+    proc::AbstractProcessDefinition,
+    model::AbstractModelDefinition,
+    out_psl::AbstractOutPhaseSpaceLayout,
+    in_coords::NTuple{N1,T},
+    out_coords::NTuple{N2,T},
+) where {Ncin,Ncout,N1,N2,T<:Real}
+    err_msg = ""
+
+    if Ncin != N1
+        err_msg =
+            err_msg *
+            "number of in coordinates <$N1> must be the same as the in-phase-space dimension <$Ncin>\n"
+    end
+
+    if Ncout != N2
+        err_msg =
+            err_msg *
+            "number of out coordinates <$N2> must be the same as the out-phase-space dimension <$Ncout>"
+    end
+
+    throw(InvalidInputError(err_msg))
+end
+
+function _build_momenta(
+    ::Val{Ncin},
+    ::Val{Ncout},
+    proc::AbstractProcessDefinition,
+    model::AbstractModelDefinition,
+    out_psl::AbstractOutPhaseSpaceLayout,
+    in_coords::NTuple{Ncin,T},
+    out_coords::NTuple{Ncout,T},
+) where {Ncin,Ncout,T<:Real}
+    in_moms = _build_momenta(proc, model, in_phase_space_layout(out_psl), in_coords)
+    return _build_momenta(proc, model, in_moms, out_psl, out_coords)
+end
+
+# this only exists, since the constructor of `QEDcore.PhaseSpacePoint` calls it and not
+# build_momenta(...) without the underscore
+function _build_momenta(
+    proc::AbstractProcessDefinition,
+    model::AbstractModelDefinition,
+    out_psl::AbstractOutPhaseSpaceLayout,
+    in_coords::NTuple{Ncin,T},
+    out_coords::NTuple{Ncout,T},
+) where {Ncin,Ncout,T<:Real}
+    return _build_momenta(
+        Val(phase_space_dimension(proc, model, in_phase_space_layout(out_psl))),
+        Val(phase_space_dimension(proc, model, out_psl)),
+        proc,
+        model,
+        out_psl,
+        in_coords,
+        out_coords,
+    )
+end
+
 """
     build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)
 
@@ -150,6 +209,24 @@ function build_momenta(
         model,
         in_moms,
         out_psl,
+        out_coords,
+    )
+end
+
+function build_momenta(
+    proc::AbstractProcessDefinition,
+    model::AbstractModelDefinition,
+    out_psl::AbstractOutPhaseSpaceLayout,
+    in_coords::NTuple{Ncin,T},
+    out_coords::NTuple{Ncout,T},
+) where {Ncin,Ncout,T}
+    return _build_momenta(
+        Val(phase_space_dimension(proc, model, in_phase_space_layout(out_psl))),
+        Val(phase_space_dimension(proc, model, out_psl)),
+        proc,
+        model,
+        out_psl,
+        in_coords,
         out_coords,
     )
 end
