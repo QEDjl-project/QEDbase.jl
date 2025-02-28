@@ -120,24 +120,30 @@ end
 
 """
     momentum_type(psp::Type{AbstractPhaseSpacePoint})
-    momentum_type(psp::AbstractPhaseSpacePoint)
 
 Return the type of the stored momenta in the phase space point.
-
-See also: [`momentum_eltype`](@ref)
 """
 @inline function momentum_type(::Type{<:AbstractPhaseSpacePoint{P,M,L,PS}}) where {P,M,L,PS}
     return momentum_type(PS.parameters[1])
 end
+
+"""
+    momentum_type(psp::AbstractPhaseSpacePoint)
+
+Return the type of the stored momenta in the phase space point.
+"""
 @inline momentum_type(psp::AbstractPhaseSpacePoint) = momentum_type(typeof(psp))
 
 """
     momentum_eltype(psp::Type{AbstractPhaseSpacePoint})
+
+Short for `eltype(momentum_type(psp))`, i.e., returning the momentum's element type.
+"""
+@inline momentum_eltype(psp::Type{<:AbstractPhaseSpacePoint}) = eltype(momentum_type(psp))
+
+"""
     momentum_eltype(psp::AbstractPhaseSpacePoint)
 
 Short for `eltype(momentum_type(psp))`, i.e., returning the momentum's element type.
-
-See also: [`momentum_type`](@ref)
 """
-@inline momentum_eltype(psp::Type{<:AbstractPhaseSpacePoint}) = eltype(momentum_type(psp))
 @inline momentum_eltype(psp::AbstractPhaseSpacePoint) = momentum_eltype(typeof(psp))
