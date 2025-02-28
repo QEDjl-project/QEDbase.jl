@@ -75,6 +75,7 @@ export build_momenta, phase_space_dimension, in_phase_space_layout
 # Abstract phase space point interface
 export AbstractParticleStateful, AbstractPhaseSpacePoint
 export particle_direction, particle_species, momentum
+export momentum_type, momentum_eltype
 export process, model, phase_space_layout, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
@@ -132,6 +133,9 @@ include("implementations/cross_section/total_probability.jl")
 include("implementations/cross_section/total_cross_section.jl")
 
 include("implementations/particle/print.jl")
+
+include("implementations/particle_stateful/momentum.jl")
+include("implementations/phase_space_point/momenta.jl")
 
 include("mocks/Mocks.jl")
 

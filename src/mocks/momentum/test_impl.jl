@@ -6,7 +6,7 @@ An abstract type representing a mock four-momentum.
 This serves as a base type for mock momentum representations, parameterized by
 `T`, which defines the numerical type of the momentum components.
 """
-abstract type AbstractMockMomentum{T} <: AbstractFourMomentum end
+abstract type AbstractMockMomentum{T} <: AbstractFourMomentum{T} end
 
 """
     struct MockMomentum{T} <: AbstractMockMomentum{T}
