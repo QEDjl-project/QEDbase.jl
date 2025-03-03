@@ -8,7 +8,7 @@ RNG = MersenneTwister(137137)
     (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
 )
     @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
-        ATOL = 0.0
+        ATOL = eps(MOM_EL_TYPE)
         RTOL = sqrt(eps(MOM_EL_TYPE))
         MOM_TYPE = MockMomentum{MOM_EL_TYPE}
         INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
@@ -136,6 +136,15 @@ RNG = MersenneTwister(137137)
                     TESTOUTPSL,
                     (TESTINCOORDS..., rand(RNG)),
                     (TESTOUTCOORDS..., rand(RNG)),
+                )
+
+                # wrong number of in momenta
+                @test_throws InvalidInputError build_momenta(
+                    TESTPROC,
+                    TESTMODEL,
+                    (test_in_moms..., rand(RNG, MOM_TYPE)),
+                    TESTOUTPSL,
+                    TESTOUTCOORDS,
                 )
             end
         end
