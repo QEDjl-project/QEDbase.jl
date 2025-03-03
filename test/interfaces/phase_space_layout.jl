@@ -27,7 +27,7 @@ RNG = MersenneTwister(137137)
         test_out_moms = @inferred build_momenta(
             TESTPROC, TESTMODEL, test_in_moms, TESTOUTPSL, TESTOUTCOORDS
         )
-        test_out_moms_from_coords = @inferred build_momenta(
+        test_in_moms_from_coords, test_out_moms_from_coords = @inferred build_momenta(
             TESTPROC, TESTMODEL, TESTOUTPSL, TESTINCOORDS, TESTOUTCOORDS
         )
         groundtruth_out_moms = Mocks._groundtruth_out_moms(
@@ -39,6 +39,11 @@ RNG = MersenneTwister(137137)
                 @test length(test_in_moms) == N_INCOMING
                 @test all(
                     isapprox.(test_in_moms, groundtruth_in_moms, atol=ATOL, rtol=RTOL)
+                )
+                @test all(
+                    isapprox.(
+                        test_in_moms_from_coords, groundtruth_in_moms, atol=ATOL, rtol=RTOL
+                    ),
                 )
             end
 

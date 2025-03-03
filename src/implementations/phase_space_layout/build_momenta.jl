@@ -153,7 +153,7 @@ function _build_momenta(
     out_coords::NTuple{Ncout,T},
 ) where {Ncin,Ncout,T<:Real}
     in_moms = _build_momenta(proc, model, in_phase_space_layout(out_psl), in_coords)
-    return _build_momenta(proc, model, in_moms, out_psl, out_coords)
+    return in_moms, _build_momenta(proc, model, in_moms, out_psl, out_coords)
 end
 
 # this only exists, since the constructor of `QEDcore.PhaseSpacePoint` calls it and not
