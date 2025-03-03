@@ -120,6 +120,7 @@ include("interfaces/phase_space_point.jl")
 
 include("interfaces/coordinate_transformation.jl")
 
+include("implementations/phase_space_layout/checks.jl")
 include("implementations/phase_space_layout/build_momenta.jl")
 
 include("implementations/process/particles.jl")
