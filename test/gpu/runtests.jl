@@ -4,8 +4,8 @@ functional, and execute the unit tests then. Additionally, if an environment var
 ("TEST_<GPU> = 1"), the tests will fail if the library is not functional.
 """
 
-GPUS = Vector{Tuple{Module,Type}}()
-GPU_FLOAT_TYPES = Dict{Module,Vector{Type}}()
+GPUS = Vector{Tuple{Module, Type}}()
+GPU_FLOAT_TYPES = Dict{Module, Vector{Type}}()
 
 # check if we test with AMDGPU
 amdgpu_tests = tryparse(Bool, get(ENV, "TEST_AMDGPU", "0"))
@@ -61,7 +61,7 @@ if oneapi_tests
         push!(GPUS, (oneAPI, oneVector))
         GPU_FLOAT_TYPES[oneAPI] = [Float32]
         if oneL0.module_properties(device()).fp64flags & oneL0.ZE_DEVICE_MODULE_FLAG_FP64 ==
-            oneL0.ZE_DEVICE_MODULE_FLAG_FP64
+                oneL0.ZE_DEVICE_MODULE_FLAG_FP64
             # This checks whether the Intel GPU supports Float64, see oneAPI Readme
             push!(GPU_FLOAT_TYPES[oneAPI], Float64)
         end

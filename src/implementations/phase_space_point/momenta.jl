@@ -7,7 +7,7 @@ function momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)
     return momentum(psp[dir, n])
 end
 
-function _momentum_helper(particles::Tuple{}, species::SPECIES, n::Val{N}) where {SPECIES,N}
+function _momentum_helper(particles::Tuple{}, species::SPECIES, n::Val{N}) where {SPECIES, N}
     throw(
         BoundsError(
             "momentum(): requested $species momentum is not in this phase space point"
@@ -16,26 +16,26 @@ function _momentum_helper(particles::Tuple{}, species::SPECIES, n::Val{N}) where
 end
 
 function _momentum_helper(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
-    species::SPECIES,
-    n::Val{1},
-) where {DIR,SPECIES,EL}
+        particles::Tuple{AbstractParticleStateful{DIR, SPECIES, EL}, Vararg},
+        species::SPECIES,
+        n::Val{1},
+    ) where {DIR, SPECIES, EL}
     return momentum(particles[1])
 end
 
 function _momentum_helper(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES1,EL},Vararg},
-    species::SPECIES2,
-    n::Val{N},
-) where {DIR,SPECIES1,SPECIES2,EL,N}
+        particles::Tuple{AbstractParticleStateful{DIR, SPECIES1, EL}, Vararg},
+        species::SPECIES2,
+        n::Val{N},
+    ) where {DIR, SPECIES1, SPECIES2, EL, N}
     return _momentum_helper(particles[2:end], species, n)
 end
 
 function _momentum_helper(
-    particles::Tuple{AbstractParticleStateful{DIR,SPECIES,EL},Vararg},
-    species::SPECIES,
-    n::Val{N},
-) where {DIR,SPECIES,EL,N}
+        particles::Tuple{AbstractParticleStateful{DIR, SPECIES, EL}, Vararg},
+        species::SPECIES,
+        n::Val{N},
+    ) where {DIR, SPECIES, EL, N}
     return _momentum_helper(particles[2:end], species, Val(N - 1))
 end
 
@@ -49,11 +49,11 @@ Returns the momentum of the `n`th particle in the given [`AbstractPhaseSpacePoin
     If it is not, use the overload of this function that uses `n::Int` instead. That function is faster than calling this one with `Val(n)`.
 """
 function momentum(
-    psp::AbstractPhaseSpacePoint,
-    dir::ParticleDirection,
-    species::AbstractParticleType,
-    n::Val{N},
-) where {N}
+        psp::AbstractPhaseSpacePoint,
+        dir::ParticleDirection,
+        species::AbstractParticleType,
+        n::Val{N},
+    ) where {N}
     return _momentum_helper(particles(psp, dir), species, n)
 end
 
@@ -63,8 +63,8 @@ end
 Returns the momentum of the particle in the given [`AbstractPhaseSpacePoint`](@ref) with `dir` and `species`, *if* there is only one such particle. If there are multiple or none, an [`InvalidInputError`](@ref) is thrown.
 """
 function momentum(
-    psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType
-)
+        psp::AbstractPhaseSpacePoint, dir::ParticleDirection, species::AbstractParticleType
+    )
     if (number_particles(process(psp), dir, species) != 1)
         throw(
             InvalidInputError(
@@ -85,11 +85,11 @@ Returns the momentum of the `n`th particle in the given [`AbstractPhaseSpacePoin
     This function accepts n as an `Int` value. If `n` is a compile-time constant (for example, a literal `1` or `2`), you can use `Val(n)` instead to call a zero overhead version of this function.
 """
 function momentum(
-    psp::AbstractPhaseSpacePoint,
-    dir::ParticleDirection,
-    species::AbstractParticleType,
-    n::Int,
-)
+        psp::AbstractPhaseSpacePoint,
+        dir::ParticleDirection,
+        species::AbstractParticleType,
+        n::Int,
+    )
     i = 0
     c = n
     for p in particles(psp, dir)
@@ -123,7 +123,7 @@ end
 
 Return the type of the stored momenta in the phase space point.
 """
-@inline function momentum_type(::Type{<:AbstractPhaseSpacePoint{P,M,L,PS}}) where {P,M,L,PS}
+@inline function momentum_type(::Type{<:AbstractPhaseSpacePoint{P, M, L, PS}}) where {P, M, L, PS}
     return momentum_type(PS.parameters[1])
 end
 

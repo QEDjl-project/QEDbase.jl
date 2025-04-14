@@ -1,4 +1,3 @@
-
 using Random
 using QEDbase
 using QEDbase.Mocks

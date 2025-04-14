@@ -1,4 +1,4 @@
-# # [Tutorial: Define a Custom Phase Space Point](@id tutorial_psp) 
+# # [Tutorial: Define a Custom Phase Space Point](@id tutorial_psp)
 #
 # In this tutorial, we will define a custom **phase space point** type following the interface
 # specification used in `QuantumElectrodynamics.jl`.
@@ -78,8 +78,8 @@ struct ExamplePhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 # in the phase space of the muon-anti-muon annihilation process. This type holds the process,
 # the model, the phase space definition, and the incoming and outgoing particles.
 
-struct ExamplePhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES} <:
-       AbstractPhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES}
+struct ExamplePhaseSpacePoint{PROC, MODEL, PSL, IN_PARTICLES, OUT_PARTICLES} <:
+    AbstractPhaseSpacePoint{PROC, MODEL, PSL, IN_PARTICLES, OUT_PARTICLES}
     proc::PROC
     mdl::MODEL
     psl::PSL

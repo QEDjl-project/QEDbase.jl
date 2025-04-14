@@ -34,9 +34,9 @@ TESTTRAFO = MockCoordinateTrafo()
 
         @testset "phase space points" begin
             @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in
-                                                     Iterators.product(
-                (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
-            )
+                Iterators.product(
+                    (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
+                )
                 INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
                 OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
@@ -44,12 +44,12 @@ TESTTRAFO = MockCoordinateTrafo()
 
                 test_psps = [
                     MockPhaseSpacePoint(
-                        TESTPROC,
-                        TESTMODEL,
-                        TESTPSL,
-                        Mocks._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
-                        Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
-                    ) for _ in 1:100
+                            TESTPROC,
+                            TESTMODEL,
+                            TESTPSL,
+                            Mocks._rand_momenta(RNG, N_INCOMING, MOM_TYPE),
+                            Mocks._rand_momenta(RNG, N_OUTGOING, MOM_TYPE),
+                        ) for _ in 1:100
                 ]
                 gpu_test_psps = VECTOR_TYPE(test_psps)
 

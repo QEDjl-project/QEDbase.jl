@@ -10,11 +10,11 @@ function QEDbase.propagator(::MockFermion, mom::AbstractMockMomentum)
     return _groundtruth_fermion_propagator(mom)
 end
 function QEDbase.base_state(
-    ::MockFermion,
-    dir::ParticleDirection,
-    mom::AbstractMockMomentum,
-    spin::AbstractSpinOrPolarization,
-)
+        ::MockFermion,
+        dir::ParticleDirection,
+        mom::AbstractMockMomentum,
+        spin::AbstractSpinOrPolarization,
+    )
     return _groundtruth_fermion_base_state(dir, mom, spin)
 end
 
@@ -29,11 +29,11 @@ function QEDbase.propagator(::MockMasslessFermion, mom::AbstractMockMomentum)
     return _groundtruth_fermion_propagator(mom)
 end
 function QEDbase.base_state(
-    ::MockMasslessFermion,
-    dir::ParticleDirection,
-    mom::AbstractMockMomentum,
-    spin::AbstractSpinOrPolarization,
-)
+        ::MockMasslessFermion,
+        dir::ParticleDirection,
+        mom::AbstractMockMomentum,
+        spin::AbstractSpinOrPolarization,
+    )
     return _groundtruth_massless_fermion_base_state(dir, mom, spin)
 end
 
@@ -48,11 +48,11 @@ function QEDbase.propagator(::MockBoson, mom::AbstractMockMomentum)
     return _groundtruth_boson_propagator(mom)
 end
 function QEDbase.base_state(
-    ::MockBoson,
-    dir::ParticleDirection,
-    mom::AbstractMockMomentum,
-    pol::AbstractSpinOrPolarization,
-)
+        ::MockBoson,
+        dir::ParticleDirection,
+        mom::AbstractMockMomentum,
+        pol::AbstractSpinOrPolarization,
+    )
     return _groundtruth_boson_base_state(dir, mom, pol)
 end
 
@@ -67,14 +67,14 @@ function QEDbase.propagator(::MockMasslessBoson, mom::AbstractMockMomentum)
     return _groundtruth_boson_propagator(mom)
 end
 function QEDbase.base_state(
-    ::MockMasslessBoson,
-    dir::ParticleDirection,
-    mom::AbstractMockMomentum,
-    pol::AbstractSpinOrPolarization,
-)
+        ::MockMasslessBoson,
+        dir::ParticleDirection,
+        mom::AbstractMockMomentum,
+        pol::AbstractSpinOrPolarization,
+    )
     return _groundtruth_massless_boson_base_state(dir, mom, pol)
 end
 
 const PARTICLE_SET = [
-    MockFermion(), MockMasslessFermion(), MockBoson(), MockMasslessBoson()
+    MockFermion(), MockMasslessFermion(), MockBoson(), MockMasslessBoson(),
 ]

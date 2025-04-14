@@ -3,7 +3,7 @@
 
 Return the type of the particle's momentum.
 """
-@inline momentum_type(::Type{<:AbstractParticleStateful{D,S,E}}) where {D,S,E} = E
+@inline momentum_type(::Type{<:AbstractParticleStateful{D, S, E}}) where {D, S, E} = E
 
 """
     momentum_type(part::AbstractParticleStateful)
@@ -17,7 +17,7 @@ Return the type of the particle's momentum.
 
 Return the eltype of the particle's momentum type. Short for `eltype(momentum_type(ps))`.
 """
-@inline momentum_eltype(::Type{<:AbstractParticleStateful{D,S,E}}) where {D,S,E} = eltype(E)
+@inline momentum_eltype(::Type{<:AbstractParticleStateful{D, S, E}}) where {D, S, E} = eltype(E)
 
 """
     momentum_eltype(part::AbstractParticleStateful)

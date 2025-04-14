@@ -3,11 +3,11 @@
 
 An iterator type to iterate over spin and polarization combinations. Should be used through [`spin_pols_iter`](@ref).
 """
-struct SpinPolIter{I,O}
+struct SpinPolIter{I, O}
     # product iterator doing the actual iterating
     product_iter::Base.Iterators.ProductIterator
     # lookup table for which indices go where, translating the base iterator to the actual result
-    indexing_lut::Tuple{NTuple{I,Int},NTuple{O,Int}}
+    indexing_lut::Tuple{NTuple{I, Int}, NTuple{O, Int}}
 end
 
 """
@@ -56,7 +56,7 @@ function spin_pols_iter(process::AbstractProcessDefinition)
     sps = (in_sp..., out_sp...)
 
     # keep indices of first seen SyncedSpins or SyncedPols
-    synced_seen = Dict{AbstractSpinOrPolarization,Int}()
+    synced_seen = Dict{AbstractSpinOrPolarization, Int}()
     index = 0
     for sp in sps
         index += 1
@@ -69,7 +69,7 @@ function spin_pols_iter(process::AbstractProcessDefinition)
     end
 
     # keep indices of the synced spins/pols in the iterator (not necessarily the same as synced_seen)
-    synced_indices = Dict{AbstractSpinOrPolarization,Int}()
+    synced_indices = Dict{AbstractSpinOrPolarization, Int}()
 
     iter_tuples = Vector()
     lut = Vector{Int}()
@@ -107,7 +107,7 @@ function spin_pols_iter(process::AbstractProcessDefinition)
     )
 end
 
-function Base.iterate(iterator::SpinPolIter, state=nothing)
+function Base.iterate(iterator::SpinPolIter, state = nothing)
     local prod_iter_res
     if isnothing(state)
         prod_iter_res = iterate(iterator.product_iter)

@@ -1,10 +1,9 @@
-
 using Pkg
 
 # targeting the correct source code
 # this assumes the make.jl script is located in QEDbase.jl/docs
 project_path = Base.Filesystem.joinpath(Base.Filesystem.dirname(Base.source_path()), "..")
-Pkg.develop(; path=project_path)
+Pkg.develop(; path = project_path)
 
 using Documenter
 using Literate
@@ -87,35 +86,35 @@ pages = [
 try
     # generate markdown files with Literate.jl
     for file in literate_paths
-        Literate.markdown(file, tutorial_output_dir; documenter=true)
+        Literate.markdown(file, tutorial_output_dir; documenter = true)
     end
 
     # generate docs with Documenter.jl
     makedocs(;
-        modules=[QEDbase],
-        checkdocs=:exports,
-        authors="Uwe Hernandez Acosta",
-        repo=Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
-        sitename="QEDbase.jl",
-        format=Documenter.HTML(;
-            prettyurls=get(ENV, "CI", "false") == "true",
-            canonical="https://qedjl-project.gitlab.io/QEDbase.jl",
-            assets=String[],
-            mathengine=Documenter.MathJax2(),
-            collapselevel=1,
+        modules = [QEDbase],
+        checkdocs = :exports,
+        authors = "Uwe Hernandez Acosta",
+        repo = Documenter.Remotes.GitHub("QEDjl-project", "QEDbase.jl"),
+        sitename = "QEDbase.jl",
+        format = Documenter.HTML(;
+            prettyurls = get(ENV, "CI", "false") == "true",
+            canonical = "https://qedjl-project.gitlab.io/QEDbase.jl",
+            assets = String[],
+            mathengine = Documenter.MathJax2(),
+            collapselevel = 1,
             # TODO: workaround
             # should be fixed: https://github.com/QEDjl-project/QEDbase.jl/issues/4
-            size_threshold_ignore=["index.md"],
+            size_threshold_ignore = ["index.md"],
         ),
-        pages=pages,
-        plugins=[bib, links],
+        pages = pages,
+        plugins = [bib, links],
     )
 finally
     # doing some garbage collection
     @info "GarbageCollection: remove generated landing page"
     rm(index_path)
     @info "GarbageCollection: remove generated tutorial files"
-    rm(tutorial_output_dir; recursive=true)
+    rm(tutorial_output_dir; recursive = true)
 end
 
-deploydocs(; repo="github.com/QEDjl-project/QEDbase.jl.git", push_preview=false)
+deploydocs(; repo = "github.com/QEDjl-project/QEDbase.jl.git", push_preview = false)

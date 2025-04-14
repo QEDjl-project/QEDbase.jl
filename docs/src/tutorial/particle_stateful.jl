@@ -21,8 +21,8 @@ using QEDbase
 
 # Define a general stateful particle type that works for any particle species
 struct ExampleParticleStateful{
-    DIR<:ParticleDirection,SPECIES<:AbstractParticleType,ELEMENT<:AbstractFourMomentum
-} <: AbstractParticleStateful{DIR,SPECIES,ELEMENT}
+        DIR <: ParticleDirection, SPECIES <: AbstractParticleType, ELEMENT <: AbstractFourMomentum,
+    } <: AbstractParticleStateful{DIR, SPECIES, ELEMENT}
     direction::DIR        # Incoming or outgoing
     species::SPECIES      # Particle species (e.g., Muon, AntiMuon)
     mom::ELEMENT          # Particle's four-momentum
@@ -83,9 +83,9 @@ println("Outgoing antimuon momentum: ", momentum(outgoing_antimuon))
 
 # ## Summary
 #
-# In this tutorial, we created a general `ExampleParticleStateful` type that can represent any particle species 
-# (like `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle), but also [`Electron`](@extref QEDcore.Electron) and 
-# [`Positron`](@extref QEDcore.Positron) from `QEDcore`) by using the species as a type parameter. This approach avoids the need to define 
+# In this tutorial, we created a general `ExampleParticleStateful` type that can represent any particle species
+# (like `Muon` or `AntiMuon` implemented in [this tutorial](@ref tutorial_particle), but also [`Electron`](@extref QEDcore.Electron) and
+# [`Positron`](@extref QEDcore.Positron) from `QEDcore`) by using the species as a type parameter. This approach avoids the need to define
 # separate stateful types for each particle, making the implementation more flexible and reusable.
 #
 # The key steps were:

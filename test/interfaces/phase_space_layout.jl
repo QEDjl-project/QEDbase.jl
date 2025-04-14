@@ -5,8 +5,8 @@ using QEDbase.Mocks
 RNG = MersenneTwister(137137)
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
-    (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
-)
+        (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
+    )
     @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
         ATOL = eps(MOM_EL_TYPE)
         RTOL = sqrt(eps(MOM_EL_TYPE))
@@ -38,11 +38,11 @@ RNG = MersenneTwister(137137)
             @testset "in-phase-space layout" begin
                 @test length(test_in_moms) == N_INCOMING
                 @test all(
-                    isapprox.(test_in_moms, groundtruth_in_moms, atol=ATOL, rtol=RTOL)
+                    isapprox.(test_in_moms, groundtruth_in_moms, atol = ATOL, rtol = RTOL)
                 )
                 @test all(
                     isapprox.(
-                        test_in_moms_from_coords, groundtruth_in_moms, atol=ATOL, rtol=RTOL
+                        test_in_moms_from_coords, groundtruth_in_moms, atol = ATOL, rtol = RTOL
                     ),
                 )
             end
@@ -51,10 +51,10 @@ RNG = MersenneTwister(137137)
                 @testset "in momenta based" begin
                     @test length(test_out_moms) == N_OUTGOING
                     @test all(
-                        isapprox.(test_out_moms, groundtruth_out_moms, atol=ATOL, rtol=RTOL)
+                        isapprox.(test_out_moms, groundtruth_out_moms, atol = ATOL, rtol = RTOL)
                     )
                     @test isapprox(
-                        sum(test_in_moms), sum(test_out_moms), atol=ATOL, rtol=RTOL
+                        sum(test_in_moms), sum(test_out_moms), atol = ATOL, rtol = RTOL
                     )
                 end
 
@@ -64,15 +64,15 @@ RNG = MersenneTwister(137137)
                         isapprox.(
                             test_out_moms_from_coords,
                             groundtruth_out_moms,
-                            atol=ATOL,
-                            rtol=RTOL,
+                            atol = ATOL,
+                            rtol = RTOL,
                         ),
                     )
                     @test isapprox(
                         sum(test_in_moms),
                         sum(test_out_moms_from_coords),
-                        atol=ATOL,
-                        rtol=RTOL,
+                        atol = ATOL,
+                        rtol = RTOL,
                     )
                 end
             end

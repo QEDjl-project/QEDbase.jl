@@ -1,4 +1,3 @@
-
 """
     struct MockModel <: AbstractModelDefinition
 

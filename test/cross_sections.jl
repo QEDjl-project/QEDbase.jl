@@ -8,8 +8,8 @@ TESTMODEL = MockModel()
 TESTMODEL_FAIL = Mocks.MockModel_FAIL()
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
-    (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
-)
+        (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
+    )
     INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
     OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
@@ -48,13 +48,13 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     MockInPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys)
                 )
                 groundtruth = Mocks._groundtruth_incident_flux(p_in_phys)
-                @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(test_incident_flux, groundtruth, atol = ATOL, rtol = RTOL)
 
                 test_incident_flux = QEDbase._incident_flux(
                     MockPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, p_in_phys, p_out_phys)
                 )
                 @test test_incident_flux isa MOM_EL_TYPE
-                @test isapprox(test_incident_flux, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(test_incident_flux, groundtruth, atol = ATOL, rtol = RTOL)
 
                 #@test_throws MethodError QEDbase._incident_flux(
                 #    OutPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, OUT_PS)
@@ -65,7 +65,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 test_avg_norm = QEDbase._averaging_norm(MOM_EL_TYPE, TESTPROC)
                 groundtruth = Mocks._groundtruth_averaging_norm(MOM_EL_TYPE, TESTPROC)
                 @test test_avg_norm isa MOM_EL_TYPE
-                @test isapprox(test_avg_norm, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(test_avg_norm, groundtruth, atol = ATOL, rtol = RTOL)
             end
 
             @testset "matrix element" begin
@@ -77,7 +77,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 for i in eachindex(test_matrix_element)
                     @test test_matrix_element[i] isa Complex{MOM_EL_TYPE}
                     @test isapprox(
-                        test_matrix_element[i], groundtruth[i], atol=ATOL, rtol=RTOL
+                        test_matrix_element[i], groundtruth[i], atol = ATOL, rtol = RTOL
                     )
                 end
             end
@@ -108,7 +108,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 )
                 groundtruth = Mocks._groundtruth_phase_space_factor(p_in_phys, p_out_phys)
                 @test test_phase_space_factor isa MOM_EL_TYPE
-                @test isapprox(test_phase_space_factor, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(test_phase_space_factor, groundtruth, atol = ATOL, rtol = RTOL)
             end
         end
 
@@ -124,7 +124,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 )
 
                 @test diffCS_on_psp isa MOM_EL_TYPE
-                @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(diffCS_on_psp, groundtruth, atol = ATOL, rtol = RTOL)
             end
 
             @testset "safe compute" begin
@@ -137,14 +137,14 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     groundtruth = Mocks._groundtruth_safe_diffCS(TESTPROC, P_IN, P_OUT)
 
                     @test diffCS_on_psp isa MOM_EL_TYPE
-                    @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
+                    @test isapprox(diffCS_on_psp, groundtruth, atol = ATOL, rtol = RTOL)
                 end
             end
 
             @testset "failed" begin
                 @testset "$PROC $MODEL" for (PROC, MODEL) in Iterators.product(
-                    (TESTPROC, TESTPROC_FAIL_DIFFCS), (TESTMODEL, TESTMODEL_FAIL)
-                )
+                        (TESTPROC, TESTPROC_FAIL_DIFFCS), (TESTMODEL, TESTMODEL_FAIL)
+                    )
                     if Mocks._any_fail(PROC, MODEL)
                         for (P_IN, P_OUT) in p_combs
                             psp = MockPhaseSpacePoint(PROC, MODEL, TESTPSL, P_IN, P_OUT)
@@ -176,7 +176,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 totCS_on_moms = total_cross_section(IN_PS_POINT)
 
                 @test totCS_on_moms isa MOM_EL_TYPE
-                @test isapprox(totCS_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(totCS_on_moms, groundtruth, atol = ATOL, rtol = RTOL)
             end
         end
 
@@ -191,7 +191,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 )
 
                 @test prop_on_psp isa MOM_EL_TYPE
-                @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(prop_on_psp, groundtruth, atol = ATOL, rtol = RTOL)
             end
 
             @testset "safe compute" begin
@@ -202,7 +202,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     prop_on_psp = differential_probability(PS_POINT)
                     groundtruth = Mocks._groundtruth_safe_probability(TESTPROC, P_IN, P_OUT)
                     @test prop_on_psp isa MOM_EL_TYPE
-                    @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
+                    @test isapprox(prop_on_psp, groundtruth, atol = ATOL, rtol = RTOL)
                 end
             end
         end
@@ -215,7 +215,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                 tot_prop_on_moms = Mocks.total_probability(IN_PS_POINT)
 
                 @test tot_prop_on_moms isa MOM_EL_TYPE
-                @test isapprox(tot_prop_on_moms, groundtruth, atol=ATOL, rtol=RTOL)
+                @test isapprox(tot_prop_on_moms, groundtruth, atol = ATOL, rtol = RTOL)
             end
         end
     end
