@@ -20,6 +20,13 @@ RNG = MersenneTwister(137137)
 
         PSP = MockPhaseSpacePoint(TESTPROC, TESTMODEL, TESTPSL, IN_PS, OUT_PS)
 
+        @testset "momentum element types" begin
+            @test MOM_TYPE == momentum_type(PSP)
+            @test MOM_TYPE == momentum_type(typeof(PSP))
+            @test MOM_EL_TYPE == momentum_eltype(PSP)
+            @test MOM_EL_TYPE == momentum_eltype(typeof(PSP))
+        end
+
         @testset "momentum implementations" begin
             @test @inferred momentum(PSP, Incoming(), MockBoson(), 1) == IN_PS[1]
             @test @inferred momentum(PSP, Incoming(), MockFermion(), 1) == IN_PS[2]

@@ -2,4 +2,4 @@
 # generic definition of the gamma matrices
 ####
 
-abstract type AbstractGammaRepresentation end
+abstract type AbstractGammaRepresentation{T<:Number} end

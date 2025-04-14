@@ -62,8 +62,9 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
             end
 
             @testset "averaging norm" begin
-                test_avg_norm = QEDbase._averaging_norm(TESTPROC)
-                groundtruth = Mocks._groundtruth_averaging_norm(TESTPROC)
+                test_avg_norm = QEDbase._averaging_norm(MOM_EL_TYPE, TESTPROC)
+                groundtruth = Mocks._groundtruth_averaging_norm(MOM_EL_TYPE, TESTPROC)
+                @test test_avg_norm isa MOM_EL_TYPE
                 @test isapprox(test_avg_norm, groundtruth, atol=ATOL, rtol=RTOL)
             end
 
@@ -122,8 +123,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     TESTPROC, p_in_phys, p_out_phys
                 )
 
-                # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                # @test diffCS_on_psp isa MOM_EL_TYPE
+                @test diffCS_on_psp isa MOM_EL_TYPE
                 @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
             end
 
@@ -136,8 +136,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     diffCS_on_psp = differential_cross_section(PS_POINT)
                     groundtruth = Mocks._groundtruth_safe_diffCS(TESTPROC, P_IN, P_OUT)
 
-                    # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                    # @test diffCS_on_psp isa MOM_EL_TYPE
+                    @test diffCS_on_psp isa MOM_EL_TYPE
                     @test isapprox(diffCS_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
                 end
             end
@@ -150,7 +149,9 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                         for (P_IN, P_OUT) in p_combs
                             psp = MockPhaseSpacePoint(PROC, MODEL, TESTPSL, P_IN, P_OUT)
                             @test_throws MethodError QEDbase._incident_flux(psp)
-                            @test_throws MethodError QEDbase._averaging_norm(psp)
+                            @test_throws MethodError QEDbase._averaging_norm(
+                                MOM_EL_TYPE, psp
+                            )
                             @test_throws MethodError QEDbase._matrix_element(psp)
                         end
                     end
@@ -189,8 +190,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     TESTPROC, p_in_phys, p_out_phys
                 )
 
-                # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                # @test prop_on_psp isa MOM_EL_TYPE
+                @test prop_on_psp isa MOM_EL_TYPE
                 @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
             end
 
@@ -201,8 +201,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                     )
                     prop_on_psp = differential_probability(PS_POINT)
                     groundtruth = Mocks._groundtruth_safe_probability(TESTPROC, P_IN, P_OUT)
-                    # This test is broken for MOM_EL_TYPE==Float32 (see https://github.com/QEDjl-project/QEDbase.jl/issues/147)
-                    # @test prop_on_psp isa MOM_EL_TYPE
+                    @test prop_on_psp isa MOM_EL_TYPE
                     @test isapprox(prop_on_psp, groundtruth, atol=ATOL, rtol=RTOL)
                 end
             end

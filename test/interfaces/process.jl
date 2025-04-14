@@ -53,6 +53,13 @@ RTOL = sqrt(eps())
                 )
                 test_ps = MockParticleStateful(dir, species, zero(MOM_TYPE))
 
+                @testset "momentum element types" begin
+                    @test MOM_TYPE == momentum_type(test_ps)
+                    @test MOM_TYPE == momentum_type(typeof(test_ps))
+                    @test MOM_EL_TYPE == momentum_eltype(test_ps)
+                    @test MOM_EL_TYPE == momentum_eltype(typeof(test_ps))
+                end
+
                 @test @inferred number_particles(TESTPROC, dir, species) ==
                     groundtruth_particle_count
                 @test @inferred number_particles(TESTPROC, test_ps) ==
