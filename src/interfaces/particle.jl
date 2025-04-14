@@ -19,8 +19,8 @@ If the output of those functions differ from the defaults for a subtype of `Abst
 The second type of functions define a hard interface for `AbstractParticle`:
 
 ```julia
-    mass(::AbstractParticle)::Real
-    charge(::AbstractParticle)::Real
+    mass(::Type{T}, ::AbstractParticle)::T
+    charge(::Type{T}, ::AbstractParticle)::T
 ```
 These functions must be implemented in order to have the subtype of `AbstractParticle` work with the functionalities of `QEDprocesses.jl`.
 """
@@ -70,20 +70,22 @@ The default implementation of `is_anti_particle` for every subtype of [`Abstract
 is_anti_particle(::AbstractParticle) = false
 
 """
-    mass(particle::AbstractParticle)::Real
+    mass(::Type{T}, particle::AbstractParticle)::T
 
-Interface function for particles. Return the rest mass of a particle (in units of the electron mass).
+Interface function for particles. Return the rest mass of a particle (in units of the electron mass) in type `T`.
 
-This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref). A function `mass(p::AbstractParticle) = mass(Float64, p)` is
+automatically derived.
 """
 function mass end
 
 """
-    charge(::AbstractParticle)::Real
+    charge(::Type{T}, ::AbstractParticle)::T
 
-Interface function for particles. Return the electric charge of a particle (in units of the elementary electric charge).
+Interface function for particles. Return the electric charge of a particle (in units of the elementary electric charge) in type `T`.
 
-This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref).
+This needs to be implemented for each concrete subtype of [`AbstractParticle`](@ref). A function `charge(p::AbstractParticle) = charge(Float64, p)` is
+automatically derived.
 """
 function charge end
 
@@ -95,13 +97,13 @@ Compute the propagator of a particle for a given four-momentum `mom`.
 # Notes on Convention
 The `QEDProcesses.jl` package includes two types of propagators:
 
-**Boson-like particles**: For a `BosonLike` particle with four-momentum `k` and mass `m = QEDbase.mass(particle)`, the propagator is given by:
+**Boson-like particles**: For a `BosonLike` particle with four-momentum `k` and mass `m = QEDbase.mass(T, particle)`, the propagator is given by:
 
 ```math
 D(k) = \\frac{1}{k^2 - m^2}
 ```
 
-**Fermion-like particles**: For a `FermionLike` particle with four-momentum `p` and mass `m = QEDbase.mass(particle)`, the propagator is defined as:
+**Fermion-like particles**: For a `FermionLike` particle with four-momentum `p` and mass `m = QEDbase.mass(T, particle)`, the propagator is defined as:
 
 ```math
 S(p) = \\frac{\\gamma^\\mu p_\\mu + m}{p^2 - m^2}
