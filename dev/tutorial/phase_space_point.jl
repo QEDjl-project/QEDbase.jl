@@ -1,4 +1,4 @@
-# # [Tutorial: Define a Custom Phase Space Point](@id tutorial_psp) 
+# # [Tutorial: Define a Custom Phase Space Point](@id tutorial_psp)
 #
 # In this tutorial, we will define a custom **phase space point** type following the interface
 # specification used in `QuantumElectrodynamics.jl`.
@@ -34,8 +34,8 @@ struct Photon <: AbstractParticleType end
 QEDbase.is_boson(::Photon) = true
 QEDbase.is_particle(::Photon) = true
 QEDbase.is_anti_particle(::Photon) = true
-QEDbase.mass(::Type{T}, ::Photon) where {T<:Number} = one(T)
-QEDbase.charge(::Type{T}, ::Photon) where {T<:Number} = one(T)
+QEDbase.mass(::Type{T}, ::Photon) where {T <: Number} = one(T)
+QEDbase.charge(::Type{T}, ::Photon) where {T <: Number} = one(T)
 
 # ## Step 1: Define an Example Process
 # We define a process that describes muon-anti-muon annihilation. This process will involve
@@ -78,8 +78,8 @@ struct ExamplePhaseSpaceLayout <: AbstractPhaseSpaceLayout end
 # in the phase space of the muon-anti-muon annihilation process. This type holds the process,
 # the model, the phase space definition, and the incoming and outgoing particles.
 
-struct ExamplePhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES} <:
-       AbstractPhaseSpacePoint{PROC,MODEL,PSL,IN_PARTICLES,OUT_PARTICLES}
+struct ExamplePhaseSpacePoint{PROC, MODEL, PSL, IN_PARTICLES, OUT_PARTICLES} <:
+    AbstractPhaseSpacePoint{PROC, MODEL, PSL, IN_PARTICLES, OUT_PARTICLES}
     proc::PROC
     mdl::MODEL
     psl::PSL

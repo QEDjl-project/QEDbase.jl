@@ -6,7 +6,7 @@
 # First we need particle definitions from the particles tutorial:
 
 redirect_stdout(devnull) do # hide
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))    # to get predefined particles
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))    # to get predefined particles
 end # hide
 
 struct CustomModel <: AbstractModelDefinition end
@@ -31,8 +31,8 @@ end
 function isphysical(proc::AbstractProcessDefinition, ::CustomModel)
     return (
         number_particles(proc, Incoming(), Muon()) +
-        number_particles(proc, Outgoing(), AntiMuon()) ==
-        number_particles(proc, Incoming(), AntiMuon()) +
-        number_particles(proc, Outgoing(), Muon())
+            number_particles(proc, Outgoing(), AntiMuon()) ==
+            number_particles(proc, Incoming(), AntiMuon()) +
+            number_particles(proc, Outgoing(), Muon())
     ) && number_particles(proc, Incoming()) + number_particles(proc, Outgoing()) >= 2
 end

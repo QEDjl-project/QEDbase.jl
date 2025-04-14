@@ -30,8 +30,8 @@ QEDbase.is_anti_particle(::Muon) = false  # Muon is not an anti-particle
 # These functions return the mass and charge of the `Muon`.
 
 # Define the physical properties of the Muon
-QEDbase.mass(::Type{T}, ::Muon) where {T<:Number} = T(105.66)  # Muon mass in MeV/c^2
-QEDbase.charge(::Type{T}, ::Muon) where {T<:Number} = -one(T)  # Muon has a charge of -1 (same as electron)
+QEDbase.mass(::Type{T}, ::Muon) where {T <: Number} = T(105.66)  # Muon mass in MeV/c^2
+QEDbase.charge(::Type{T}, ::Muon) where {T <: Number} = -one(T)  # Muon has a charge of -1 (same as electron)
 
 # ## Anti-Particle Implementation (Optional)
 #
@@ -48,8 +48,8 @@ QEDbase.is_particle(::AntiMuon) = false      # AntiMuon is not a regular particl
 QEDbase.is_anti_particle(::AntiMuon) = true  # AntiMuon is an anti-particle
 
 # Define the physical properties for the AntiMuon
-QEDbase.mass(::Type{T}, ::AntiMuon) where {T<:Number} = T(105.66)  # AntiMuon has the same mass as Muon
-QEDbase.charge(::Type{T}, ::AntiMuon) where {T<:Number} = one(T)   # AntiMuon has the opposite charge of Muon
+QEDbase.mass(::Type{T}, ::AntiMuon) where {T <: Number} = T(105.66)  # AntiMuon has the same mass as Muon
+QEDbase.charge(::Type{T}, ::AntiMuon) where {T <: Number} = one(T)   # AntiMuon has the opposite charge of Muon
 
 # ## Example Usage
 #
