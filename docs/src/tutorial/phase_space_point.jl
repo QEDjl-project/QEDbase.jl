@@ -34,8 +34,8 @@ struct Photon <: AbstractParticleType end
 QEDbase.is_boson(::Photon) = true
 QEDbase.is_particle(::Photon) = true
 QEDbase.is_anti_particle(::Photon) = true
-QEDbase.mass(::Type{T}, ::Photon) where {T<:Number} = one(T)
-QEDbase.charge(::Type{T}, ::Photon) where {T<:Number} = one(T)
+QEDbase.mass(::Type{T}, ::Photon) where {T <: Number} = one(T)
+QEDbase.charge(::Type{T}, ::Photon) where {T <: Number} = one(T)
 
 # ## Step 1: Define an Example Process
 # We define a process that describes muon-anti-muon annihilation. This process will involve

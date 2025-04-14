@@ -4,8 +4,8 @@ QEDbase.is_fermion(::MockFermion) = true
 QEDbase.is_boson(::MockFermion) = false
 QEDbase.is_particle(::MockFermion) = true
 QEDbase.is_anti_particle(::MockFermion) = false
-QEDbase.mass(::Type{T}, ::MockFermion) where {T<:Number} = T(_MASS_TEST_FERMION)
-QEDbase.charge(::Type{T}, ::MockFermion) where {T<:Number} = T(_CHARGE_TEST_FERMION)
+QEDbase.mass(::Type{T}, ::MockFermion) where {T <: Number} = T(_MASS_TEST_FERMION)
+QEDbase.charge(::Type{T}, ::MockFermion) where {T <: Number} = T(_CHARGE_TEST_FERMION)
 function QEDbase.propagator(::MockFermion, mom::AbstractMockMomentum)
     return _groundtruth_fermion_propagator(mom)
 end
@@ -23,8 +23,8 @@ QEDbase.is_fermion(::MockMasslessFermion) = true
 QEDbase.is_boson(::MockMasslessFermion) = false
 QEDbase.is_particle(::MockMasslessFermion) = true
 QEDbase.is_anti_particle(::MockMasslessFermion) = false
-QEDbase.mass(::Type{T}, ::MockMasslessFermion) where {T<:Number} = zero(T)
-QEDbase.charge(::Type{T}, ::MockMasslessFermion) where {T<:Number} = T(_CHARGE_TEST_FERMION)
+QEDbase.mass(::Type{T}, ::MockMasslessFermion) where {T <: Number} = zero(T)
+QEDbase.charge(::Type{T}, ::MockMasslessFermion) where {T <: Number} = T(_CHARGE_TEST_FERMION)
 function QEDbase.propagator(::MockMasslessFermion, mom::AbstractMockMomentum)
     return _groundtruth_fermion_propagator(mom)
 end
@@ -42,8 +42,8 @@ QEDbase.is_fermion(::MockBoson) = false
 QEDbase.is_boson(::MockBoson) = true
 QEDbase.is_particle(::MockBoson) = true
 QEDbase.is_anti_particle(::MockBoson) = false
-QEDbase.mass(::Type{T}, ::MockBoson) where {T<:Number} = T(_MASS_TEST_BOSON)
-QEDbase.charge(::Type{T}, ::MockBoson) where {T<:Number} = T(_CHARGE_TEST_BOSON)
+QEDbase.mass(::Type{T}, ::MockBoson) where {T <: Number} = T(_MASS_TEST_BOSON)
+QEDbase.charge(::Type{T}, ::MockBoson) where {T <: Number} = T(_CHARGE_TEST_BOSON)
 function QEDbase.propagator(::MockBoson, mom::AbstractMockMomentum)
     return _groundtruth_boson_propagator(mom)
 end
@@ -61,8 +61,8 @@ QEDbase.is_fermion(::MockMasslessBoson) = false
 QEDbase.is_boson(::MockMasslessBoson) = true
 QEDbase.is_particle(::MockMasslessBoson) = true
 QEDbase.is_anti_particle(::MockMasslessBoson) = false
-QEDbase.mass(::Type{T}, ::MockMasslessBoson) where {T<:Number} = zero(T)
-QEDbase.charge(::Type{T}, ::MockMasslessBoson) where {T<:Number} = T(_CHARGE_TEST_BOSON)
+QEDbase.mass(::Type{T}, ::MockMasslessBoson) where {T <: Number} = zero(T)
+QEDbase.charge(::Type{T}, ::MockMasslessBoson) where {T <: Number} = T(_CHARGE_TEST_BOSON)
 function QEDbase.propagator(::MockMasslessBoson, mom::AbstractMockMomentum)
     return _groundtruth_boson_propagator(mom)
 end

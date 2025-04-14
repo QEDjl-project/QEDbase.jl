@@ -46,7 +46,7 @@ function momentum end
     is_particle(particle_species(particle))
 @inline is_anti_particle(particle::AbstractParticleStateful) =
     is_anti_particle(particle_species(particle))
-@inline mass(::Type{T}, particle::AbstractParticleStateful) where {T<:Number} =
+@inline mass(::Type{T}, particle::AbstractParticleStateful) where {T <: Number} =
     mass(T, particle_species(particle))
-@inline charge(::Type{T}, particle::AbstractParticleStateful) where {T<:Number} =
+@inline charge(::Type{T}, particle::AbstractParticleStateful) where {T <: Number} =
     charge(T, particle_species(particle))
