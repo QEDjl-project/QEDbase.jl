@@ -38,18 +38,45 @@ BUF = IOBuffer()
         @test is_boson(MockMasslessBoson()) == true
     end
 
-    @testset "mass" begin
-        @test mass(MockFermion()) == Mocks._MASS_TEST_FERMION
-        @test mass(MockMasslessFermion()) == 0.0
-        @test mass(MockBoson()) == Mocks._MASS_TEST_BOSON
-        @test mass(MockMasslessBoson()) == 0.0
+    @testset "mass & charge in $FLOAT_T" for FLOAT_T in (Float16, Float32, Float64)
+        @testset "mass" begin
+            @test mass(FLOAT_T, MockFermion()) == FLOAT_T(Mocks._MASS_TEST_FERMION)
+            @test mass(FLOAT_T, MockMasslessFermion()) == zero(FLOAT_T)
+            @test mass(FLOAT_T, MockBoson()) == FLOAT_T(Mocks._MASS_TEST_BOSON)
+            @test mass(FLOAT_T, MockMasslessBoson()) == zero(FLOAT_T)
+
+            @test mass(FLOAT_T, MockFermion()) isa FLOAT_T
+            @test mass(FLOAT_T, MockMasslessFermion()) isa FLOAT_T
+            @test mass(FLOAT_T, MockBoson()) isa FLOAT_T
+            @test mass(FLOAT_T, MockMasslessBoson()) isa FLOAT_T
+        end
+
+        @testset "charge" begin
+            @test charge(FLOAT_T, MockFermion()) == FLOAT_T(Mocks._CHARGE_TEST_FERMION)
+            @test charge(FLOAT_T, MockMasslessFermion()) ==
+                FLOAT_T(Mocks._CHARGE_TEST_FERMION)
+            @test charge(FLOAT_T, MockBoson()) == FLOAT_T(Mocks._CHARGE_TEST_BOSON)
+            @test charge(FLOAT_T, MockMasslessBoson()) == FLOAT_T(Mocks._CHARGE_TEST_BOSON)
+
+            @test charge(FLOAT_T, MockFermion()) isa FLOAT_T
+            @test charge(FLOAT_T, MockMasslessFermion()) isa FLOAT_T
+            @test charge(FLOAT_T, MockBoson()) isa FLOAT_T
+            @test charge(FLOAT_T, MockMasslessBoson()) isa FLOAT_T
+        end
     end
 
-    @testset "charge" begin
-        @test charge(MockFermion()) == Mocks._CHARGE_TEST_FERMION
-        @test charge(MockMasslessFermion()) == Mocks._CHARGE_TEST_FERMION
-        @test charge(MockBoson()) == Mocks._CHARGE_TEST_BOSON
-        @test charge(MockMasslessBoson()) == Mocks._CHARGE_TEST_BOSON
+    @testset "mass default type" begin
+        @test mass(MockFermion()) isa Float64
+        @test mass(MockMasslessFermion()) isa Float64
+        @test mass(MockBoson()) isa Float64
+        @test mass(MockMasslessBoson()) isa Float64
+    end
+
+    @testset "charge default type" begin
+        @test charge(MockFermion()) isa Float64
+        @test charge(MockMasslessFermion()) isa Float64
+        @test charge(MockBoson()) isa Float64
+        @test charge(MockMasslessBoson()) isa Float64
     end
 
     @testset "show" begin

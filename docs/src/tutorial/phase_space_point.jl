@@ -22,8 +22,10 @@
 using QEDbase
 
 redirect_stdout(devnull) do # hide
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle_stateful.jl")) # to get custom particle stateful definition
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+    include(
+        joinpath(dirname(Base.active_project()), "src", "tutorial", "particle_stateful.jl")
+    ) # to get custom particle stateful definition
 end # hide
 
 # We'll also need a `Photon` type which we briefly define right here.
@@ -32,8 +34,8 @@ struct Photon <: AbstractParticleType end
 QEDbase.is_boson(::Photon) = true
 QEDbase.is_particle(::Photon) = true
 QEDbase.is_anti_particle(::Photon) = true
-QEDbase.mass(::Photon) = 0.0
-QEDbase.charge(::Photon) = 0.0
+QEDbase.mass(::Type{T}, ::Photon) where {T<:Number} = one(T)
+QEDbase.charge(::Type{T}, ::Photon) where {T<:Number} = one(T)
 
 # ## Step 1: Define an Example Process
 # We define a process that describes muon-anti-muon annihilation. This process will involve
