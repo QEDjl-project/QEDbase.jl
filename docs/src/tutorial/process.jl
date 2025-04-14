@@ -68,7 +68,7 @@ end
 #
 # Define the `_averaging_norm` function to return the normalization factor used to average the squared matrix elements over spins and polarizations.
 
-function QEDbase._averaging_norm(proc::MyProcess; T::Type=Float64)
+function QEDbase._averaging_norm(::Type{T}, proc::MyProcess) where {T<:Number}
     ## For example, if both incoming particles are fermions, the normalization could be the product of their spin multiplicity, i.e. 2 times 2.
     return one(T) / T(4)  # Placeholder value
 end

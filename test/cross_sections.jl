@@ -62,8 +62,8 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
             end
 
             @testset "averaging norm" begin
-                test_avg_norm = QEDbase._averaging_norm(TESTPROC; T=MOM_EL_TYPE)
-                groundtruth = Mocks._groundtruth_averaging_norm(TESTPROC; T=MOM_EL_TYPE)
+                test_avg_norm = QEDbase._averaging_norm(MOM_EL_TYPE, TESTPROC)
+                groundtruth = Mocks._groundtruth_averaging_norm(MOM_EL_TYPE, TESTPROC)
                 @test test_avg_norm isa MOM_EL_TYPE
                 @test isapprox(test_avg_norm, groundtruth, atol=ATOL, rtol=RTOL)
             end
@@ -150,7 +150,7 @@ TESTMODEL_FAIL = Mocks.MockModel_FAIL()
                             psp = MockPhaseSpacePoint(PROC, MODEL, TESTPSL, P_IN, P_OUT)
                             @test_throws MethodError QEDbase._incident_flux(psp)
                             @test_throws MethodError QEDbase._averaging_norm(
-                                psp; T=MOM_EL_TYPE
+                                MOM_EL_TYPE, psp
                             )
                             @test_throws MethodError QEDbase._matrix_element(psp)
                         end

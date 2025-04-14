@@ -3,8 +3,8 @@ function QEDbase._incident_flux(in_psp::MockPhaseSpacePoint{<:MockProcess,<:Mock
     return _groundtruth_incident_flux(momenta(in_psp, Incoming()))
 end
 
-function QEDbase._averaging_norm(proc::MockProcess; T::Type=Float64)
-    return _groundtruth_averaging_norm(proc; T=T)
+function QEDbase._averaging_norm(::Type{T}, proc::MockProcess) where {T<:Number}
+    return _groundtruth_averaging_norm(T, proc)
 end
 
 function QEDbase._matrix_element(psp::MockPhaseSpacePoint{<:MockProcess,<:MockModel})

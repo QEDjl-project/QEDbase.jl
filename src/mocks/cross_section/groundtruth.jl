@@ -28,11 +28,11 @@ function _groundtruth_matrix_element(in_ps, out_ps)
 end
 
 """
-    _groundtruth_averaging_norm(proc; T=Float64)
+    _groundtruth_averaging_norm(::Type{T}, proc)
 
 Mock implementation of the averaging norm. Returns the inverse of the sum of all external particles of the passed process.
 """
-function _groundtruth_averaging_norm(proc; T::Type=Float64)
+function _groundtruth_averaging_norm(::Type{T}, proc) where {T<:Number}
     return one(T) / (number_incoming_particles(proc) + number_outgoing_particles(proc))
 end
 
@@ -72,7 +72,7 @@ function _groundtruth_unsafe_probability(
 ) where {I,O}
     mat_el = _groundtruth_matrix_element(in_ps, out_ps)
     mat_el_sq = abs2.(mat_el)
-    normalization = _groundtruth_averaging_norm(proc; T=eltype(eltype(in_ps)))
+    normalization = _groundtruth_averaging_norm(eltype(eltype(in_ps)), proc)
     ps_fac = _groundtruth_phase_space_factor(in_ps, out_ps)
 
     return sum(mat_el_sq) * ps_fac * normalization
