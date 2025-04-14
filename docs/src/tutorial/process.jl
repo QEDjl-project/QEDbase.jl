@@ -11,10 +11,12 @@
 using QEDbase
 
 redirect_stdout(devnull) do # hide
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "model.jl"))             # to get the custom model
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get the custom four momenta
-include(joinpath(dirname(Base.active_project()), "src", "tutorial", "phase_space_point.jl")) # to get the custom phase space points
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "particle.jl"))          # to get predefined particles
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "model.jl"))             # to get the custom model
+    include(joinpath(dirname(Base.active_project()), "src", "tutorial", "four_momentum.jl"))     # to get the custom four momenta
+    include(
+        joinpath(dirname(Base.active_project()), "src", "tutorial", "phase_space_point.jl")
+    ) # to get the custom phase space points
 end # hide
 
 # Define a specific process by creating a subtype of `AbstractProcessDefinition`:
@@ -49,7 +51,7 @@ QEDbase.outgoing_spin_pols(::MyProcess) = (AllPolarization(), AllPolarization())
 function QEDbase._matrix_element(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Calculate the matrix element for the specific process.
     ## This is a placeholder for the actual computation.
-    return 1.0  # Placeholder value
+    return one(momentum_eltype(psp))  # Placeholder value
 end
 
 # ## Step 5: Define Incident Flux
@@ -59,16 +61,16 @@ end
 
 function QEDbase._incident_flux(psp::AbstractInPhaseSpacePoint{MyProcess})
     ## Placeholder calculation for incident flux
-    return 1.0  # Placeholder value
+    return one(momentum_eltype(psp))  # Placeholder value
 end
 
 # ## Step 6: Averaging Over Spin and Polarization
 #
 # Define the `_averaging_norm` function to return the normalization factor used to average the squared matrix elements over spins and polarizations.
 
-function QEDbase._averaging_norm(proc::MyProcess)
+function QEDbase._averaging_norm(proc::MyProcess; T::Type=Float64)
     ## For example, if both incoming particles are fermions, the normalization could be the product of their spin multiplicity, i.e. 2 times 2.
-    return 4  # Placeholder value
+    return one(T) / T(4)  # Placeholder value
 end
 
 # ## Step 7: Check for Physical Phase Space
@@ -86,7 +88,7 @@ end
 
 function QEDbase._phase_space_factor(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Return the phase space factor
-    return 1.0  # Placeholder value
+    return one(momentum_eltype(psp))  # Placeholder value
 end
 
 # ## Step 9: Optional - Total Probability Calculation
@@ -96,7 +98,7 @@ end
 
 function QEDbase._total_probability(psp::AbstractPhaseSpacePoint{MyProcess})
     ## Calculate the total probability for the process
-    return 1.0  # Placeholder value
+    return one(momentum_eltype(psp))  # Placeholder value
 end
 
 # ## Putting It All Together

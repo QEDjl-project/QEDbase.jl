@@ -21,7 +21,7 @@ Return differential probability evaluated on a phase space point without checkin
 function unsafe_differential_probability(psp::AbstractPhaseSpacePoint)
     matrix_elements_sq = _matrix_element_square(psp)
 
-    normalization = convert(momentum_eltype(psp), (_averaging_norm(psp.proc)))
+    normalization = _averaging_norm(psp.proc; T=momentum_eltype(psp))
 
     ps_fac = _phase_space_factor(psp)
 

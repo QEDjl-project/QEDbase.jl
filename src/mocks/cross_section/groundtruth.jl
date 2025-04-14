@@ -28,12 +28,12 @@ function _groundtruth_matrix_element(in_ps, out_ps)
 end
 
 """
-    _groundtruth_averaging_norm(proc)
+    _groundtruth_averaging_norm(proc; T=Float64)
 
 Mock implementation of the averaging norm. Returns the inverse of the sum of all external particles of the passed process.
 """
-function _groundtruth_averaging_norm(proc)
-    return 1.0 / (number_incoming_particles(proc) + number_outgoing_particles(proc))
+function _groundtruth_averaging_norm(proc; T::Type=Float64)
+    return one(T) / (number_incoming_particles(proc) + number_outgoing_particles(proc))
 end
 
 """
@@ -72,7 +72,7 @@ function _groundtruth_unsafe_probability(
 ) where {I,O}
     mat_el = _groundtruth_matrix_element(in_ps, out_ps)
     mat_el_sq = abs2.(mat_el)
-    normalization = _groundtruth_averaging_norm(proc)
+    normalization = _groundtruth_averaging_norm(proc; T=eltype(eltype(in_ps)))
     ps_fac = _groundtruth_phase_space_factor(in_ps, out_ps)
 
     return sum(mat_el_sq) * ps_fac * normalization
@@ -83,7 +83,7 @@ function _groundtruth_unsafe_probability(
     in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_unsafe_probability(proc, in_ps, view(out_ps, :, i))
@@ -96,7 +96,7 @@ function _groundtruth_unsafe_probability(
     in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_unsafe_probability(proc, view(in_ps, :, i), out_ps)
@@ -109,7 +109,7 @@ function _groundtruth_unsafe_probability(
     in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)
@@ -194,7 +194,7 @@ function _groundtruth_unsafe_diffCS(
     in_ps::AbstractVector{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Vector{RES_TYPE}(undef, size(out_ps, 2))
     for i in 1:size(out_ps, 2)
         res[i] = _groundtruth_unsafe_diffCS(proc, in_ps, view(out_ps, :, i))
@@ -207,7 +207,7 @@ function _groundtruth_unsafe_diffCS(
     in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractVector{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Vector{RES_TYPE}(undef, size(in_ps, 2))
     for i in 1:size(in_ps, 2)
         res[i] = _groundtruth_unsafe_diffCS(proc, view(in_ps, :, i), out_ps)
@@ -220,7 +220,7 @@ function _groundtruth_unsafe_diffCS(
     in_ps::AbstractMatrix{NTuple{I,<:AbstractMockMomentum}},
     out_ps::AbstractMatrix{NTuple{O,<:AbstractMockMomentum}},
 ) where {I,O}
-    RES_TYPE = momentum_eltype(eltype(in_ps))
+    RES_TYPE = eltype(eltype(eltype(in_ps)))
     res = Matrix{RES_TYPE}(undef, size(in_ps, 2), size(out_ps, 2))
     for i in 1:size(in_ps, 2)
         for j in 1:size(out_ps, 2)

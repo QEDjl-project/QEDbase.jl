@@ -50,7 +50,7 @@ interface functions need to be implemented for every combination of `CustomProce
 
     _matrix_element(psp::PhaseSpacePoint{CustomProcess,CustomModel})
 
-    _averaging_norm(proc::CustomProcess)
+    _averaging_norm(proc::CustomProcess; T::Type=Float64)
 
     _is_in_phasespace(psp::PhaseSpacePoint{CustomProcess,CustomModel})
 
@@ -144,9 +144,14 @@ Interface function which returns a tuple of scattering matrix elements for each 
 function _matrix_element end
 
 """
-    _averaging_norm(proc::AbstractProcessDefinition)
+    _averaging_norm(proc::AbstractProcessDefinition; T::Type=Float64)::T
 
 Interface function, which returns a normalization for the averaging of the squared matrix elements over spins and polarizations.
+The return type should be of type `T`.
+
+!!! note
+    The correct return type can't be inferred from input types here because `AbstractProcessDefinition`s are agnostic to the
+    four-momenta types used with them. Therefore, a parameter is necessary.
 """
 function _averaging_norm end
 
