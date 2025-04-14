@@ -32,8 +32,8 @@ struct MockMomentum{T} <: AbstractMockMomentum{T}
 end
 
 function StaticArrays.similar_type(
-    ::Type{A}, ::Type{T}, ::Size{S}
-) where {A<:MockMomentum,T,S}
+        ::Type{A}, ::Type{T}, ::Size{S}
+    ) where {A <: MockMomentum, T, S}
     return MockMomentum{T}
 end
 
@@ -71,8 +71,8 @@ mutable struct MockMomentumMutable{T} <: AbstractMockMomentum{T}
 end
 
 function StaticArrays.similar_type(
-    ::Type{A}, ::Type{T}, ::Size{S}
-) where {A<:MockMomentumMutable,T,S}
+        ::Type{A}, ::Type{T}, ::Size{S}
+    ) where {A <: MockMomentumMutable, T, S}
     return MockMomentumMutable{T}
 end
 

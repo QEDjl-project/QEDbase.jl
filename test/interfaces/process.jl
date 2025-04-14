@@ -7,8 +7,8 @@ ATOL = 0.0
 RTOL = sqrt(eps())
 
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
-    (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
-)
+        (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
+    )
     INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
     OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 
@@ -44,8 +44,8 @@ RTOL = sqrt(eps())
         @test @inferred number_particles(TESTPROC, Outgoing()) == N_OUTGOING
 
         @testset "$dir $species" for (dir, species) in Iterators.product(
-            (Incoming(), Outgoing()), Mocks.PARTICLE_SET
-        )
+                (Incoming(), Outgoing()), Mocks.PARTICLE_SET
+            )
             @testset "$MOM_EL_TYPE" for MOM_EL_TYPE in (Float16, Float32, Float64)
                 MOM_TYPE = MockMomentum{MOM_EL_TYPE}
                 groundtruth_particle_count = count(
@@ -83,10 +83,12 @@ RTOL = sqrt(eps())
         @test @inferred spin_pols(TESTPROC, Incoming()) == groundtruth_incoming_spin_pols
         @test @inferred spin_pols(TESTPROC, Outgoing()) == groundtruth_outgoing_spin_pols
 
-        for (pt, sp) in Iterators.flatten((
-            Iterators.zip(incoming_particles(TESTPROC), incoming_spin_pols(TESTPROC)),
-            Iterators.zip(outgoing_particles(TESTPROC), outgoing_spin_pols(TESTPROC)),
-        ))
+        for (pt, sp) in Iterators.flatten(
+                (
+                    Iterators.zip(incoming_particles(TESTPROC), incoming_spin_pols(TESTPROC)),
+                    Iterators.zip(outgoing_particles(TESTPROC), outgoing_spin_pols(TESTPROC)),
+                )
+            )
             @test is_boson(pt) ? sp isa AbstractPolarization : true
             @test is_fermion(pt) ? sp isa AbstractSpin : true
             @test is_boson(pt) || is_fermion(pt)

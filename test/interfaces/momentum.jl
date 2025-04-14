@@ -65,7 +65,7 @@ lorentz_setter = [
 
 @testset "LorentzVectorInterface" begin
     @testset "CustomType" begin
-        @test hasmethod(minkowski_dot, Tuple{MockMomentum,MockMomentum})
+        @test hasmethod(minkowski_dot, Tuple{MockMomentum, MockMomentum})
 
         for fun in lorentz_getter
             @test hasmethod(fun, Tuple{MockMomentum})
@@ -74,7 +74,7 @@ lorentz_setter = [
 
     @testset "MutableCustomType" begin
         for fun in lorentz_setter
-            @test hasmethod(fun, Tuple{MockMomentumMutable,<:Union{}})
+            @test hasmethod(fun, Tuple{MockMomentumMutable, <:Union{}})
         end
     end
 end # LorentzVectorInterface

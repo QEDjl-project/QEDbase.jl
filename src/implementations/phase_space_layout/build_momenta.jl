@@ -1,4 +1,3 @@
-
 #############
 # Implementations: Phase space layout
 #############
@@ -23,11 +22,11 @@ number of coordinates against the phase space dimensionality.
     reasons, it is recommended to return a `Tuple` of four-momenta.
 """
 function build_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    in_psl::AbstractInPhaseSpaceLayout,
-    in_coords::Tuple,
-)
+        proc::AbstractProcessDefinition,
+        model::AbstractModelDefinition,
+        in_psl::AbstractInPhaseSpaceLayout,
+        in_coords::Tuple,
+    )
     _check_phase_space_dimension(Val(phase_space_dimension(proc, model, in_psl)), in_coords)
     return _build_momenta(proc, model, in_psl, in_coords)
 end
@@ -55,11 +54,11 @@ a single coordinate to define the particle momenta.
 
 """
 function build_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    in_psl::AbstractInPhaseSpaceLayout,
-    in_coords::Real,
-)
+        proc::AbstractProcessDefinition,
+        model::AbstractModelDefinition,
+        in_psl::AbstractInPhaseSpaceLayout,
+        in_coords::Real,
+    )
     return build_momenta(proc, model, in_psl, (in_coords,))
 end
 
@@ -68,12 +67,12 @@ end
 # this only exists, since the constructor of `QEDcore.PhaseSpacePoint` calls it and not
 # build_momenta(...) without the underscore
 function _build_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    out_psl::AbstractOutPhaseSpaceLayout,
-    in_coords::NTuple{Ncin,T},
-    out_coords::NTuple{Ncout,T},
-) where {Ncin,Ncout,T<:Real}
+        proc::AbstractProcessDefinition,
+        model::AbstractModelDefinition,
+        out_psl::AbstractOutPhaseSpaceLayout,
+        in_coords::NTuple{Ncin, T},
+        out_coords::NTuple{Ncout, T},
+    ) where {Ncin, Ncout, T <: Real}
     in_moms = _build_momenta(proc, model, in_phase_space_layout(out_psl), in_coords)
     return in_moms, _build_momenta(proc, model, in_moms, out_psl, out_coords)
 end
@@ -99,12 +98,12 @@ consistent with the physics model in use.
     reasons, it is recommened to return a `Tuple` of four-momenta.
 """
 function build_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    in_moms::NTuple{NIN,<:AbstractFourMomentum},
-    out_psl::AbstractOutPhaseSpaceLayout,
-    out_coords::NTuple{Nc,T},
-) where {Nc,NIN,T}
+        proc::AbstractProcessDefinition,
+        model::AbstractModelDefinition,
+        in_moms::NTuple{NIN, <:AbstractFourMomentum},
+        out_psl::AbstractOutPhaseSpaceLayout,
+        out_coords::NTuple{Nc, T},
+    ) where {Nc, NIN, T}
     _check_number_of_momenta(Val(number_incoming_particles(proc)), in_moms)
     _check_phase_space_dimension(
         Val(phase_space_dimension(proc, model, out_psl)), out_coords
@@ -113,12 +112,12 @@ function build_momenta(
 end
 
 function build_momenta(
-    proc::AbstractProcessDefinition,
-    model::AbstractModelDefinition,
-    out_psl::AbstractOutPhaseSpaceLayout,
-    in_coords::NTuple{Ncin,T},
-    out_coords::NTuple{Ncout,T},
-) where {Ncin,Ncout,T}
+        proc::AbstractProcessDefinition,
+        model::AbstractModelDefinition,
+        out_psl::AbstractOutPhaseSpaceLayout,
+        in_coords::NTuple{Ncin, T},
+        out_coords::NTuple{Ncout, T},
+    ) where {Ncin, Ncout, T}
     _check_phase_space_dimension(
         Val(phase_space_dimension(proc, model, in_phase_space_layout(out_psl))),
         Val(phase_space_dimension(proc, model, out_psl)),

@@ -4,7 +4,7 @@ $(SIGNATURES)
 Wrapper around `Base.hasmethod` with a more meaningful error message in the context of function registration.
 """
 function _hasmethod_registry(fun::Function, ::Type{T}) where {T}
-    @argcheck hasmethod(fun, Tuple{T}) RegistryError(fun, T)
+    return @argcheck hasmethod(fun, Tuple{T}) RegistryError(fun, T)
 end
 
 @traitdef IsLorentzVectorLike{T}
@@ -28,10 +28,10 @@ function register_LorentzVectorLike(T::Type)
 
     @eval @traitimpl IsLorentzVectorLike{$T}
 
-    if hasmethod(setT!, Tuple{T,<:Union{}}) &&
-        hasmethod(setX!, Tuple{T,<:Union{}}) &&
-        hasmethod(setY!, Tuple{T,<:Union{}}) &&
-        hasmethod(setZ!, Tuple{T,<:Union{}})
+    if hasmethod(setT!, Tuple{T, <:Union{}}) &&
+            hasmethod(setX!, Tuple{T, <:Union{}}) &&
+            hasmethod(setY!, Tuple{T, <:Union{}}) &&
+            hasmethod(setZ!, Tuple{T, <:Union{}})
         @eval @traitimpl IsMutableLorentzVectorLike{$T}
     end
     return nothing

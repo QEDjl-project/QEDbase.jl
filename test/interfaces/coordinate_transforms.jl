@@ -36,9 +36,9 @@ TESTMODEL = MockModel()
 
     @testset "phase space points" begin
         @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in
-                                                 Iterators.product(
-            (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
-        )
+            Iterators.product(
+                (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
+            )
             INCOMING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_INCOMING))
             OUTGOING_PARTICLES = Tuple(rand(RNG, Mocks.PARTICLE_SET, N_OUTGOING))
 

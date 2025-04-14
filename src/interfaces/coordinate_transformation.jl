@@ -73,15 +73,15 @@ function _transform end
 end
 
 @inline function (trafo::AbstractCoordinateTransformation)(
-    psf::PSF
-) where {PSF<:AbstractParticleStateful}
+        psf::PSF
+    ) where {PSF <: AbstractParticleStateful}
     p_prime = _transform(trafo, momentum(psf))
     return PSF(p_prime)
 end
 
 @inline function (trafo::AbstractCoordinateTransformation)(
-    psp::PSP
-) where {PSP<:AbstractPhaseSpacePoint}
+        psp::PSP
+    ) where {PSP <: AbstractPhaseSpacePoint}
     in_moms = momenta(psp, Incoming())
     out_moms = momenta(psp, Outgoing())
     in_moms_prime = _transform.(trafo, in_moms)

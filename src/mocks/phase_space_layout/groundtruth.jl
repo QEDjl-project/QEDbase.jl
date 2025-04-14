@@ -1,12 +1,11 @@
-
 """
     _groundtruth_in_moms(in_coords,mom_type)
 
 Mock implementation for building incoming momenta. Maps all components into four momenta.
 """
 function _groundtruth_in_moms(
-    in_coords, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractMockMomentum}
+        in_coords, mom_type::Type{MOM_TYPE}
+    ) where {MOM_TYPE <: AbstractMockMomentum}
     n = Int(length(in_coords) / 4)
     return NTuple{n}(map(mom_type, Iterators.partition(in_coords, 4)))
 end
@@ -18,8 +17,8 @@ Mock implementation for building outgoing momenta. Maps all components into four
 the last momentum via energy momentum conservation.
 """
 function _groundtruth_out_moms(
-    in_moms, out_coords, mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractMockMomentum}
+        in_moms, out_coords, mom_type::Type{MOM_TYPE}
+    ) where {MOM_TYPE <: AbstractMockMomentum}
     Ptot = sum(in_moms)
     n = Int(length(out_coords) / 4)
     if length(out_coords) == 0

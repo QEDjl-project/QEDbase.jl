@@ -27,11 +27,11 @@ Furthermore, an implementation of an [`AbstractPhaseSpacePoint`](@ref) has to ve
 If `IN_PARTICLES` is non-empty, `AbstractPhaseSpacePoint <: AbstractInPhaseSpacePoint` is true. Likewise, if `OUT_PARTICLES` is non-empty, `AbstractPhaseSpacePoint <: AbstractOutPhaseSpacePoint` is true. Consequently, if both `IN_PARTICLES` and `OUT_PARTICLES` are non-empty, both `<:` statements are true.
 """
 abstract type AbstractPhaseSpacePoint{
-    PROC<:AbstractProcessDefinition,
-    MODEL<:AbstractModelDefinition,
-    PSL<:AbstractPhaseSpaceLayout,
-    IN_PARTICLES<:Tuple{Vararg{AbstractParticleStateful}},
-    OUT_PARTICLES<:Tuple{Vararg{AbstractParticleStateful}},
+    PROC <: AbstractProcessDefinition,
+    MODEL <: AbstractModelDefinition,
+    PSL <: AbstractPhaseSpaceLayout,
+    IN_PARTICLES <: Tuple{Vararg{AbstractParticleStateful}},
+    OUT_PARTICLES <: Tuple{Vararg{AbstractParticleStateful}},
 } end
 
 """
@@ -68,9 +68,9 @@ A partial type specialization on [`AbstractPhaseSpacePoint`](@ref) which can be 
 
 See also: [`AbstractOutPhaseSpacePoint`](@ref)
 """
-AbstractInPhaseSpacePoint{P,M,D,IN,OUT} = AbstractPhaseSpacePoint{
-    P,M,D,IN,OUT
-} where {PS<:AbstractParticleStateful,IN<:Tuple{PS,Vararg},OUT<:Tuple{Vararg}}
+AbstractInPhaseSpacePoint{P, M, D, IN, OUT} = AbstractPhaseSpacePoint{
+    P, M, D, IN, OUT,
+} where {PS <: AbstractParticleStateful, IN <: Tuple{PS, Vararg}, OUT <: Tuple{Vararg}}
 
 """
     AbstractOutPhaseSpacePoint
@@ -79,6 +79,6 @@ A partial type specialization on [`AbstractPhaseSpacePoint`](@ref) which can be 
 
 See also: [`AbstractInPhaseSpacePoint`](@ref)
 """
-AbstractOutPhaseSpacePoint{P,M,D,IN,OUT} = AbstractPhaseSpacePoint{
-    P,M,D,IN,OUT
-} where {PS<:AbstractParticleStateful,IN<:Tuple{Vararg},OUT<:Tuple{PS,Vararg}}
+AbstractOutPhaseSpacePoint{P, M, D, IN, OUT} = AbstractPhaseSpacePoint{
+    P, M, D, IN, OUT,
+} where {PS <: AbstractParticleStateful, IN <: Tuple{Vararg}, OUT <: Tuple{PS, Vararg}}

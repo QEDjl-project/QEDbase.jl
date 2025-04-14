@@ -1,4 +1,4 @@
-struct OnshellError{M,T} <: Exception
+struct OnshellError{M, T} <: Exception
     mom::M
     mass::T
 end
@@ -6,7 +6,7 @@ end
 function Base.showerror(io::IO, e::OnshellError)
     return print(
         io,
-        "OnshellError: The momentum $(e.mom) is not onshell w.r.t. the mass $(e.mass).\n mom*mom = $(e.mom*e.mom)",
+        "OnshellError: The momentum $(e.mom) is not onshell w.r.t. the mass $(e.mass).\n mom*mom = $(e.mom * e.mom)",
     )
 end
 
