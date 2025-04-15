@@ -21,7 +21,7 @@ export setTransverseMomentum!, setPerp!, setPt!
 export setTransverseMass!, setMt!
 export setRapidity!
 
-export AbstractLorentzVector, dot
+export AbstractLorentzVector
 export AbstractFourMomentum
 export isonshell, assert_onshell
 
