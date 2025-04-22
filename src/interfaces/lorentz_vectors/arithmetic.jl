@@ -62,7 +62,7 @@ Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum 
 
 """
 @inline @traitfn function getMagnitude2(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return getX(lv)^2 + getY(lv)^2 + getZ(lv)^2
+    return hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """
@@ -86,7 +86,7 @@ Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spa
 
 """
 @inline @traitfn function getMagnitude(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return sqrt(getMagnitude2(lv))
+    return hypot(getX(lv), getY(lv), getZ(lv))
 end
 
 """
@@ -106,7 +106,7 @@ Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minko
 
 """
 @inline @traitfn function getInvariantMass2(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return minkowski_dot(lv, lv)
+    return getT(lv)^2 - hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """Function alias for [`getInvariantMass2`](@ref)"""
@@ -277,7 +277,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitu
 
 """
 @inline @traitfn function getTransverseMomentum(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return sqrt(getTransverseMomentum2(lv))
+    return hypot(getX(lv), getY(lv))
 end
 """Function alias for [`getTransverseMomentum`](@ref)."""
 const getPt = getTransverseMomentum
