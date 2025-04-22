@@ -3,7 +3,7 @@
 
 Abstract base type for four-momentas, representing one energy and three spacial components.
 
-Also see: [`QEDcore.SFourMomentum`](@extref), [`QEDcore.MFourMomentum`](@extref)
+Also see: [`QEDcore.SFourMomentum`](@extref)
 """
 abstract type AbstractFourMomentum{T_ELEM <: Real} <: AbstractLorentzVector{T_ELEM} end
 
