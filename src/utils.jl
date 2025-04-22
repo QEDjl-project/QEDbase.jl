@@ -22,21 +22,26 @@ Return a split of the given string delimited at the upper case letters in the st
     return split(s, r"(?=[A-Z])")
 end
 
-"""
-    _precise_sum(::Type{T}, in::NTuple{N, T})
-
-Calculate the sum of the values in a tuple, with error correction applied (using a simple unrolled Kahan summation algorithm).
-
-!!! note
-    This relies on fast-math optimizations being turned off.
-"""
-@inline _precise_sum(::Type{T}, in::Tuple{}; sum = zero(T), error = zero(T)) where {T} = sum + error
-@inline function _precise_sum(::Type{T}, in::Tuple{T, Vararg{T, N}}; sum = zero(T), error = zero(T)) where {N, T <: Number}
+@inline _precise_sum_helper(in::Tuple{}, sum::T, error::T) where {T} = sum + error
+@inline function _precise_sum_helper(in::Tuple{T, Vararg{T, N}}, sum::T, error::T) where {N, T <: Number}
     y = in[1] - error
     t = sum + y
     z = t - sum
     error = z - y
     sum = t
 
-    return _precise_sum(T, in[2:end]; sum = sum, error = error)
+    return _precise_sum_helper(in[2:end], sum, error)
+end
+
+
+"""
+    _precise_sum(in::NTuple{N, T})
+
+Calculate the sum of the values in a tuple, with error correction applied (using a simple unrolled Kahan summation algorithm).
+
+!!! note
+    This relies on fast-math optimizations being turned off.
+"""
+@inline function _precise_sum(in::NTuple{N, T}) where {N, T}
+    return _precise_sum_helper(in, zero(T), zero(T))
 end

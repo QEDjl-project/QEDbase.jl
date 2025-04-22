@@ -32,7 +32,6 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
     # use a precise sum here because in many applications
     # the result will be close to zero
     return _precise_sum(
-        eltype(x1),
         (
             getT(x1) * getT(x2),
             -getX(x1) * getX(x2),
