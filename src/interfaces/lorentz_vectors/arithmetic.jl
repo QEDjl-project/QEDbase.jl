@@ -29,8 +29,17 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
 @inline @traitfn function minkowski_dot(
         x1::T1, x2::T2
     ) where {T1, T2; IsLorentzVectorLike{T1}, IsLorentzVectorLike{T2}}
-    return getT(x1) * getT(x2) -
-        (getX(x1) * getX(x2) + getY(x1) * getY(x2) + getZ(x1) * getZ(x2))
+    # use a precise sum here because in many applications
+    # the result will be close to zero
+    return _precise_sum(
+        eltype(x1),
+        (
+            getT(x1) * getT(x2),
+            -getX(x1) * getX(x2),
+            -getY(x1) * getY(x2),
+            -getZ(x1) * getZ(x2),
+        )
+    )
 end
 
 """
