@@ -1,10 +1,16 @@
 """
     momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)
+    momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, ::Val{N}) where {N}
 
 Returns the momentum of the `n`th particle in the given [`AbstractPhaseSpacePoint`](@ref) which has direction `dir`. If `n` is outside the valid range for this phase space point, a `BoundsError` is thrown.
 """
 function momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, n::Int)
     return momentum(psp[dir, n])
+end
+function momentum(psp::AbstractPhaseSpacePoint, dir::ParticleDirection, ::Val{N}) where {N}
+    @assert N > 0 "requested $dir particle $N of process $(process(psp)), but N must be at least 1"
+    @assert N <= number_particles(process(psp), dir) "requested $dir particle $N of process $(process(psp)), but only $(number_particles(process(psp), dir)) are available"
+    return @inbounds momenta(psp, dir)[N]
 end
 
 function _momentum_helper(particles::Tuple{}, species::SPECIES, n::Val{N}) where {SPECIES, N}

@@ -28,6 +28,20 @@ RNG = MersenneTwister(137137)
         end
 
         @testset "momentum implementations" begin
+            @test @inferred momentum(PSP, Incoming(), 1) == IN_PS[1]
+            @test @inferred momentum(PSP, Incoming(), 2) == IN_PS[2]
+            @test @inferred momentum(PSP, Incoming(), 3) == IN_PS[3]
+            @test @inferred momentum(PSP, Outgoing(), 1) == OUT_PS[1]
+            @test @inferred momentum(PSP, Outgoing(), 2) == OUT_PS[2]
+            @test @inferred momentum(PSP, Outgoing(), 3) == OUT_PS[3]
+
+            @test @inferred momentum(PSP, Incoming(), Val(1)) == IN_PS[1]
+            @test @inferred momentum(PSP, Incoming(), Val(2)) == IN_PS[2]
+            @test @inferred momentum(PSP, Incoming(), Val(3)) == IN_PS[3]
+            @test @inferred momentum(PSP, Outgoing(), Val(1)) == OUT_PS[1]
+            @test @inferred momentum(PSP, Outgoing(), Val(2)) == OUT_PS[2]
+            @test @inferred momentum(PSP, Outgoing(), Val(3)) == OUT_PS[3]
+
             @test @inferred momentum(PSP, Incoming(), MockBoson(), 1) == IN_PS[1]
             @test @inferred momentum(PSP, Incoming(), MockFermion(), 1) == IN_PS[2]
             @test @inferred momentum(PSP, Incoming(), MockFermion()) == IN_PS[2]
@@ -64,6 +78,10 @@ RNG = MersenneTwister(137137)
             @test_throws InvalidInputError momentum(PSP, Outgoing(), MockFermion())
 
             # same for Val() overloads
+            @test_throws AssertionError momentum(PSP, Incoming(), Val(0))
+            @test_throws AssertionError momentum(PSP, Outgoing(), Val(0))
+            @test_throws AssertionError momentum(PSP, Incoming(), Val(4))
+            @test_throws AssertionError momentum(PSP, Outgoing(), Val(4))
             @test_throws BoundsError momentum(PSP, Incoming(), MockBoson(), Val(0))
             @test_throws BoundsError momentum(PSP, Outgoing(), MockFermion(), Val(0))
             @test_throws BoundsError momentum(PSP, Incoming(), MockFermion(), Val(2))
