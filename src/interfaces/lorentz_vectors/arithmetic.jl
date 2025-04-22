@@ -31,7 +31,7 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
     ) where {T1, T2; IsLorentzVectorLike{T1}, IsLorentzVectorLike{T2}}
     # use a precise sum here because in many applications
     # the result will be close to zero
-    return _precise_sum(
+    return sum(
         (
             getT(x1) * getT(x2),
             -getX(x1) * getX(x2),
