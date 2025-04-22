@@ -1,9 +1,7 @@
-import Base: *
-
 function dot(p1::T1, p2::T2) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return mdot(p1, p2)
 end
-@inline function *(
+@inline function Base.:*(
         p1::T1, p2::T2
     ) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return dot(p1, p2)
