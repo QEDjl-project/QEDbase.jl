@@ -23,7 +23,7 @@ Return a split of the given string delimited at the upper case letters in the st
 end
 
 @inline _precise_sum_helper(in::Tuple{}, sum::T, error::T) where {T} = sum + error
-@inline function _precise_sum_helper(in::Tuple{T, Vararg{T, N}}, sum::T, error::T) where {N, T <: Number}
+@inline function _precise_sum_helper(in::Tuple{T, Vararg{T, N}}, sum::T, error::T) where {N, T}
     y = in[1] - error
     t = sum + y
     z = t - sum
