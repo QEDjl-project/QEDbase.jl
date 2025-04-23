@@ -14,13 +14,18 @@ generate_pipeline:
     - apt update && apt install -y git
     - git clone --depth 1 -b $CI_GIT_CI_TOOLS_BRANCH $CI_GIT_CI_TOOLS_URL /generator
     - julia --project=/generator/.ci/CI -e 'import Pkg; Pkg.instantiate()'
-    - julia --project=/generator/.ci/CI /generator/.ci/CI/src/Bootloader.jl --output-cpu=cpu_pipeline.yaml --output-gpu=gpu_pipeline.yaml
+    - julia --project=/generator/.ci/CI /generator/.ci/CI/src/Bootloader.jl
+      --output-cpu=cpu_pipeline.yaml
+      --output-gpu=gpu_pipeline.yaml
+      --output-unit-test-verify=unit_verify.yaml
     - cat $CI_PROJECT_DIR/cpu_pipeline.yaml
     - cat $CI_PROJECT_DIR/gpu_pipeline.yaml
+    - cat $CI_PROJECT_DIR/unit_verify.yaml
   artifacts:
     paths:
       - cpu_pipeline.yaml
       - gpu_pipeline.yaml
+      - unit_verify.yaml
     expire_in: 1 week
   interruptible: true
   tags:
@@ -39,5 +44,13 @@ gpu_tests:
   trigger:
     include:
       - artifact: gpu_pipeline.yaml
+        job: generate_pipeline
+    strategy: depend
+
+verify_unit_test_env_vars:
+  stage: run
+  trigger:
+    include:
+      - artifact: unit_verify.yaml
         job: generate_pipeline
     strategy: depend
