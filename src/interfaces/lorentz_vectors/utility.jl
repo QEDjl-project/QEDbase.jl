@@ -5,9 +5,7 @@
 #######
 
 function isonshell(mom::QEDbase.AbstractLorentzVector{T}) where {T <: Real}
-    mag2 = getMag2(mom)
-    E = getE(mom)
-    return isapprox(E^2, mag2; rtol = eps(T))
+    return isapprox(getE(mom), getMag(mom); rtol = 8 * eps(T))
 end
 
 """
@@ -25,9 +23,8 @@ function isonshell(mom::QEDbase.AbstractLorentzVector{T}, mass::Real) where {T <
     if iszero(mass)
         return isonshell(mom)
     end
-    mag2 = getMag2(mom)
-    E = getE(mom)
-    return isapprox(E^2, (mass)^2 + mag2; atol = 2 * eps(T), rtol = eps(T))
+
+    return isapprox(getE(mom), hypot(mass, getX(mom), getY(mom), getZ(mom)); rtol = 8 * eps(T))
 end
 
 """

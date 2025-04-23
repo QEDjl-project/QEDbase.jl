@@ -1,9 +1,7 @@
-import Base: *
-
 function dot(p1::T1, p2::T2) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return mdot(p1, p2)
 end
-@inline function *(
+@inline function Base.:*(
         p1::T1, p2::T2
     ) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return dot(p1, p2)
@@ -29,8 +27,16 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
 @inline @traitfn function minkowski_dot(
         x1::T1, x2::T2
     ) where {T1, T2; IsLorentzVectorLike{T1}, IsLorentzVectorLike{T2}}
-    return getT(x1) * getT(x2) -
-        (getX(x1) * getX(x2) + getY(x1) * getY(x2) + getZ(x1) * getZ(x2))
+    # use a precise sum here because in many applications
+    # the result will be close to zero
+    return sum(
+        (
+            getT(x1) * getT(x2),
+            -getX(x1) * getX(x2),
+            -getY(x1) * getY(x2),
+            -getZ(x1) * getZ(x2),
+        )
+    )
 end
 
 """
@@ -54,7 +60,7 @@ Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum 
 
 """
 @inline @traitfn function getMagnitude2(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return getX(lv)^2 + getY(lv)^2 + getZ(lv)^2
+    return hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """
@@ -78,7 +84,7 @@ Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spa
 
 """
 @inline @traitfn function getMagnitude(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return sqrt(getMagnitude2(lv))
+    return hypot(getX(lv), getY(lv), getZ(lv))
 end
 
 """
@@ -98,7 +104,7 @@ Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minko
 
 """
 @inline @traitfn function getInvariantMass2(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return minkowski_dot(lv, lv)
+    return getT(lv)^2 - hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """Function alias for [`getInvariantMass2`](@ref)"""
@@ -269,7 +275,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitu
 
 """
 @inline @traitfn function getTransverseMomentum(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return sqrt(getTransverseMomentum2(lv))
+    return hypot(getX(lv), getY(lv))
 end
 """Function alias for [`getTransverseMomentum`](@ref)."""
 const getPt = getTransverseMomentum
