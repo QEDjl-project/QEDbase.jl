@@ -4,6 +4,8 @@ using QEDbase.Mocks
 
 RNG = MersenneTwister(137137)
 
+_broadcast_test(x::AbstractPhaseSpaceLayout) = x
+
 @testset "($N_INCOMING,$N_OUTGOING)" for (N_INCOMING, N_OUTGOING) in Iterators.product(
         (1, rand(RNG, 2:8)), (1, rand(RNG, 2:8))
     )
@@ -33,6 +35,11 @@ RNG = MersenneTwister(137137)
         groundtruth_out_moms = Mocks._groundtruth_out_moms(
             test_in_moms, TESTOUTCOORDS, MOM_TYPE
         )
+
+        @testset "scalar broadcast" begin
+            @test _broadcast_test.(TESTINPSL) == TESTINPSL
+            @test _broadcast_test.(TESTOUTPSL) == TESTOUTPSL
+        end
 
         @testset "build momenta" begin
             @testset "in-phase-space layout" begin
