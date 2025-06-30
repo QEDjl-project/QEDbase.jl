@@ -10,6 +10,8 @@ a phase space layout in a scattering process.
     of independent phase space coordinates needed to build the momenta.
 """
 abstract type AbstractPhaseSpaceLayout end
+Base.broadcastable(psl::AbstractPhaseSpaceLayout) = Ref(psl)
+
 
 """
 
