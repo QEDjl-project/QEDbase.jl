@@ -124,6 +124,8 @@ function momenta(psp::AbstractPhaseSpacePoint, dir::ParticleDirection)
     return ntuple(i -> momentum(psp[dir, i]), number_particles(process(psp), dir))
 end
 
+momenta(psp::AbstractPhaseSpacePoint) = (momenta(psp, Incoming())..., momenta(psp, Outgoing())...)
+
 """
     momentum_type(psp::Type{AbstractPhaseSpacePoint})
 
