@@ -1,16 +1,16 @@
 ### Trivial phase-space layouts
 
 # maps all components onto four momenta
-struct MockInPhaseSpaceLayout{MOM_TYPE<:AbstractMockMomentum} <:
-       QEDbase.AbstractInPhaseSpaceLayout end
+struct MockInPhaseSpaceLayout{MOM_TYPE <: AbstractMockMomentum} <:
+    QEDbase.AbstractInPhaseSpaceLayout end
 function Base.eltype(
-    ::Type{PSL}
-) where {MOM_TYPE<:AbstractMockMomentum,PSL<:MockInPhaseSpaceLayout{MOM_TYPE}}
+        ::Type{PSL}
+    ) where {MOM_TYPE <: AbstractMockMomentum, PSL <: MockInPhaseSpaceLayout{MOM_TYPE}}
     return MOM_TYPE
 end
 function Base.eltype(
-    ::PSL
-) where {MOM_TYPE<:AbstractMockMomentum,PSL<:MockInPhaseSpaceLayout{MOM_TYPE}}
+        ::PSL
+    ) where {MOM_TYPE <: AbstractMockMomentum, PSL <: MockInPhaseSpaceLayout{MOM_TYPE}}
     return MOM_TYPE
 end
 
@@ -19,36 +19,36 @@ end
 ) = 4 * number_incoming_particles(proc)
 
 @inline function QEDbase._build_momenta(
-    ::MockProcess, ::MockModel, in_psl::MockInPhaseSpaceLayout, in_coords
-)
+        ::MockProcess, ::MockModel, in_psl::MockInPhaseSpaceLayout, in_coords
+    )
     return _groundtruth_in_moms(in_coords, eltype(in_psl))
 end
 
 # maps components of N-1 particles onto four-momenta and uses energy-momentum conservation
-struct MockOutPhaseSpaceLayout{INPSL,MOM_TYPE} <: QEDbase.AbstractOutPhaseSpaceLayout{INPSL}
+struct MockOutPhaseSpaceLayout{INPSL, MOM_TYPE} <: QEDbase.AbstractOutPhaseSpaceLayout{INPSL}
     in_psl::INPSL
 
     function MockOutPhaseSpaceLayout(
-        in_psl::INPSL
-    ) where {MOM_TYPE<:AbstractMockMomentum,INPSL<:MockInPhaseSpaceLayout{MOM_TYPE}}
-        return new{INPSL,MOM_TYPE}(in_psl)
+            in_psl::INPSL
+        ) where {MOM_TYPE <: AbstractMockMomentum, INPSL <: MockInPhaseSpaceLayout{MOM_TYPE}}
+        return new{INPSL, MOM_TYPE}(in_psl)
     end
 end
 
 function MockOutPhaseSpaceLayout(
-    mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractMockMomentum}
+        mom_type::Type{MOM_TYPE}
+    ) where {MOM_TYPE <: AbstractMockMomentum}
     return MockOutPhaseSpaceLayout(MockInPhaseSpaceLayout{MOM_TYPE}())
 end
 
 function Base.eltype(
-    ::Type{PSL}
-) where {MOM_TYPE<:AbstractMockMomentum,INPSL,PSL<:MockOutPhaseSpaceLayout{INPSL,MOM_TYPE}}
+        ::Type{PSL}
+    ) where {MOM_TYPE <: AbstractMockMomentum, INPSL, PSL <: MockOutPhaseSpaceLayout{INPSL, MOM_TYPE}}
     return MOM_TYPE
 end
 function Base.eltype(
-    ::PSL
-) where {MOM_TYPE<:AbstractMockMomentum,INPSL,PSL<:MockOutPhaseSpaceLayout{INPSL,MOM_TYPE}}
+        ::PSL
+    ) where {MOM_TYPE <: AbstractMockMomentum, INPSL, PSL <: MockOutPhaseSpaceLayout{INPSL, MOM_TYPE}}
     return MOM_TYPE
 end
 
@@ -59,12 +59,12 @@ end
 ) = 4 * number_outgoing_particles(proc) - 4
 
 @inline function QEDbase._build_momenta(
-    proc::MockProcess,
-    model::MockModel,
-    in_moms::NTuple{NIN,AbstractFourMomentum},
-    out_psl::MockOutPhaseSpaceLayout,
-    out_coords,
-) where {NIN}
+        proc::MockProcess,
+        model::MockModel,
+        in_moms::NTuple{NIN, AbstractFourMomentum},
+        out_psl::MockOutPhaseSpaceLayout,
+        out_coords,
+    ) where {NIN}
     return _groundtruth_out_moms(in_moms, out_coords, eltype(out_psl))
 end
 
@@ -74,11 +74,11 @@ end
 
 struct MockInPhaseSpaceLayout_FAIL <: QEDbase.AbstractInPhaseSpaceLayout end
 struct MockOutPhaseSpaceLayout_FAIL <:
-       QEDbase.AbstractOutPhaseSpaceLayout{MockInPhaseSpaceLayout}
+    QEDbase.AbstractOutPhaseSpaceLayout{MockInPhaseSpaceLayout}
     in_psl::MockInPhaseSpaceLayout
 end
 function MockOutPhaseSpaceLayout_FAIL(
-    mom_type::Type{MOM_TYPE}
-) where {MOM_TYPE<:AbstractMockMomentum}
+        mom_type::Type{MOM_TYPE}
+    ) where {MOM_TYPE <: AbstractMockMomentum}
     return MockOutPhaseSpaceLayout_FAIL(MockInPhaseSpaceLayout{MOM_TYPE}())
 end

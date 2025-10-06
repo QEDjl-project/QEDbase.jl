@@ -1,4 +1,3 @@
-
 """
     _groundtruth_coord_trafo(p::AbstractMockMomentum)::AbstractMockMomentum
     _groundtruth_coord_trafo(psp::MockPhaseSpacePoint)::MockPhaseSpacePoint

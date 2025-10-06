@@ -2,7 +2,7 @@
     MockProcess(rng,incoming_particles,outgoing_particles)
 
 """
-struct MockProcess{IP<:Tuple,OP<:Tuple} <: AbstractProcessDefinition
+struct MockProcess{IP <: Tuple, OP <: Tuple} <: AbstractProcessDefinition
     incoming_particles::IP
     outgoing_particles::OP
 end
@@ -35,8 +35,8 @@ end
 
 Process for testing with settable spin and polarization.
 """
-struct MockProcessSP{IP<:Tuple,OP<:Tuple,IN_SP<:Tuple,OUT_SP<:Tuple} <:
-       AbstractProcessDefinition
+struct MockProcessSP{IP <: Tuple, OP <: Tuple, IN_SP <: Tuple, OUT_SP <: Tuple} <:
+    AbstractProcessDefinition
     incoming_particles::IP
     outgoing_particles::OP
     incoming_spin_pols::IN_SP
@@ -50,7 +50,7 @@ QEDbase.outgoing_spin_pols(proc::MockProcessSP) = proc.outgoing_spin_pols
 
 # Failing processes
 
-struct MockProcess_FAIL{IP<:Tuple,OP<:Tuple} <: AbstractProcessDefinition
+struct MockProcess_FAIL{IP <: Tuple, OP <: Tuple} <: AbstractProcessDefinition
     incoming_particles::IP
     outgoing_particles::OP
 end
@@ -64,7 +64,7 @@ end
 """
 Mock process with no implemented interface. Should fail every usage except construction.
 """
-struct MockProcess_FAIL_ALL{IP<:Tuple,OP<:Tuple} <: AbstractProcessDefinition
+struct MockProcess_FAIL_ALL{IP <: Tuple, OP <: Tuple} <: AbstractProcessDefinition
     incoming_particles::IP
     outgoing_particles::OP
 end
@@ -79,7 +79,7 @@ end
 Mock process with no implemented interface except the incoming and outgoing particles.
 Should fail every usage except construction of itself and the respective phase space point for given four-momenta.
 """
-struct MockProcess_FAIL_DIFFCS{IP<:Tuple,OP<:Tuple} <: AbstractProcessDefinition
+struct MockProcess_FAIL_DIFFCS{IP <: Tuple, OP <: Tuple} <: AbstractProcessDefinition
     incoming_particles::IP
     outgoing_particles::OP
 end

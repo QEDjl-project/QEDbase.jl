@@ -5,7 +5,7 @@ export MockFermion, MockBoson
 export MockMasslessFermion, MockMasslessBoson
 
 export MockModel, MockModel_FAIL
-export MockProcess, MockProcess_FAIL
+export MockProcess, MockProcessSP, MockProcess_FAIL
 
 export MockInPhaseSpaceLayout, MockInPhaseSpaceLayout_FAIL
 export MockOutPhaseSpaceLayout, MockOutPhaseSpaceLayout_FAIL

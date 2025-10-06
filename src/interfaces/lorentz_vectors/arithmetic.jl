@@ -1,11 +1,9 @@
-import Base: *
-
-function dot(p1::T1, p2::T2) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
+function dot(p1::T1, p2::T2) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return mdot(p1, p2)
 end
-@inline function *(
-    p1::T1, p2::T2
-) where {T1<:AbstractLorentzVector,T2<:AbstractLorentzVector}
+@inline function Base.:*(
+        p1::T1, p2::T2
+    ) where {T1 <: AbstractLorentzVector, T2 <: AbstractLorentzVector}
     return dot(p1, p2)
 end
 
@@ -27,10 +25,18 @@ Return the Minkowski dot product of two `LorentzVectorLike`.
 
 """
 @inline @traitfn function minkowski_dot(
-    x1::T1, x2::T2
-) where {T1,T2;IsLorentzVectorLike{T1}, IsLorentzVectorLike{T2}}
-    return getT(x1) * getT(x2) -
-           (getX(x1) * getX(x2) + getY(x1) * getY(x2) + getZ(x1) * getZ(x2))
+        x1::T1, x2::T2
+    ) where {T1, T2; IsLorentzVectorLike{T1}, IsLorentzVectorLike{T2}}
+    # use a precise sum here because in many applications
+    # the result will be close to zero
+    return sum(
+        (
+            getT(x1) * getT(x2),
+            -getX(x1) * getX(x2),
+            -getY(x1) * getY(x2),
+            -getZ(x1) * getZ(x2),
+        )
+    )
 end
 
 """
@@ -53,8 +59,8 @@ Return the square of the magnitude of a given `LorentzVectorLike`, i.e. the sum 
     This function differs from a similar function for the `TLorentzVector` used in the famous `ROOT` library.
 
 """
-@inline @traitfn function getMagnitude2(lv::T) where {T; IsLorentzVectorLike{T}}
-    return getX(lv)^2 + getY(lv)^2 + getZ(lv)^2
+@inline @traitfn function getMagnitude2(lv::T) where {{T; IsLorentzVectorLike{T}}}
+    return hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """
@@ -77,8 +83,8 @@ Return the magnitude of a given `LorentzVectorLike`, i.e. the euklidian norm spa
     This function differs from a similar function for the `TLorentzVector` used in the famous `ROOT` library.
 
 """
-@inline @traitfn function getMagnitude(lv::T) where {T; IsLorentzVectorLike{T}}
-    return sqrt(getMagnitude2(lv))
+@inline @traitfn function getMagnitude(lv::T) where {{T; IsLorentzVectorLike{T}}}
+    return hypot(getX(lv), getY(lv), getZ(lv))
 end
 
 """
@@ -97,8 +103,8 @@ Return the squared invariant mass of a given `LorentzVectorLike`, i.e. the minko
 
 
 """
-@inline @traitfn function getInvariantMass2(lv::T) where {T; IsLorentzVectorLike{T}}
-    return minkowski_dot(lv, lv)
+@inline @traitfn function getInvariantMass2(lv::T) where {{T; IsLorentzVectorLike{T}}}
+    return getT(lv)^2 - hypot(getX(lv), getY(lv), getZ(lv))^2
 end
 
 """Function alias for [`getInvariantMass2`](@ref)"""
@@ -119,7 +125,7 @@ Return the the invariant mass of a given `LorentzVectorLike`, i.e. the square ro
     If the squared invariant mass `m2` is negative, `-sqrt(-m2)` is returned.
 
 """
-@traitfn function getInvariantMass(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getInvariantMass(lv::T) where {{T; IsLorentzVectorLike{T}}}
     m2 = getInvariantMass2(lv)
     if m2 < zero(m2)
         # Think about including this waring, maybe optional with a global PRINT_WARINGS switch.
@@ -147,7 +153,7 @@ Return the energy component of a given `LorentzVectorLike`, i.e. its 0-component
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `E`.
 
 """
-@inline @traitfn getE(lv::T) where {T; IsLorentzVectorLike{T}} = getT(lv)
+@inline @traitfn getE(lv::T) where {{T; IsLorentzVectorLike{T}}} = getT(lv)
 
 """Function alias for [`getE`](@ref)."""
 const getEnergy = getE
@@ -162,7 +168,7 @@ Return the ``p_x`` component of a given `LorentzVectorLike`, i.e. its 1-componen
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `px`.
 
 """
-@inline @traitfn getPx(lv::T) where {T; IsLorentzVectorLike{T}} = getX(lv)
+@inline @traitfn getPx(lv::T) where {{T; IsLorentzVectorLike{T}}} = getX(lv)
 
 """
     getPy(lv)
@@ -174,7 +180,7 @@ Return the ``p_y`` component of a given `LorentzVectorLike`, i.e. its 2-componen
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `py`.
 
 """
-@inline @traitfn getPy(lv::T) where {T; IsLorentzVectorLike{T}} = getY(lv)
+@inline @traitfn getPy(lv::T) where {{T; IsLorentzVectorLike{T}}} = getY(lv)
 
 """
     getPz(lv)
@@ -186,7 +192,7 @@ Return the ``p_z`` component of a given `LorentzVectorLike`, i.e. its 3-componen
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `pz`.
 
 """
-@inline @traitfn getPz(lv::T) where {T; IsLorentzVectorLike{T}} = getZ(lv)
+@inline @traitfn getPz(lv::T) where {{T; IsLorentzVectorLike{T}}} = getZ(lv)
 
 """
     getBeta(lv)
@@ -198,7 +204,7 @@ Return magnitude of the beta vector for a given `LorentzVectorLike`, i.e. the ma
     If `(E,px,py,pz)` is a `LorentzVectorLike`, this is equivalent to `sqrt(px^2 + py^2 + pz^2)/E`.
 
 """
-@inline @traitfn function getBeta(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getBeta(lv::T) where {{T; IsLorentzVectorLike{T}}}
     if getT(lv) != zero(getT(lv))
         getRho(lv) / getT(lv)
     elseif getRho(lv) == zero(getT(lv))
@@ -222,7 +228,7 @@ Return the relativistic gamma factor for a given `LorentzVectorLike`, i.e. the i
     If `(E,px,py,pz)` is a `LorentzVectorLike` with beta vector `β`, this is equivalent to `1/sqrt(1- β^2)`.
 
 """
-@inline @traitfn function getGamma(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getGamma(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return inv(sqrt(one(getT(lv)) - getBeta(lv)^2))
 end
 
@@ -243,7 +249,7 @@ Return the squared transverse momentum for a given `LorentzVectorLike`, i.e. the
     The transverse components are defined w.r.t. to the 3-axis.
 
 """
-@inline @traitfn function getTransverseMomentum2(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getTransverseMomentum2(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return getX(lv)^2 + getY(lv)^2
 end
 
@@ -268,8 +274,8 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the magnitu
 
 
 """
-@inline @traitfn function getTransverseMomentum(lv::T) where {T; IsLorentzVectorLike{T}}
-    return sqrt(getTransverseMomentum2(lv))
+@inline @traitfn function getTransverseMomentum(lv::T) where {{T; IsLorentzVectorLike{T}}}
+    return hypot(getX(lv), getY(lv))
 end
 """Function alias for [`getTransverseMomentum`](@ref)."""
 const getPt = getTransverseMomentum
@@ -291,7 +297,7 @@ Return the squared transverse mass for a given `LorentzVectorLike`, i.e. the dif
     The transverse components are defined w.r.t. to the 3-axis.
 
 """
-@inline @traitfn function getTransverseMass2(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getTransverseMass2(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return getT(lv)^2 - getZ(lv)^2
 end
 """Function alias for [`getTransverseMass2`](@ref)"""
@@ -316,7 +322,7 @@ Return the transverse momentum for a given `LorentzVectorLike`, i.e. the square 
     If the squared transverse mass `mT2` is negative, `-sqrt(-mT2)` is returned.
 
 """
-@traitfn function getTransverseMass(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getTransverseMass(lv::T) where {{T; IsLorentzVectorLike{T}}}
     mT2 = getTransverseMass2(lv)
     if mT2 < zero(mT2)
         # add optional waring: negative transverse mass -> -sqrt(-mT2) is returned.
@@ -343,7 +349,7 @@ Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `Loren
     The transverse components are defined w.r.t. to the 3-axis.
 
 """
-@inline @traitfn function getRapidity(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getRapidity(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return 0.5 * log((getT(lv) + getZ(lv)) / (getT(lv) - getZ(lv)))
 end
 
@@ -370,10 +376,10 @@ Return the theta angle for a given `LorentzVectorLike`, i.e. the polar angle of 
     The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis.
 
 """
-@inline @traitfn function getTheta(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getTheta(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return if getX(lv) == zero(getX(lv)) &&
-        getY(lv) == zero(getY(lv)) &&
-        getZ(lv) == zero(getZ(lv))
+            getY(lv) == zero(getY(lv)) &&
+            getZ(lv) == zero(getZ(lv))
         zero(getX(lv))
     else
         atan(getTransverseMomentum(lv), getZ(lv))
@@ -390,7 +396,7 @@ Return the cosine of the theta angle for a given `LorentzVectorLike`.
     This is an equivalent but faster version of `cos(getTheta(lv))`; see [`getTheta`](@ref).
 
 """
-@traitfn function getCosTheta(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getCosTheta(lv::T) where {{T; IsLorentzVectorLike{T}}}
     r = getRho(lv)
     return r == zero(getX(lv)) ? one(getX(lv)) : getZ(lv) / r
 end
@@ -409,7 +415,7 @@ Return the phi angle for a given `LorentzVectorLike`, i.e. the azimuthal angle o
     The [spherical coordinates](https://en.wikipedia.org/wiki/Spherical_coordinate_system) are defined w.r.t. to the 3-axis.
 
 """
-@traitfn function getPhi(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getPhi(lv::T) where {{T; IsLorentzVectorLike{T}}}
     n = zero(getX(lv))
     return getX(lv) == n && getY(lv) == n ? n : atan(getY(lv), getX(lv))
 end
@@ -424,7 +430,7 @@ Return the cosine of the phi angle for a given `LorentzVectorLike`.
     This is an equivalent but faster version of `cos(getPhi(lv))`; see [`getPhi`](@ref).
 
 """
-@traitfn function getCosPhi(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getCosPhi(lv::T) where {{T; IsLorentzVectorLike{T}}}
     perp = getPerp(lv)
     return perp == zero(perp) ? one(perp) : getX(lv) / perp
 end
@@ -439,7 +445,7 @@ Return the sine of the phi angle for a given `LorentzVectorLike`.
     This is an equivalent but faster version of `sin(getPhi(lv))`; see [`getPhi`](@ref).
 
 """
-@traitfn function getSinPhi(lv::T) where {T; IsLorentzVectorLike{T}}
+@traitfn function getSinPhi(lv::T) where {{T; IsLorentzVectorLike{T}}}
     perp = getPerp(lv)
     return perp == zero(perp) ? sin(perp) : getY(lv) / perp
 end
@@ -462,10 +468,10 @@ Return the plus component for a given `LorentzVectorLike` in [light-cone coordin
 
 !!! warning
 
-    The definition ``p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+    The definition `p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
 
 """
-@inline @traitfn function getPlus(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getPlus(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return 0.5 * (getT(lv) + getZ(lv))
 end
 
@@ -484,10 +490,10 @@ Return the minus component for a given `LorentzVectorLike` in [light-cone coordi
 
 !!! warning
 
-    The definition ``p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+    The definition `p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
 
 """
-@inline @traitfn function getMinus(lv::T) where {T; IsLorentzVectorLike{T}}
+@inline @traitfn function getMinus(lv::T) where {{T; IsLorentzVectorLike{T}}}
     return 0.5 * (getT(lv) - getZ(lv))
 end
 
@@ -507,7 +513,7 @@ Sets the energy component of a given `LorentzVectorLike` to a given `value`.
     The `value` set with `setE!` is then returned by [`getE`](@ref).
 
 """
-@inline @traitfn function setE!(lv::T, value::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@inline @traitfn function setE!(lv::T, value::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     return setT!(lv, value)
 end
 """Function alias for [`setE!`](@ref)."""
@@ -524,8 +530,8 @@ Sets the 1-component of a given `LorentzVectorLike` to a given `value`.
 
 """
 @inline @traitfn function setPx!(
-    lv::T, value::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, value::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     return setX!(lv, value)
 end
 
@@ -540,8 +546,8 @@ Sets the 2-component of a given `LorentzVectorLike` to a given `value`.
 
 """
 @inline @traitfn function setPy!(
-    lv::T, value::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, value::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     return setY!(lv, value)
 end
 
@@ -556,8 +562,8 @@ Sets the 3-component of a given `LorentzVectorLike` to a given `value`.
 
 """
 @inline @traitfn function setPz!(
-    lv::T, value::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, value::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     return setZ!(lv, value)
 end
 
@@ -573,7 +579,7 @@ Sets the theta angle of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setTheta!` is then returned by [`getTheta`](@ref). Since the theta angle is computed on the call of `getTheta`, the setter `setTheta!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setTheta!(lv::T, theta::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setTheta!(lv::T, theta::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = getSinPhi(lv)
     cphi = getCosPhi(lv)
@@ -596,8 +602,8 @@ Sets the cosine of the theta angle of a `LorentzVectorLike` to a given `value`.
 
 """
 @traitfn function setCosTheta!(
-    lv::T, cos_theta::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, cos_theta::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = getSinPhi(lv)
     cphi = getCosPhi(lv)
@@ -619,7 +625,7 @@ Sets the phi angle of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setPhi!` is then returned by [`getPhi`](@ref). Since the phi angle is computed on the call of `getPhi`, the setter `setPhi!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setPhi!(lv::T, phi::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setPhi!(lv::T, phi::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     rho = getRho(lv)
     sphi = sin(phi)
     cphi = cos(phi)
@@ -642,7 +648,7 @@ Sets the magnitude of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setRho!` is then returned by [`getRho`](@ref). Since the magnitude is computed on the call of `getRho`, the setter `setRho!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setRho!(lv::T, rho::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setRho!(lv::T, rho::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     rho2 = getRho(lv)
     if rho2 != zero(rho2)
         setX!(lv, getX(lv) * rho / rho2)
@@ -665,7 +671,7 @@ Sets the plus component of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setPlus!` is then returned by [`getPlus`](@ref). Since the plus component is computed on the call of `getPlus`, the setter `setPlus!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setPlus!(lv::T, plus::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setPlus!(lv::T, plus::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     old_pminus = getMinus(lv)
     setT!(lv, plus + old_pminus)
     setZ!(lv, plus - old_pminus)
@@ -682,7 +688,7 @@ Sets the minus component of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setMinus!` is then returned by [`getMinus`](@ref). Since the minus component is computed on the call of `getMinus`, the setter `setMinus!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setMinus!(lv::T, minus::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setMinus!(lv::T, minus::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     old_pplus = getPlus(lv)
     setT!(lv, old_pplus + minus)
     setZ!(lv, old_pplus - minus)
@@ -701,8 +707,8 @@ Sets the transverse momentum of a `LorentzVectorLike` to a given `value`.
 
 """
 @traitfn function setTransverseMomentum!(
-    lv::T, pT::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, pT::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     old_pT = getTransverseMomentum(lv)
     if old_pT != zero(old_pT)
         setX!(lv, getX(lv) * pT / old_pT)
@@ -727,8 +733,8 @@ Sets the transverse mass of a `LorentzVectorLike` to a given `value`.
 
 """
 @traitfn function setTransverseMass!(
-    lv::T, mT::VT
-) where {T,VT;IsMutableLorentzVectorLike{T}}
+        lv::T, mT::VT
+    ) where {T, VT; IsMutableLorentzVectorLike{T}}
     old_mT = getTransverseMass(lv)
     if old_mT != zero(old_mT)
         setT!(lv, getT(lv) * mT / old_mT)
@@ -750,7 +756,7 @@ Sets the rapidity of a `LorentzVectorLike` to a given `value`.
     The `value` set with `setRapidity!` is then returned by [`getRapidity`](@ref). Since the rapidity is computed on the call of `setRapidity`, the setter `setRapidity!` changes several components of the given `LorentzVectorLike`.
 
 """
-@traitfn function setRapidity!(lv::T, rap::VT) where {T,VT;IsMutableLorentzVectorLike{T}}
+@traitfn function setRapidity!(lv::T, rap::VT) where {T, VT; IsMutableLorentzVectorLike{T}}
     mT = getTransverseMass(lv)
     setT!(lv, mT * cosh(rap))
     setZ!(lv, mT * sinh(rap))

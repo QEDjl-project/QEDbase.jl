@@ -1,4 +1,3 @@
-
 """
 
     AbstractPhaseSpaceLayout
@@ -11,6 +10,8 @@ a phase space layout in a scattering process.
     of independent phase space coordinates needed to build the momenta.
 """
 abstract type AbstractPhaseSpaceLayout end
+Base.broadcastable(psl::AbstractPhaseSpaceLayout) = Ref(psl)
+
 
 """
 
@@ -47,8 +48,8 @@ allowing consistency between the two configurations in the process.
 - `_build_momenta(proc, model, Ptot::AbstractFourMomentum, out_psl::AbstractOutPhaseSpaceLayout, out_coords::Tuple)`:
     Constructs the momenta for the outgoing particles, ensuring they comply with energy and momentum conservation based on the total incoming four-momentum.
 """
-abstract type AbstractOutPhaseSpaceLayout{IN_PSL<:AbstractInPhaseSpaceLayout} <:
-              AbstractPhaseSpaceLayout end
+abstract type AbstractOutPhaseSpaceLayout{IN_PSL <: AbstractInPhaseSpaceLayout} <:
+AbstractPhaseSpaceLayout end
 """
 
     phase_space_dimension(proc, model, layout::AbstractPhaseSpaceLayout)::Int

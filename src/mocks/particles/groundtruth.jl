@@ -1,4 +1,3 @@
-
 # Numbers just for testing - they have no physical meaning
 
 const _MASS_TEST_FERMION = 1.37

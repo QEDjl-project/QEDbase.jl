@@ -21,7 +21,7 @@ export setTransverseMomentum!, setPerp!, setPt!
 export setTransverseMass!, setMt!
 export setRapidity!
 
-export AbstractLorentzVector, dot
+export AbstractLorentzVector
 export AbstractFourMomentum
 export isonshell, assert_onshell
 
@@ -75,6 +75,7 @@ export build_momenta, phase_space_dimension, in_phase_space_layout
 # Abstract phase space point interface
 export AbstractParticleStateful, AbstractPhaseSpacePoint
 export particle_direction, particle_species, momentum
+export momentum_type, momentum_eltype
 export process, model, phase_space_layout, momenta
 export AbstractInPhaseSpacePoint, AbstractOutPhaseSpacePoint
 
@@ -120,6 +121,7 @@ include("interfaces/phase_space_point.jl")
 
 include("interfaces/coordinate_transformation.jl")
 
+include("implementations/phase_space_layout/checks.jl")
 include("implementations/phase_space_layout/build_momenta.jl")
 
 include("implementations/process/particles.jl")
@@ -132,6 +134,10 @@ include("implementations/cross_section/total_probability.jl")
 include("implementations/cross_section/total_cross_section.jl")
 
 include("implementations/particle/print.jl")
+include("implementations/particle/properties.jl")
+
+include("implementations/particle_stateful/momentum.jl")
+include("implementations/phase_space_point/momenta.jl")
 
 include("mocks/Mocks.jl")
 

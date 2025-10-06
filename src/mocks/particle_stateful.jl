@@ -1,5 +1,4 @@
-
-struct MockParticleStateful{D,P,M} <: AbstractParticleStateful{D,P,M}
+struct MockParticleStateful{D, P, M} <: AbstractParticleStateful{D, P, M}
     dir::D
     part::P
     mom::M
