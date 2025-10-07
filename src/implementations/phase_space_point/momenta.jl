@@ -125,6 +125,15 @@ function momenta(psp::AbstractPhaseSpacePoint, dir::ParticleDirection)
 end
 
 """
+    momenta(psp::AbstractPhaseSpacePoint)
+
+Return a `Tuple` containing all momenta, with incoming momenta listed before outgoing ones.
+"""
+function momenta(psp::AbstractPhaseSpacePoint)
+    return (momenta(psp, Incoming())..., momenta(psp, Outgoing())...)
+end
+
+"""
     momentum_type(psp::Type{AbstractPhaseSpacePoint})
 
 Return the type of the stored momenta in the phase space point.

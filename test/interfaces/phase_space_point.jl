@@ -93,6 +93,8 @@ RNG = MersenneTwister(137137)
         @testset "momenta implementation" begin
             @test IN_PS == @inferred momenta(PSP, Incoming())
             @test OUT_PS == @inferred momenta(PSP, Outgoing())
+            @test @inferred momenta(PSP) == (IN_PS..., OUT_PS...)
         end
+
     end
 end
