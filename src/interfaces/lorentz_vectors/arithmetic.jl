@@ -468,7 +468,7 @@ Return the plus component for a given `LorentzVectorLike` in [light-cone coordin
 
 !!! warning
 
-    The definition ``p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+    The definition `p^+ := (E + p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
 
 """
 @inline @traitfn function getPlus(lv::T) where {{T; IsLorentzVectorLike{T}}}
@@ -490,7 +490,7 @@ Return the minus component for a given `LorentzVectorLike` in [light-cone coordi
 
 !!! warning
 
-    The definition ``p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
+    The definition `p^- := (E - p_z)/2` differs from the usual definition of [light-cone coordinates](https://en.wikipedia.org/wiki/Light-cone_coordinates) in general relativity.
 
 """
 @inline @traitfn function getMinus(lv::T) where {{T; IsLorentzVectorLike{T}}}
