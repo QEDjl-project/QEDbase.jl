@@ -9,7 +9,7 @@
 """
     _matrix_element_square(psp::AbstractPhaseSpacePoint)
 
-Function that returns an `SVector` of squared matrix elements for the given [`PhaseSpacePoint`](@ref).
+Function that returns an `SVector` of squared matrix elements for the given [`AbstractPhaseSpacePoint`](@ref).
 This function has a default implementation that uses [`_matrix_element`](@ref) and can be implemented instead of that function.
 """
 @inline function _matrix_element_square(psp::AbstractPhaseSpacePoint)
@@ -20,7 +20,7 @@ end
 """
     _matrix_element_square_sum(psp::AbstractPhaseSpacePoint)
 
-Function that returns the sum of squared matrix elements for a given [`PhaseSpacePoint`](@ref).
+Function that returns the sum of squared matrix elements for a given [`AbstractPhaseSpacePoint`](@ref).
 This function has a default implementation that uses [`_matrix_element_square`](@ref) and can be implemented instead of that function.
 """
 @inline function _matrix_element_square_sum(psp::AbstractPhaseSpacePoint)
