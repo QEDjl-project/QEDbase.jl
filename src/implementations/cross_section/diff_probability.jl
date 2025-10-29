@@ -6,11 +6,25 @@
 # constraint.
 ############
 
-# convenience function
-# can be overloaded if an analytical version is known
-function _matrix_element_square(psp::AbstractPhaseSpacePoint)
+"""
+    _matrix_element_square(psp::AbstractPhaseSpacePoint)
+
+Function that returns an `SVector` of squared matrix elements for the given [`AbstractPhaseSpacePoint`](@ref).
+This function has a default implementation that uses [`_matrix_element`](@ref) and can be implemented instead of that function.
+"""
+@inline function _matrix_element_square(psp::AbstractPhaseSpacePoint)
     mat_el = _matrix_element(psp)
     return abs2.(mat_el)
+end
+
+"""
+    _matrix_element_square_sum(psp::AbstractPhaseSpacePoint)
+
+Function that returns the sum of squared matrix elements for a given [`AbstractPhaseSpacePoint`](@ref).
+This function has a default implementation that uses [`_matrix_element_square`](@ref) and can be implemented instead of that function.
+"""
+@inline function _matrix_element_square_sum(psp::AbstractPhaseSpacePoint)
+    return sum(_matrix_element_square(psp))
 end
 
 """
@@ -19,13 +33,13 @@ end
 Return differential probability evaluated on a phase space point without checking if the given phase space(s) are physical.
 """
 function unsafe_differential_probability(psp::AbstractPhaseSpacePoint)
-    matrix_elements_sq = _matrix_element_square(psp)
+    matrix_elements_sq_sum = _matrix_element_square_sum(psp)
 
     normalization = _averaging_norm(momentum_eltype(psp), psp.proc)
 
     ps_fac = _phase_space_factor(psp)
 
-    return normalization * sum(matrix_elements_sq) * ps_fac
+    return normalization * matrix_elements_sq_sum * ps_fac
 end
 
 """
