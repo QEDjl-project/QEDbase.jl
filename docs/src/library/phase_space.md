@@ -34,7 +34,8 @@ phase_space_layout
 ```@docs
 particle_direction
 particle_species
-momenta
+momenta(::AbstractPhaseSpacePoint, ::ParticleDirection)
+momenta(::AbstractPhaseSpacePoint)
 momentum_type(::AbstractPhaseSpacePoint)
 momentum_type(::Type{<:AbstractPhaseSpacePoint{P,M,L,PS}}) where {P,M,L,PS}
 momentum_eltype(::AbstractPhaseSpacePoint)

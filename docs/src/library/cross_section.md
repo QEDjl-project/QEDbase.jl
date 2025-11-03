@@ -8,6 +8,9 @@ CurrentModule = QEDbase
 
 ```@docs
 _incident_flux
+_matrix_element
+_matrix_element_square
+_matrix_element_square_sum
 ```
 
 ## Differential and total probability

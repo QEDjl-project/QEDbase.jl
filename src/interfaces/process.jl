@@ -139,7 +139,8 @@ function _incident_flux end
         MODEL <: AbstractModelDefinition,
     }
 
-Interface function which returns a tuple of scattering matrix elements for each spin and polarization combination of `proc`.
+Interface function which returns an `SVector` of scattering matrix elements for each spin and polarization combination of `proc`.
+Any of this function, [`_matrix_element_square`](@ref), or [`_matrix_element_square_sum`] have to be implemented for a process and model.
 """
 function _matrix_element end
 
