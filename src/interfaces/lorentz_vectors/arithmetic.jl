@@ -350,7 +350,7 @@ Return the [rapidity](https://en.wikipedia.org/wiki/Rapidity) for a given `Loren
 
 """
 @inline @traitfn function getRapidity(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return 0.5 * log((getT(lv) + getZ(lv)) / (getT(lv) - getZ(lv)))
+    return log((getT(lv) + getZ(lv)) / (getT(lv) - getZ(lv))) / 2
 end
 
 #######################
@@ -472,7 +472,7 @@ Return the plus component for a given `LorentzVectorLike` in [light-cone coordin
 
 """
 @inline @traitfn function getPlus(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return 0.5 * (getT(lv) + getZ(lv))
+    return (getT(lv) + getZ(lv)) / 2
 end
 
 """
@@ -494,7 +494,7 @@ Return the minus component for a given `LorentzVectorLike` in [light-cone coordi
 
 """
 @inline @traitfn function getMinus(lv::T) where {{T; IsLorentzVectorLike{T}}}
-    return 0.5 * (getT(lv) - getZ(lv))
+    return (getT(lv) - getZ(lv)) / 2
 end
 
 ####
