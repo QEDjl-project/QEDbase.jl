@@ -28,3 +28,22 @@ function differential_cross_section(phase_space_point::AbstractPhaseSpacePoint)
 
     return unsafe_differential_cross_section(phase_space_point)
 end
+
+# == VECTOR VERSIONS ==
+
+@kernel inbounds = true function unsafe_differential_cross_section(
+    phase_space_points::AbstractVector{PSP}, 
+    dest::AbstractVector
+) where {PSP <: AbstractPhaseSpacePoint}
+    id = @index(Global)
+    dest[id] = @inline unsafe_differential_cross_section(phase_space_points[id])
+end
+
+
+@kernel inbounds = true function differential_cross_section(
+    phase_space_points::AbstractVector{PSP}, 
+    dest::AbstractVector
+) where {PSP <: AbstractPhaseSpacePoint}
+    id = @index(Global)
+    dest[id] = @inline differential_cross_section(phase_space_points[id])
+end
