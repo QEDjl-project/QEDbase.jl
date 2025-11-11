@@ -94,7 +94,12 @@ if metal_tests
     end
 end
 
-#include("../test_implementation/TestImplementation.jl")
+if isempty(GPUS)
+    @info """No GPU tests are enabled, skipping tests...
+    To test GPU functionality, please use 'TEST_<GPU> = 1 julia ...' for one of GPU=[CUDA, AMDGPU, METAL, ONEAPI]"""
+    exit(0)
+end
 
 # from here on, we cannot use safe test sets or we would unload the GPU libraries again
 include("momentum_map.jl")
+include("cross_sections.jl")
