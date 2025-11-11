@@ -5,6 +5,7 @@
 # process interface with and without input validation and/or phase space
 # constraint.
 ############
+using KernelAbstractions
 
 """
     _matrix_element_square(psp::AbstractPhaseSpacePoint)
@@ -56,21 +57,41 @@ function differential_probability(phase_space_point::AbstractPhaseSpacePoint)
 end
 
 
-# == VECTOR VERSIONS ==
-
-@kernel inbounds = true function unsafe_differential_probability(
-    phase_space_points::AbstractVector{PSP}, 
-    dest::AbstractVector
-) where {PSP <: AbstractPhaseSpacePoint}
+# == KERNEL VERSIONS ==
+@kernel inbounds = true function unsafe_differential_probability_kernel(
+        @Const(phase_space_points::AbstractVector{PSP}),
+        dest::AbstractVector
+    ) where {PSP <: AbstractPhaseSpacePoint}
     id = @index(Global)
     dest[id] = @inline unsafe_differential_probability(phase_space_points[id])
 end
 
 
-@kernel inbounds = true function differential_probability(
-    phase_space_points::AbstractVector{PSP}, 
-    dest::AbstractVector
-) where {PSP <: AbstractPhaseSpacePoint}
+@kernel inbounds = true function differential_probability_kernel(
+        @Const(phase_space_points::AbstractVector{PSP}),
+        dest::AbstractVector
+    ) where {PSP <: AbstractPhaseSpacePoint}
     id = @index(Global)
     dest[id] = @inline differential_probability(phase_space_points[id])
+end
+
+# == VECTOR VERSIONS ==
+function unsafe_differential_probability(
+        phase_space_points::AbstractVector{PSP},
+        dest::AbstractVector
+    ) where {PSP <: AbstractPhaseSpacePoint}
+    @assert length(phase_space_points) == length(dest)
+    backend = get_backend(phase_space_points)
+    unsafe_differential_probability_kernel(backend)(phase_space_points, dest; ndrange = length(phase_space_points))
+    return KernelAbstractions.synchronize(backend)
+end
+
+function differential_probability(
+        phase_space_points::AbstractVector{PSP},
+        dest::AbstractVector
+    ) where {PSP <: AbstractPhaseSpacePoint}
+    @assert length(phase_space_points) == length(dest)
+    backend = get_backend(phase_space_points)
+    differential_probability_kernel(backend)(phase_space_points, dest; ndrange = length(phase_space_points))
+    return KernelAbstractions.synchronize(backend)
 end
