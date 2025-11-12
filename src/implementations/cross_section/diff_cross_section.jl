@@ -32,26 +32,26 @@ end
 
 # == KERNEL VERSIONS ==
 @kernel inbounds = true function unsafe_differential_cross_section_kernel(
-        @Const(phase_space_points::AbstractVector{PSP}),
+        @Const(phase_space_points::AbstractVector{<:AbstractPhaseSpacePoint}),
         dest::AbstractVector
-    ) where {PSP <: AbstractPhaseSpacePoint}
+    )
     id = @index(Global)
     dest[id] = @inline unsafe_differential_cross_section(phase_space_points[id])
 end
 
 @kernel inbounds = true function differential_cross_section_kernel(
-        @Const(phase_space_points::AbstractVector{PSP}),
+        @Const(phase_space_points::AbstractVector{<:AbstractPhaseSpacePoint}),
         dest::AbstractVector
-    ) where {PSP <: AbstractPhaseSpacePoint}
+    )
     id = @index(Global)
     dest[id] = @inline differential_cross_section(phase_space_points[id])
 end
 
 # == VECTOR VERSIONS ==
 function unsafe_differential_cross_section(
-        phase_space_points::AbstractVector{PSP},
+        phase_space_points::AbstractVector{<:AbstractPhaseSpacePoint},
         dest::AbstractVector
-    ) where {PSP <: AbstractPhaseSpacePoint}
+    )
     @assert length(phase_space_points) == length(dest)
     backend = get_backend(phase_space_points)
     unsafe_differential_cross_section_kernel(backend)(phase_space_points, dest; ndrange = length(phase_space_points))
@@ -59,9 +59,9 @@ function unsafe_differential_cross_section(
 end
 
 function differential_cross_section(
-        phase_space_points::AbstractVector{PSP},
+        phase_space_points::AbstractVector{<:AbstractPhaseSpacePoint},
         dest::AbstractVector
-    ) where {PSP <: AbstractPhaseSpacePoint}
+    )
     @assert length(phase_space_points) == length(dest)
     backend = get_backend(phase_space_points)
     differential_cross_section_kernel(backend)(phase_space_points, dest; ndrange = length(phase_space_points))
