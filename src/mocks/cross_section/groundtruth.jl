@@ -41,7 +41,7 @@ end
 
 Mock implementation of the phase space check. Return `false` if either the momentum of the first incoming particle is exactly `zero(SFourMomentum)`, or if the momentum of the last outgoing momentum is exactly `ones(SFourMomentum)`. Otherwise, return true.
 """
-function _groundtruth_is_in_phasespace(in_ps, out_ps)
+function _groundtruth_is_in_phasespace(in_ps::NTuple{N, <:AbstractFourMomentum}, out_ps::NTuple{M, <:AbstractFourMomentum}) where {N, M}
     if iszero(in_ps[1])
         return false
     end
