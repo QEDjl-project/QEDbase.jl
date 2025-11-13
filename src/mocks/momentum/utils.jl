@@ -10,7 +10,7 @@ end
 
 # not pretty but necessary to make KA.jl/AMDGPU happy
 # see https://github.com/JuliaGPU/AMDGPU.jl/issues/846
-Base.:(==)(mom1::MOM_T, mom2::MOM_T) where {MOM_T <: AbstractMockMomentum} = (mom1[1] == mom2[1] && mom1[2] == mom2[2] && mom1[3] == mom2[3] && mom1[4] == mom2[4])
+Base.:(==)(mom1::MOM_T, mom2::MOM_T) where {MOM_T <: AbstractMockMomentum} = (getE(mom1) == getE(mom2) && getX(mom1) == getX(mom2) && getY(mom1) == getY(mom2) && getZ(mom1) == getZ(mom2))
 
 Base.zero(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.zero(MOM_TYPE)
 Base.one(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.one(MOM_TYPE)

@@ -29,26 +29,25 @@ N = 128
         @testset "KernelAbstractions cross section" begin
             dest = similar(gpupsps, FLOAT_T)
             gt = unsafe_differential_cross_section.(psps)
-            unsafe_differential_cross_section(gpupsps, dest)
+            unsafe_differential_cross_section!(dest, gpupsps)
             @test sum(isapprox.(Vector(dest), gt)) == N
 
             fill!(dest, zero(FLOAT_T))
             gt = differential_cross_section.(psps)
-            differential_cross_section(gpupsps, dest)
+            differential_cross_section!(dest, gpupsps)
             @test sum(isapprox.(Vector(dest), gt)) == N
         end
 
         @testset "KernelAbstractions probability" begin
             dest = similar(gpupsps, FLOAT_T)
             gt = unsafe_differential_probability.(psps)
-            unsafe_differential_probability(gpupsps, dest)
+            unsafe_differential_probability!(dest, gpupsps)
             @test sum(isapprox.(Vector(dest), gt)) == N
 
             fill!(dest, zero(FLOAT_T))
             gt = differential_probability.(psps)
-            differential_probability(gpupsps, dest)
+            differential_probability!(dest, gpupsps)
             @test sum(isapprox.(Vector(dest), gt)) == N
         end
-
     end
 end
