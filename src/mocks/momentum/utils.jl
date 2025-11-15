@@ -1,8 +1,12 @@
 Base.eltype(::Type{MOM_TYPE}) where {T, MOM_TYPE <: AbstractMockMomentum{T}} = T
 Base.eltype(mom::MOM_TYPE) where {T, MOM_TYPE <: AbstractMockMomentum{T}} = T
 
-Base.zero(mom_type::Type{<:AbstractMockMomentum}) = mom_type(zeros(eltype(mom_type), 4))
-Base.one(mom_type::Type{<:AbstractMockMomentum}) = mom_type(ones(eltype(mom_type), 4))
+function Base.zero(mom_type::Type{T}) where {EL_T, T <: AbstractMockMomentum{EL_T}}
+    return mom_type(zero(EL_T), zero(EL_T), zero(EL_T), zero(EL_T))
+end
+function Base.one(mom_type::Type{T}) where {EL_T, T <: AbstractMockMomentum{EL_T}}
+    return mom_type(one(EL_T), one(EL_T), one(EL_T), one(EL_T))
+end
 
 Base.zero(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.zero(MOM_TYPE)
 Base.one(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.one(MOM_TYPE)
