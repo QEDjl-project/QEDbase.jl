@@ -8,10 +8,6 @@ function Base.one(mom_type::Type{T}) where {EL_T, T <: AbstractMockMomentum{EL_T
     return mom_type(one(EL_T), one(EL_T), one(EL_T), one(EL_T))
 end
 
-# not pretty but necessary to make KA.jl/AMDGPU happy
-# see https://github.com/JuliaGPU/AMDGPU.jl/issues/846
-Base.:(==)(mom1::MOM_T, mom2::MOM_T) where {MOM_T <: AbstractMockMomentum} = (getE(mom1) == getE(mom2) && getX(mom1) == getX(mom2) && getY(mom1) == getY(mom2) && getZ(mom1) == getZ(mom2))
-
 Base.zero(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.zero(MOM_TYPE)
 Base.one(mom::MOM_TYPE) where {MOM_TYPE <: AbstractMockMomentum} = Base.one(MOM_TYPE)
 
