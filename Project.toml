@@ -7,12 +7,13 @@ authors = [
     "Tom Jungnickel",
     "Anton Reinhard",
 ]
-version = "0.5.1"
+version = "0.5.2"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
 ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+KernelAbstractions = "63c18a36-062a-441e-b654-da1e3ab1ce7c"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 PhysicalConstants = "5ad8b20f-a522-5ce9-bfc9-ddf1d5bda6ab"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
@@ -24,6 +25,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 ArgCheck = "2.3.0"
 ConstructionBase = "1"
 DocStringExtensions = "0.8.5, 0.9"
+KernelAbstractions = "0.9.39"
 PhysicalConstants = "0.2.1"
 SimpleTraits = "0.9.4"
 StaticArrays = "1.2.13"

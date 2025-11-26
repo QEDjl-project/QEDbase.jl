@@ -50,10 +50,12 @@ export spin_pols_iter
 
 # probabilities
 export differential_probability, unsafe_differential_probability
+export differential_probability!, unsafe_differential_probability!
 export total_probability
 
 # differential cross section
 export differential_cross_section, unsafe_differential_cross_section
+export differential_cross_section!, unsafe_differential_cross_section!
 export total_cross_section
 
 # Abstract model interface
